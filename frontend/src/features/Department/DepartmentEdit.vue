@@ -98,9 +98,7 @@ export default {
       this.department = data;
     },
     async handleSubmit() {
-      this.$Progress.start();
       await editDepartment(this.department);
-      this.$Progress.finish();
       this.$notify({
         type: 'success',
         title: 'Thành công',

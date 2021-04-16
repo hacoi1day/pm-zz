@@ -1,9 +1,9 @@
 <template>
   <b-card
-      header="Sửa thông tin nhân viên"
-      header-tag="header"
-    >
-      <b-container fluid>
+    header="Sửa thông tin cá nhân"
+    header-tag="header"
+  >
+    <b-container fluid>
         <b-row>
           <b-col md="6">
             <b-form @submit.prevent="handleSubmit">
@@ -30,26 +30,8 @@
                     type="email"
                     placeholder="Nhập địa chỉ email"
                     v-model="user.email"
+                    disabled
                   ></b-form-input>
-                </b-col>
-              </b-row>
-              <b-row class="my-2">
-                <b-col sm="4">
-                  <label for="password">Mật khẩu</label>
-                </b-col>
-                <b-col sm="8">
-                  <b-input-group>
-                    <b-form-input
-                      id="password"
-                      type="text"
-                      placeholder="Nhập mật khẩu"
-                      :disabled="!isEditPassword"
-                      v-model="user.password"
-                    ></b-form-input>
-                    <b-input-group-append>
-                      <b-button v-if="!isEditPassword" variant="info" @click="isEditPassword = true">Sửa</b-button>
-                    </b-input-group-append>
-                  </b-input-group>
                 </b-col>
               </b-row>
               <b-row class="my-2">
@@ -126,43 +108,32 @@
           </b-col>
         </b-row>
       </b-container>
-    </b-card>
+  </b-card>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { storeFile } from '../../apis/storage';
-import { editUser, getUser } from '../../apis/user';
+import { editUser } from '../../apis/user';
 export default {
-  name: 'user-edit',
+  name: 'user-info-edit',
+  computed: mapState({
+    user: state => state.user.userInfo
+  }),
   data () {
     return {
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        phone: '',
-        birthday: '',
-        avatar: 'https://via.placeholder.com/150',
-        gender: '',
-        address: '',
-        password: '123456'
-      },
-      isEditPassword: false,
-      userId: null,
-    }
-  },
-  created () {
-    this.userId = this.$route.params.id;
-  },
-  watch: {
-    userId () {
-      this.getUser();
-    }
+      
+    };
   },
   methods: {
-    async getUser () {
-      let user = await getUser(this.userId);
-      this.user = user;
+    async handleSubmit () {
+      await editUser(this.user);
+      this.$notify({
+        type: 'success',
+        title: 'Thành công',
+        text: 'Sửa thông tin thành công !'
+      });
+      this.$router.push({name: 'user-info'});
     },
     onSelectFile () {
       this.$refs.inputAvatar.click();
@@ -171,15 +142,6 @@ export default {
       const files = event.target.files;
       let {url} = await storeFile(files[0]);
       this.user.avatar = url;
-    },
-    async handleSubmit () {
-      await editUser(this.user);
-      this.$notify({
-        type: 'success',
-        title: 'Thành công',
-        text: 'Sửa Nhân viên mới thành công !'
-      });
-      this.$router.push({name: 'user-list'});
     }
   }
 }

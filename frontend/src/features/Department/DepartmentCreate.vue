@@ -85,9 +85,7 @@ export default {
       this.users = data;
     },
     async handleSubmit() {
-      this.$Progress.start();
       await createDepartment(this.department);
-      this.$Progress.finish();
       this.$notify({
         type: 'success',
         title: 'Thành công',

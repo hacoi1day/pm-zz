@@ -153,9 +153,7 @@ export default {
   },
   methods: {
     async handleSubmit () {
-      this.$Progress.start();
       await createUser(this.user);
-      this.$Progress.finish();
       this.$notify({
         type: 'success',
         title: 'Thành công',

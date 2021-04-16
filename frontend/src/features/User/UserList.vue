@@ -75,9 +75,7 @@ export default {
   },
   methods: {
     async getUsers () {
-      this.$Progress.start();
       const {data, last_page, total} = await listUser(this.currentPage);
-      this.$Progress.finish();
       this.items = data;
       this.lastPage = last_page;
       this.total = total;

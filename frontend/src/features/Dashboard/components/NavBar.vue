@@ -12,7 +12,7 @@
         <b-nav-item-dropdown right>
           <!-- Using 'button-content' slot -->
           <template #button-content>
-            <em>Root</em>
+            <em v-if="user.name">{{ user.name }}</em>
           </template>
           <b-dropdown-item>
             <router-link to="/user-info">Thông tin</router-link>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { logout } from '../../../apis/auth';
 import { removeToken } from '../../../utils/token';
 
@@ -35,10 +36,14 @@ export default {
 
     };
   },
+  computed: mapState({
+    user: state => state.user.userInfo
+  }),
   methods: {
     async onLogout () {
       await logout();
       removeToken();
+      this.$store.commit('clearUser');
       this.$router.push({name: 'login'});
     }
   }

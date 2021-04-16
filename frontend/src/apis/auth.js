@@ -1,8 +1,8 @@
-import axiosInstance from '../utils/axiosInstance';
+import httpHelper from '../utils/httpHelper';
 
 export const login = async (email, password) => {
     try {
-        const {data} = await axiosInstance.post('login', {
+        const {data} = await httpHelper.post('login', {
             email, 
             password
         });
@@ -15,7 +15,7 @@ export const login = async (email, password) => {
 
 export const resetPassword = async (email) => {
     try {
-        const {data} = await axiosInstance.post('reset-password', {
+        const {data} = await httpHelper.post('reset-password', {
             email
         });
         return data;
@@ -27,7 +27,7 @@ export const resetPassword = async (email) => {
 
 export const me = async () => {
     try {
-        const {data} = await axiosInstance.get('me');
+        const {data} = await httpHelper.get('me');
         return data;
     } catch(err) {
         console.log(err);
@@ -37,7 +37,7 @@ export const me = async () => {
 
 export const logout = async () => {
     try {
-        const {data} = await axiosInstance.get('logout');
+        const {data} = await httpHelper.get('logout');
         return data;
     } catch (err) {
         console.log(err);

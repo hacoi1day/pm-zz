@@ -11,6 +11,8 @@ import ResetPassword from './features/Auth/ResetPassword';
 
 // Dashboard
 import UserInfo from './features/Dashboard/UserInfo';
+import UserInfoEdit from './features/Dashboard/UserInfoEdit';
+import Test from './features/Dashboard/Test';
 
 // User
 import User from './features/User';
@@ -50,6 +52,8 @@ const routes = [
     component: HomePage,
     children: [
       { path: 'user-info', name: 'user-info', component: UserInfo },
+      { path: 'user-info-edit', name: 'user-info-edit', component: UserInfoEdit },
+      { path: 'test', name: 'test', component: Test },
       {
         path: 'user',
         name: 'user',

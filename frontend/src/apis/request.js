@@ -1,8 +1,8 @@
-import axiosInstance from '../utils/axiosInstance';
+import httpHelper from '../utils/httpHelper';
 
 export const listRequest = async (page) => {
     try {
-        const {data} = await axiosInstance.get(`request/request?page=${page}`);
+        const {data} = await httpHelper.get(`request/request?page=${page}`);
         return data;
     } catch (err) {
         console.log(err);
@@ -12,7 +12,7 @@ export const listRequest = async (page) => {
 
 export const createRequest = async (user) => {
     try {
-        const {data} = await axiosInstance.post('request/request', user);
+        const {data} = await httpHelper.post('request/request', user);
         return data;
     } catch (err) {
         console.log(err);
@@ -22,7 +22,7 @@ export const createRequest = async (user) => {
 
 export const editRequest = async (user) => {
     try {
-        const {data} = await axiosInstance.put(`request/request/${user.id}`, user);
+        const {data} = await httpHelper.put(`request/request/${user.id}`, user);
         return data;
     } catch (err) {
         console.log(err);
@@ -32,7 +32,7 @@ export const editRequest = async (user) => {
 
 export const getRequest = async (userId) => {
     try {
-        const {data} = await axiosInstance.get(`request/request/${userId}`);
+        const {data} = await httpHelper.get(`request/request/${userId}`);
     return data;
     } catch (err) {
         console.log(err);
@@ -42,7 +42,7 @@ export const getRequest = async (userId) => {
 
 export const deleteRequest = async (userId) => {
     try {
-        const {data} = await axiosInstance.delete(`request/request/${userId}`);
+        const {data} = await httpHelper.delete(`request/request/${userId}`);
         return data;
     } catch (err) {
         console.log(err);
