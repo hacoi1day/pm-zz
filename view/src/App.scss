@@ -1,0 +1,26 @@
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+
+* {
+  margin: 0;
+  padding: 0
+}
+
+.no-margin {
+  margin: 0!important;
+}
+
+.no-padding {
+  padding: 0!important;
+}
+
+#table-data {
+  .action {
+    span {
+      cursor: pointer;
+      &:hover {
+        color: #2d90ca;
+      }
+    }
+  }
+}
