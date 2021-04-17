@@ -39,7 +39,7 @@ export default {
     user: state => state.user.userInfo
   }),
   created () {
-    console.log(this.user);
+
   },
   methods: {
     showInfo () {

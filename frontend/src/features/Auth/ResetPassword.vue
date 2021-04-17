@@ -42,7 +42,8 @@ export default {
       console.log(res);
       this.$Progress.finish();
     }
-  }
+  },
+  
 }
 </script>
 

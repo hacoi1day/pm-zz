@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import { changePassword } from '../../apis/auth'
 export default {
   name: 'change-password',
   data () {
@@ -75,10 +76,11 @@ export default {
     }
   },
   methods: {
-    handleSubmit () {
-      console.log(this.form);
+    async handleSubmit () {
+      await changePassword(this.form);
+      this.$router.push({name: 'user-info'});
     }
-  }
+  },
 }
 </script>
 
