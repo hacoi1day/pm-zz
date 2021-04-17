@@ -84,12 +84,10 @@ class AuthController extends Controller
             $user->update([
                 'password' => Hash::make($newPassword)
             ]);
-
             return response()->json([
                 'status' => 'success',
                 'message' => 'Đổi mật khẩu thành công.'
             ], 200);
-
         } catch(Exception $e) {
             return response()->json([
                 'status' => 'error',
