@@ -53,6 +53,10 @@ services:
         volumes: 
             - ./backend:/var/www/html/backend
         working_dir: /var/www/html/backend
+        stdin_open: true
+        tty: true
+        environment:
+            - COMPOSER_MEMORY_LIMIT=-1
         networks: 
             - app-network
     
