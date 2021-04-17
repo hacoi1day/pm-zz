@@ -14,9 +14,8 @@
           <template #button-content>
             <em v-if="user.name">{{ user.name }}</em>
           </template>
-          <b-dropdown-item>
-            <router-link to="/user-info">Thông tin</router-link>
-          </b-dropdown-item>
+          <b-dropdown-item @click="showInfo">Thông tin</b-dropdown-item>
+          <b-dropdown-item @click="changePassword">Đổi mật khẩu</b-dropdown-item>
           <b-dropdown-item @click="onLogout">Đăng xuất</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
@@ -40,6 +39,12 @@ export default {
     user: state => state.user.userInfo
   }),
   methods: {
+    showInfo () {
+      this.$router.push({name: 'user-info'});
+    },
+    changePassword () {
+      this.$router.push({name: 'change-password'});
+    },
     async onLogout () {
       await logout();
       removeToken();

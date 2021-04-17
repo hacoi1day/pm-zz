@@ -12,6 +12,7 @@ import ResetPassword from './features/Auth/ResetPassword';
 // Dashboard
 import UserInfo from './features/Dashboard/UserInfo';
 import UserInfoEdit from './features/Dashboard/UserInfoEdit';
+import ChangePassword from './features/Dashboard/ChangePassword';
 import Test from './features/Dashboard/Test';
 
 // User
@@ -53,6 +54,7 @@ const routes = [
     children: [
       { path: 'user-info', name: 'user-info', component: UserInfo },
       { path: 'user-info-edit', name: 'user-info-edit', component: UserInfoEdit },
+      { path: 'change-password', name: 'change-password', component: ChangePassword },
       { path: 'test', name: 'test', component: Test },
       {
         path: 'user',

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -57,6 +59,37 @@ class AuthController extends Controller
                     'message' => 'Logout successfully'
                 ], 200);
             }
+        } catch(Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function changePassword (ChangePasswordRequest $request)
+    {
+        try {
+            $params = $request->all();
+            $currentPassword = $params['currentPassword'];
+            $newPassword = $params['password'];
+
+            $user = $this->user->where('id', Auth::guard('api')->id())->firstOrFail();
+            if (!Hash::check($currentPassword, $user->password)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Mật khẩu cũ không chính xác.'
+                ], 500);
+            }
+            $user->update([
+                'password' => Hash::make($newPassword)
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Đổi mật khẩu thành công.'
+            ], 200);
+
         } catch(Exception $e) {
             return response()->json([
                 'status' => 'error',

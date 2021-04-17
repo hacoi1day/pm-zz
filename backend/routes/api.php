@@ -29,6 +29,9 @@ Route::middleware('auth:api')->group(function () {
     // Logout
     Route::get('logout', [AuthController::class, 'logout']);
 
+    // Change password
+    Route::post('change-password', [AuthController::class, 'changePassword']);
+
     // Storage
     Route::prefix('storage')->group(function () {
         Route::post('store-file', [StorageController::class, 'storeFile']);
