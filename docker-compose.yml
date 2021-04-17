@@ -47,19 +47,6 @@ services:
         networks: 
             - app-network
 
-    composer:
-        image: composer:latest
-        container_name: composer_${APP_NAME}
-        volumes: 
-            - ./backend:/var/www/html/backend
-        working_dir: /var/www/html/backend
-        stdin_open: true
-        tty: true
-        environment:
-            - COMPOSER_MEMORY_LIMIT=-1
-        networks: 
-            - app-network
-    
     node:
         build:
             context: .
