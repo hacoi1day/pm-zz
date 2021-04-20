@@ -1,5 +1,4 @@
 <template>
-  
   <b-form @submit.prevent="handleSubmit">
     <b-container fluid>
       <b-row>
@@ -9,6 +8,47 @@
             label="Họ và tên"
             placeholder="Nhập họ và tên"
             :value="form.name"
+            :onChange="value => form.name = value"
+          />
+
+          <input-text
+            name="name"
+            label="Email"
+            placeholder="Nhập email"
+            :value="form.email"
+            :onChange="value => form.email = value"
+          />
+
+          <input-text
+            name="phone"
+            label="Số điện thoại"
+            placeholder="Nhập số điện thoại"
+            :value="form.phone"
+            :onChange="value => form.phone = value"
+          />
+
+          <input-date
+            name="birthday1"
+            label="Ngày sinh"
+            placeholder="Nhập ngày sinh"
+            :value="form.birthday"
+            :onChange="value => form.birthday = value"
+          />
+
+          <input-radio
+            name="gender"
+            label="Giới tính"
+            :options="[{id: 1, text: 'Nam'}, {id: 0, text: 'Nữ'}]"
+            :value="1"
+            :onChange="value => form.gender = value"
+          />
+
+          <input-text
+            name="name"
+            label="Địa chỉ"
+            placeholder="Nhập địa chỉ"
+            :value="form.address"
+            :onChange="value => form.address = value"
           />
           
           <b-row>
@@ -18,6 +58,7 @@
               </b-button>
             </b-col>
           </b-row>
+
         </b-col>
         <b-col sm="6">
           <div class="upload-avatar">
@@ -49,8 +90,10 @@
 <script>
 import { storeFile } from '../../../apis/storage';
 import InputText from '../../../components/input/InputText.vue';
+import InputDate from '../../../components/input/InputDate.vue';
+import InputRadio from '../../../components/input/InputRadio.vue';
 export default {
-  components: { InputText },
+  components: { InputText, InputDate, InputRadio },
   name: 'user-form',
   props: {
     mode: {
