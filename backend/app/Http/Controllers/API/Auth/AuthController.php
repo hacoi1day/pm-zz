@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ActiveRequest;
 use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\ChangePass;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -13,9 +15,11 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     private $user;
+    private $changePass;
 
-    public function __construct(User $user) {
+    public function __construct(User $user, ChangePass $changePass) {
         $this->user = $user;
+        $this->changePass = $changePass;
     }
 
     public function login(LoginRequest $request)
@@ -59,6 +63,24 @@ class AuthController extends Controller
                     'message' => 'Logout successfully'
                 ], 200);
             }
+        } catch(Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function active(ActiveRequest $request)
+    {
+        try {
+            $token = $request->token;
+            $item = $this->changePass->where('token', $token)->firstOrFail();
+            $item->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Kích hoạt tài khoản thành công !'
+            ], 200);
         } catch(Exception $e) {
             return response()->json([
                 'status' => 'error',

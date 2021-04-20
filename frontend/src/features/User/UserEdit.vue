@@ -126,14 +126,23 @@
           </b-col>
         </b-row>
       </b-container>
+      <b-contaienr fluid>
+        <user-form
+          :user="null"
+        />
+      </b-contaienr>
     </b-card>
 </template>
 
 <script>
 import { storeFile } from '../../apis/storage';
 import { editUser, getUser } from '../../apis/user';
+import UserForm from './partials/UserForm';
 export default {
   name: 'user-edit',
+  components: {
+    'user-form': UserForm
+  },
   data () {
     return {
       user: {

@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\Route;
 // Auth Router
 Route::post('login', [AuthController::class, 'login']);
 
+// Active Account
+Route::get('active', [AuthController::class, 'active']);
+
 Route::middleware('auth:api')->group(function () {
     // Get User
     Route::get('me', [AuthController::class, 'me']);

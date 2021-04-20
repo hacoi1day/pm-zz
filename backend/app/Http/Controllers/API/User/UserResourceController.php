@@ -4,7 +4,10 @@ namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUser;
+use App\Jobs\SendMail;
+use App\Models\ChangePass;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,9 +16,11 @@ use Illuminate\Support\Str;
 class UserResourceController extends Controller
 {
     private $user;
+    private $changePass;
 
-    public function __construct(User $user) {
+    public function __construct(User $user, ChangePass $changePass) {
         $this->user = $user;
+        $this->changePass = $changePass;
     }
 
     /**
@@ -60,6 +65,23 @@ class UserResourceController extends Controller
                 $params['password'] = Hash::make($params['password']);
             }
             $item = $this->user->create($params);
+
+            $token = Str::random(40);
+
+            $this->changePass->create([
+                'user_id' => $item->id,
+                'token' => $token
+            ]);
+
+            $message = [
+                'type' => 'Store user',
+                'mail' => $item->email,
+                'content' => 'User has been created!',
+                'token' => $token
+            ];
+
+            SendMail::dispatch($message, $item)->delay(Carbon::now());
+
             return response()->json($item, 201);
         } catch (Exception $e) {
             return response()->json([

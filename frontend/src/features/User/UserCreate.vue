@@ -127,6 +127,10 @@
           </b-col>
         </b-row>
       </b-container>
+      <user-form
+        mode="create"
+        :onSubmit="handleOnSubmit"
+      />
     </b-card>
   </div>
 </template>
@@ -134,8 +138,13 @@
 <script>
 import {createUser} from '../../apis/user';
 import {storeFile} from '../../apis/storage';
+import UserForm from './partials/UserForm';
+
 export default {
   name: 'user-create',
+  components: {
+    'user-form': UserForm
+  },
   data () {
     return {
       user: {
@@ -168,6 +177,9 @@ export default {
       const files = event.target.files;
       let {url} = await storeFile(files[0]);
       this.user.avatar = url;
+    },
+    handleOnSubmit (form) {
+      console.log(form);
     }
   }
 }
