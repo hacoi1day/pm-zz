@@ -3,133 +3,159 @@
     header="Sửa thông tin cá nhân"
     header-tag="header"
   >
-    <b-container fluid>
-        <b-row>
-          <b-col md="6">
-            <b-form @submit.prevent="handleSubmit">
-              <b-row class="my-2">
-                <b-col sm="4">
-                  <label for="name">Họ và tên</label>
-                </b-col>
-                <b-col sm="8">
-                  <b-form-input
-                    id="name"
-                    type="text"
-                    placeholder="Nhập Họ và tên"
-                    v-model="user.name"
-                  ></b-form-input>
-                </b-col>
-              </b-row>
-              <b-row class="my-2">
-                <b-col sm="4">
-                  <label for="email">Địa chỉ Email</label>
-                </b-col>
-                <b-col sm="8">
+    <b-container fluid v-if="form">
+      <b-row>
+        <b-col sm="6">
+          <ValidationObserver v-slot="{ handleSubmit }">
+            <b-form @submit.prevent="handleSubmit(onSubmit)">
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Địa chỉ email"
+              >
+                <b-form-group
+                  label="Địa chỉ email:"
+                  label-for="email"
+                >
                   <b-form-input
                     id="email"
-                    type="email"
+                    v-model="form.email"
+                    type="text"
                     placeholder="Nhập địa chỉ email"
-                    v-model="user.email"
-                    disabled
+                    readonly
+                    :state="errors.length !== 0 ? false : null"
                   ></b-form-input>
-                </b-col>
-              </b-row>
-              <b-row class="my-2">
-                <b-col sm="4">
-                  <label for="phone">Số điện thoại</label>
-                </b-col>
-                <b-col sm="8">
+                  <b-form-invalid-feedback :state="errors ? false : true">
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </ValidationProvider>
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Họ và tên"
+              >
+                <b-form-group
+                  label="Họ và tên:"
+                  label-for="name"
+                >
+                  <b-form-input
+                    id="name"
+                    v-model="form.name"
+                    type="text"
+                    placeholder="Nhập họ và tên"
+                    :state="errors.length !== 0 ? false : null"
+                  ></b-form-input>
+                  <b-form-invalid-feedback :state="errors ? false : true">
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </ValidationProvider>
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Số điện thoại"
+              >
+                <b-form-group
+                  label="Số điện thoại:"
+                  label-for="phone"
+                >
                   <b-form-input
                     id="phone"
+                    v-model="form.phone"
                     type="text"
-                    placeholder="Nhập địa chỉ số điện thoại"
-                    v-model="user.phone"
+                    placeholder="Nhập số điện thoại"
+                    :state="errors.length !== 0 ? false : null"
                   ></b-form-input>
-                </b-col>
-              </b-row>
-              <b-row class="my-2">
-                <b-col sm="4">
-                  <label for="birthday">Ngày sinh</label>
-                </b-col>
-                <b-col sm="8">
-                  <b-form-input
-                    id="birthday"
-                    type="date"
-                    placeholder="Nhập địa ngày sinh"
-                    v-model="user.birthday"
-                  ></b-form-input>
-                </b-col>
-              </b-row>
-              <b-row class="my-2">
-                <b-col sm="4">
-                  <label for="gender">Giới tính</label>
-                </b-col>
-                <b-col sm="4" class="d-flex">
-                  <b-form-radio name="gender" value="1" v-model="user.gender" class="mr-3">Nam</b-form-radio>
-                  <b-form-radio name="gender" value="0" v-model="user.gender">Nữ</b-form-radio>
-                </b-col>
-              </b-row>
+                  <b-form-invalid-feedback :state="errors ? false : true">
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </ValidationProvider>
 
-              <b-row class="my-2">
-                <b-col sm="4">
-                  <label for="address">Địa chỉ</label>
-                </b-col>
-                <b-col sm="8">
-                  <b-form-input
-                    id="address"
-                    type="text"
-                    placeholder="Nhập địa địa chỉ"
-                    v-model="user.address"
-                  ></b-form-input>
-                </b-col>
-              </b-row>
-              <select-department :value="user.department_id" :onChange="handleChangeDepartment"/>
-              <b-row>
-                <b-col sm="12" class="text-center mt-3">
-                  <b-button type="submit" variant="primary">Sửa thông tin</b-button>
-                </b-col>
-              </b-row>
-            </b-form>
-          </b-col>
-          <b-col md="6">
-            <div class="upload-avatar">
-              <p class="mb-2">Ảnh đại diện</p>
-              <img class="image-preview mb-3" :src="user.avatar" :alt="user.avatar">
-              <div class="input-upload">
-                <input 
-                  type="file" 
-                  name="input-avatar" 
-                  class="input-hidden"
-                  ref="inputAvatar"
-                  accept="image/*"
-                  @change="onSelectedFile"
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Ngày sinh"
+              >
+                <label for="birthday">Ngày sinh</label>
+                <b-form-datepicker id="birthday" v-model="form.birthday" class="mb-2"></b-form-datepicker>
+                <b-form-invalid-feedback :state="errors ? false : true">
+                  {{ errors[0] }}
+                </b-form-invalid-feedback>
+              </ValidationProvider>
+
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Giới tính"
+              >
+                <b-form-group label="Giới tính">
+                  <b-form-radio v-model="form.gender" name="gender" value="1">Nam</b-form-radio>
+                  <b-form-radio v-model="form.gender" name="gender" value="0">Nữ</b-form-radio>
+                </b-form-group>
+                <b-form-invalid-feedback :state="errors ? false : true">
+                  {{ errors[0] }}
+                </b-form-invalid-feedback>
+              </ValidationProvider>
+
+              <ValidationProvider 
+                v-slot="{errors}" 
+                name="Địa chỉ"
+              >
+                <b-form-group
+                  label="Địa chỉ:"
+                  label-for="address"
                 >
-                <b-button variant="success" @click="onSelectFile">Tải lên</b-button>
-              </div>
-            </div>
-          </b-col>
-        </b-row>
-      </b-container>
+                  <b-form-textarea
+                    id="address"
+                    v-model="form.address"
+                    type="text"
+                    placeholder="Nhập địa chỉ"
+                    :state="errors.length !== 0 ? false : null"
+                  ></b-form-textarea>
+                  <b-form-invalid-feedback :state="errors ? false : true">
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </ValidationProvider>
+
+              <b-button type="submit" variant="primary">Cập nhật</b-button>
+            </b-form>
+          </ValidationObserver>
+        </b-col>
+        <b-col sm="6">
+          avatar
+        </b-col>
+      </b-row>
+    </b-container>
   </b-card>
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import { storeFile } from '../../apis/storage';
 import { editUser } from '../../apis/user';
-import SelectDepartment from '../../components/select/SelectDepartment';
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
+import { mapState } from 'vuex';
 
 export default {
   name: 'user-info-edit',
   components: {
-    'select-department': SelectDepartment
+    ValidationObserver,
+    ValidationProvider,
   },
   computed: mapState({
-    user: state => state.user.userInfo
+    form: state => state.user.userInfo
   }),
   data () {
     return {
-      
+      // form: {
+      //   name: '',
+      //   phone: '',
+      //   birthday: '',
+      //   gender: '',
+      //   address: ''
+      // }
     };
   },
   methods: {
@@ -141,6 +167,9 @@ export default {
         text: 'Sửa thông tin thành công !'
       });
       this.$router.push({name: 'user-info'});
+    },
+    onSubmit () {
+      console.log(this.form);
     },
     onSelectFile () {
       this.$refs.inputAvatar.click();

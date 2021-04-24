@@ -35,6 +35,9 @@ Route::middleware('auth:api')->group(function () {
     // Change password
     Route::post('change-password', [AuthController::class, 'changePassword']);
 
+    // Change User Info
+    Route::post('change-user-info', [AuthController::class, 'changeUserInfo']);
+
     // Storage
     Route::prefix('storage')->group(function () {
         Route::post('store-file', [StorageController::class, 'storeFile']);
