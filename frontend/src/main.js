@@ -8,6 +8,7 @@ import './configs/notification';
 import './configs/fontawesome';
 import './configs/processbar';
 import './configs/vCalendar';
+import './configs/validate';
 
 import App from './App.vue';
 import './App.scss';

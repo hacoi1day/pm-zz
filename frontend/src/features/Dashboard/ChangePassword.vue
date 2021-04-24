@@ -4,79 +4,105 @@
     header-tag="header"
   >
     <b-container fluid>
-        <b-row>
-          <b-col md="6">
-            <b-form @submit.prevent="handleSubmit">
-
-              <b-row class="my-2">
-                <b-col sm="4 d-flex align-items-center">
-                  <label for="currentPassword">Mật khẩu hiện tại</label>
-                </b-col>
-                <b-col sm="8">
+      <b-row>
+        <b-col sm="6">
+          <ValidationObserver v-slot="{ handleSubmit }">
+            <b-form @submit.prevent="handleSubmit(onSubmit)">
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Mật khẩu hiện tại"
+              >
+                <b-form-group
+                  label="Mật khẩu hiện tại:"
+                  label-for="currentPassword"
+                >
                   <b-form-input
                     id="currentPassword"
-                    type="password"
-                    placeholder="Mật khẩu hiện tại"
                     v-model="form.currentPassword"
+                    type="password"
+                    placeholder="Nhập mật khẩu hiện tại"
+                    :state="errors.length !== 0 ? false : null"
                   ></b-form-input>
-                </b-col>
-              </b-row>
+                  <b-form-invalid-feedback :state="errors ? false : true">
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </ValidationProvider>
 
-              <b-row class="my-2">
-                <b-col sm="4 d-flex align-items-center">
-                  <label for="password">Mật khẩu mới</label>
-                </b-col>
-                <b-col sm="8">
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required|min:6|max:32" 
+                name="Mật khẩu mới"
+              >
+                <b-form-group
+                  label="Mật khẩu mới:"
+                  label-for="password"
+                >
                   <b-form-input
                     id="password"
-                    type="password"
-                    placeholder="Mật khẩu mới"
                     v-model="form.password"
+                    type="password"
+                    placeholder="Nhập mật khẩu hiện tại"
+                    :state="errors.length !== 0 ? false : null"
                   ></b-form-input>
-                </b-col>
-              </b-row>
+                  <b-form-invalid-feedback :state="errors ? false : true">
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </ValidationProvider>
 
-              <b-row class="my-2">
-                <b-col sm="4 d-flex align-items-center">
-                  <label for="passwordComfirm">Xác nhận mật khẩu</label>
-                </b-col>
-                <b-col sm="8">
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required|min:6|max:32" 
+                name="Xác nhận mật khẩu"
+              >
+                <b-form-group
+                  label="Xác nhận mật khẩu:"
+                  label-for="passwordConfirm"
+                >
                   <b-form-input
-                    id="passwordComfirm"
+                    id="passwordConfirm"
+                    v-model="form.passwordConfirm"
                     type="password"
                     placeholder="Xác nhận mật khẩu"
-                    v-model="form.passwordComfirm"
+                    :state="errors.length !== 0 ? false : null"
                   ></b-form-input>
-                </b-col>
-              </b-row>
-              
-              <b-row>
-                <b-col sm="12" class="text-center mt-3">
-                  <b-button type="submit" variant="primary">Đổi mật khẩu</b-button>
-                </b-col>
-              </b-row>
+                  <b-form-invalid-feedback :state="errors ? false : true">
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </ValidationProvider>
+              <b-button type="submit" variant="primary">Đổi mật khẩu</b-button>
             </b-form>
-          </b-col>
-        </b-row>
-      </b-container>
+          </ValidationObserver>
+        </b-col>
+      </b-row>
+    </b-container>
   </b-card>
 </template>
 
 <script>
-import { changePassword } from '../../apis/auth'
+import { changePassword } from '../../apis/auth';
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
+
 export default {
   name: 'change-password',
+  components: {
+    ValidationObserver,
+    ValidationProvider,
+  },
   data () {
     return {
       form: {
         currentPassword: '',
         password: '',
-        passwordComfirm: ''
+        passwordConfirm: ''
       }
     }
   },
   methods: {
-    async handleSubmit () {
+    async onSubmit () {
       await changePassword(this.form);
       this.$router.push({name: 'user-info'});
     }

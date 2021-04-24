@@ -1,25 +1,41 @@
 <template>
-  <b-row class="my-2">
-    <b-col sm="4">
-      <label :for="name">{{label}}</label>
-    </b-col>
-    <b-col sm="8">
+  <ValidationProvider 
+    v-slot="{errors}" 
+    :rules="rules"
+    :name="label"
+  >
+    <b-form-group
+      :label="label"
+      label-for="name"
+    >
       <b-form-input
+        id="name"
         type="text"
-        :id="name"
         :placeholder="placeholder"
-        :value="value"
+        :state="errors.length !== 0 ? false : null"
         @input="handleOnChange"
       ></b-form-input>
-    </b-col>
-  </b-row>
+      <b-form-invalid-feedback :state="errors ? false : true">
+        {{ errors[0] }}
+      </b-form-invalid-feedback>
+    </b-form-group>
+  </ValidationProvider>
 </template>
 
 <script>
+import { ValidationProvider } from 'vee-validate';
+
 export default {
   name: 'input-text',
+  components: {
+    ValidationProvider
+  },
   props: {
     name: {
+      type: String,
+      default: ''
+    },
+    rules: {
       type: String,
       default: ''
     },
@@ -41,6 +57,7 @@ export default {
   },
   methods: {
     handleOnChange (value) {
+      console.log(value);
       this.onChange(value);
     }
   }
