@@ -24,7 +24,7 @@
                 </b-tr>
                 <b-tr>
                   <b-td>Ngày sinh</b-td>
-                  <b-td>{{ user.birthday }}</b-td>
+                  <b-td>{{ user.birthday | filterBirthday }}</b-td>
                 </b-tr>
                 <b-tr>
                   <b-td>Giới tính</b-td>
@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import { mapState } from 'vuex'
 export default {
   name: 'user-info',
@@ -84,12 +85,20 @@ export default {
     filterGender (value) {
       switch (value) {
         case true:
+        case 1:
           return 'Nam';
         case false:
+        case 0:
           return 'Nữ';
         default:
           return '';
       }
+    },
+    filterBirthday (value) {
+      if (!value) {
+        return '';
+      }
+      return moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY');
     }
   }
 }

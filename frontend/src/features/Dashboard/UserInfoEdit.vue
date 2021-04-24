@@ -147,6 +147,9 @@ export default {
   computed: mapState({
     form: state => state.user.userInfo
   }),
+  created () {
+    this.form.gender = this.form.gender === 1;
+  },
   data () {
     return {
       
@@ -154,7 +157,6 @@ export default {
   },
   methods: {
     async onSubmit () {
-      console.log(this.form);
       await changeUserInfo(this.form);
       this.$notify({
         type: 'success',
