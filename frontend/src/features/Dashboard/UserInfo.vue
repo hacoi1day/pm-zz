@@ -83,9 +83,9 @@ export default {
   filters: {
     filterGender (value) {
       switch (value) {
-        case 1:
+        case true:
           return 'Nam';
-        case 2:
+        case false:
           return 'Nữ';
         default:
           return '';

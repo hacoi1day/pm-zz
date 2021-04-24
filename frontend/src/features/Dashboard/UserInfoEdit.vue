@@ -91,8 +91,8 @@
                 name="Giới tính"
               >
                 <b-form-group label="Giới tính">
-                  <b-form-radio v-model="form.gender" name="gender" value="1">Nam</b-form-radio>
-                  <b-form-radio v-model="form.gender" name="gender" value="0">Nữ</b-form-radio>
+                  <b-form-radio v-model="form.gender" name="gender" :value="true">Nam</b-form-radio>
+                  <b-form-radio v-model="form.gender" name="gender" :value="false">Nữ</b-form-radio>
                 </b-form-group>
                 <b-form-invalid-feedback :state="errors ? false : true">
                   {{ errors[0] }}
@@ -100,7 +100,7 @@
               </ValidationProvider>
 
               <ValidationProvider 
-                v-slot="{errors}" 
+                v-slot="{errors}"
                 name="Địa chỉ"
               >
                 <b-form-group
@@ -133,10 +133,10 @@
 </template>
 
 <script>
-import { storeFile } from '../../apis/storage';
-import { editUser } from '../../apis/user';
-import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import { mapState } from 'vuex';
+import { storeFile } from '../../apis/storage';
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
+import { changeUserInfo } from '../../apis/auth';
 
 export default {
   name: 'user-info-edit',
@@ -149,27 +149,19 @@ export default {
   }),
   data () {
     return {
-      // form: {
-      //   name: '',
-      //   phone: '',
-      //   birthday: '',
-      //   gender: '',
-      //   address: ''
-      // }
+      
     };
   },
   methods: {
-    async handleSubmit () {
-      await editUser(this.user);
+    async onSubmit () {
+      console.log(this.form);
+      await changeUserInfo(this.form);
       this.$notify({
         type: 'success',
         title: 'Thành công',
         text: 'Sửa thông tin thành công !'
       });
       this.$router.push({name: 'user-info'});
-    },
-    onSubmit () {
-      console.log(this.form);
     },
     onSelectFile () {
       this.$refs.inputAvatar.click();

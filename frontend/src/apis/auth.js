@@ -54,3 +54,13 @@ export const changePassword = async (params) => {
     return false;
   }
 }
+
+export const changeUserInfo = async (params) => {
+  try {
+    const {data} = await httpHelper.post('change-user-info', params);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
