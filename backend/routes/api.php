@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Checkin\CheckinResourceController;
+use App\Http\Controllers\API\Common\CommonController;
 use App\Http\Controllers\API\Department\DepartmentResourceController;
 use App\Http\Controllers\API\Request\RequestResourceController;
 use App\Http\Controllers\API\Storage\StorageController;
@@ -63,6 +64,11 @@ Route::middleware('auth:api')->group(function () {
     // Request
     Route::prefix('request')->group(function () {
         Route::resource('request', RequestResourceController::class);
+    });
+
+    // Common
+    Route::prefix('common')->group(function () {
+        Route::post('check-unique/{table}/{column}/{id?}', [CommonController::class, 'checkUnique']);
     });
 
 });

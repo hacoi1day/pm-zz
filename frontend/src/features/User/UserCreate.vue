@@ -13,8 +13,7 @@
 </template>
 
 <script>
-import {createUser} from '../../apis/user';
-import {storeFile} from '../../apis/storage';
+import { createUser } from '../../apis/user';
 import UserForm from './partials/UserForm';
 
 export default {
@@ -24,39 +23,18 @@ export default {
   },
   data () {
     return {
-      user: {
-        name: '',
-        email: '',
-        phone: '',
-        birthday: '',
-        avatar: 'https://via.placeholder.com/150',
-        gender: '',
-        address: '',
-        password: '123456'
-      },
-      isEditPassword: false
+
     }
   },
   methods: {
-    async handleSubmit () {
-      await createUser(this.user);
+    async handleOnSubmit (form) {
+      await createUser(form);
       this.$notify({
         type: 'success',
         title: 'Thành công',
         text: 'Thêm Nhân viên mới thành công !'
       });
       this.$router.push({name: 'user-list'});
-    },
-    onSelectFile () {
-      this.$refs.inputAvatar.click();
-    },
-    async onSelectedFile (event) {
-      const files = event.target.files;
-      let {url} = await storeFile(files[0]);
-      this.user.avatar = url;
-    },
-    handleOnSubmit (form) {
-      console.log(form);
     }
   }
 }

@@ -119,13 +119,30 @@
                   </b-form-invalid-feedback>
                 </b-form-group>
               </ValidationProvider>
-
               <b-button type="submit" variant="primary">Cập nhật</b-button>
             </b-form>
           </ValidationObserver>
         </b-col>
         <b-col sm="6">
-          avatar
+          <div class="upload-avatar">
+            <p class="mb-2">Ảnh đại diện</p>
+            <img 
+              class="image-preview mb-3" 
+              :src="form.avatar" 
+              :alt="form.avatar"
+            />
+            <div class="input-upload">
+              <input 
+                type="file" 
+                name="input-avatar" 
+                class="input-hidden"
+                ref="inputAvatar"
+                accept="image/*"
+                @change="onSelectedFile"
+              >
+              <b-button variant="success" @click="onSelectFile">Tải lên</b-button>
+            </div>
+          </div>
         </b-col>
       </b-row>
     </b-container>
@@ -148,7 +165,9 @@ export default {
     form: state => state.user.userInfo
   }),
   created () {
+    console.log(this.form.gender);
     this.form.gender = this.form.gender === 1;
+    console.log(this.form.gender);
   },
   data () {
     return {
