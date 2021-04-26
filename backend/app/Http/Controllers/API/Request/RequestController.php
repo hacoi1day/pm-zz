@@ -20,7 +20,11 @@ class RequestController extends Controller
     {
         try {
             $userId = Auth::guard('api')->id();
-            $paginate = $this->request->where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(10);
+            $paginate = $this->request->where('user_id', $userId)->orderBy('created_at', 'asc')->paginate(10);
+            $paginate->getCollection()->transform(function ($item) {
+                $item->approval = $item->approval;
+                return $item;
+            });
             return response()->json($paginate, 200);
         } catch(Exception $e) {
             return response()->json([

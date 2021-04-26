@@ -165,7 +165,7 @@
                 </b-form-group>
               </ValidationProvider>
               <div class="text-center">
-                <b-button type="submit" variant="primary">Thêm mới</b-button>
+                <b-button type="submit" variant="primary">Tạo yêu cầu</b-button>
               </div>
             </b-form>
           </ValidationObserver>

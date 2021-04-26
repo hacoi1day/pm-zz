@@ -19,7 +19,7 @@
                 <b-tr v-for="(item, index) in items" :key="index">
                   <b-td>{{ item.type | filterType }}</b-td>
                   <b-td>{{ item.status | filterStatus }}</b-td>
-                  <b-td>{{ item.approval_by }}</b-td>
+                  <b-td>{{ item.approval | filterApproval }}</b-td>
                   <b-td>{{ item.start | filterDate }} - {{ item.end | filterDate }}</b-td>
                 </b-tr>
               </b-tbody>
@@ -64,7 +64,6 @@ export default {
   methods: {
     async getMyRequest () {
       const {data, last_page, total} = await myRequest(this.currentPage);
-      console.log(data);
       this.items = data;
       this.lastPage = last_page;
       this.total = total;
@@ -88,6 +87,12 @@ export default {
       let status = REQUEST_STATUS.find(item => item.id === value);
       if (status && status.name) {
         return status.name;
+      }
+      return '';
+    },
+    filterApproval (value) {
+      if (value && value.name) {
+        return value.name;
       }
       return '';
     }
