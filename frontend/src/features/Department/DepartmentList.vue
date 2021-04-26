@@ -26,7 +26,7 @@
                     </span>
                   </b-td>
                   <b-td>{{ item.name }}</b-td>
-                  <b-td>{{ item.manager_id }}</b-td>
+                  <b-td>{{ item.manager | filterManager }}</b-td>
                 </b-tr>
               </b-tbody>
             </b-table-simple>
@@ -96,6 +96,14 @@ export default {
           });
         }
       });
+    }
+  },
+  filters: {
+    filterManager (manager) {
+      if (manager && manager.name) {
+        return manager.name;
+      }
+      return '';
     }
   }
 }

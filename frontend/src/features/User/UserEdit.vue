@@ -3,13 +3,13 @@
       header="Sửa thông tin nhân viên"
       header-tag="header"
     >
-      <b-contaienr fluid>
+      <b-container fluid>
         <user-form
           mode="edit"
           :userId="userId"
           :onSubmit="handleSubmit"
         />
-      </b-contaienr>
+      </b-container>
     </b-card>
 </template>
 

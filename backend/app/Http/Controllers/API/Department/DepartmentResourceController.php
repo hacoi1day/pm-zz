@@ -23,8 +23,12 @@ class DepartmentResourceController extends Controller
     public function index()
     {
         try {
-            $items = $this->department->paginate(10);
-            return response()->json($items, 200);
+            $paginate = $this->department->paginate(10);
+            $paginate->getCollection()->transform(function ($item) {
+                $item->manager;
+                return $item;
+            });
+            return response()->json($paginate, 200);
         } catch(Exception $e) {
             return response()->json([
                 'status' => 'error',

@@ -32,7 +32,7 @@
                   <b-td>{{ item.email }}</b-td>
                   <b-td>{{ item.phone }}</b-td>
                   <b-td>{{ item.birthday | filterDate }}</b-td>
-                  <b-td>{{ item.department.name }}</b-td>
+                  <b-td>{{ item.department | filterDepartment }}</b-td>
                 </b-tr>
               </b-tbody>
             </b-table-simple>
@@ -54,6 +54,7 @@
 
 <script>
 import moment from 'moment';
+import swal from 'sweetalert';
 import { listUser, deleteUser } from '../../apis/user';
 export default {
   name: 'user-list',
@@ -84,14 +85,25 @@ export default {
       this.$router.push({name: 'user-edit', params: {id: userId}});
     },
     async deleteUser (userId) {
-      await deleteUser(userId);
-      this.currentPage = 1;
-      await this.getUsers();
-      this.$notify({
-        type: 'success',
-        title: 'Thành công',
-        text: 'Xoá Nhân viên mới thành công !'
+      swal({
+        title: "Chắc chắn xoá?",
+        text: "Sau khi xoá, dữ liệu sẽ không thể khôi phục",
+        icon: "warning",
+        buttons: ['Huỷ', 'Đồng ý'],
+        dangerMode: true,
+      }).then(async (willDelete) => {
+        if (willDelete) {
+          await deleteUser(userId);
+          this.currentPage = 1;
+          await this.getUsers();
+          this.$notify({
+            type: 'success',
+            title: 'Thành công',
+            text: 'Xoá Nhân viên mới thành công !'
+          });
+        }
       });
+      
     }
   },
   filters: {
@@ -102,8 +114,10 @@ export default {
       return date;
     },
     filterDepartment (department) {
-      console.log(department);
-      return '111';
+      if (department && department.name) {
+        return department.name;
+      }
+      return '';
     }
   }
 }
