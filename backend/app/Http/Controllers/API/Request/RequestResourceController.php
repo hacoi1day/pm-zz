@@ -55,6 +55,9 @@ class RequestResourceController extends Controller
         try {
             $params = $request->all();
             $params['user_id'] = Auth::guard('api')->id();
+            if (!$request->has('status')) {
+                $params['status'] = 1;
+            }
             $item = $this->request->create($params);
             return response()->json($item, 201);
         } catch(Exception $e) {
