@@ -42,7 +42,9 @@ class AuthController extends Controller
     public function me()
     {
         try {
-            return response()->json(Auth::guard('api')->user());
+            $user = Auth::guard('api')->user();
+            $user->department;
+            return response()->json($user);
         } catch(Exception $e) {
             return response()->json([
                 'status' => 'error',
