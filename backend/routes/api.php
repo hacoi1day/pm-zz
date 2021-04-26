@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\Auth\AuthController;
+use App\Http\Controllers\API\Checkin\CheckinController;
 use App\Http\Controllers\API\Checkin\CheckinResourceController;
 use App\Http\Controllers\API\Common\CommonController;
 use App\Http\Controllers\API\Department\DepartmentResourceController;
@@ -60,6 +61,7 @@ Route::middleware('auth:api')->group(function () {
     // Checkin
     Route::prefix('checkin')->group(function () {
         Route::resource('checkin', CheckinResourceController::class);
+        Route::get('calendar', [CheckinController::class, 'getCalendar']);
     });
 
     // Request
