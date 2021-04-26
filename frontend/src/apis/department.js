@@ -1,8 +1,8 @@
-import axiosInstance from '../utils/axiosInstance';
+import httpHelper from '../utils/httpHelper';
 
 export const listDepartment = async (page) => {
     try {
-        const {data} = await axiosInstance.get(`department/department?page=${page}`);
+        const {data} = await httpHelper.get(`department/department?page=${page}`);
         return data;
     } catch (err) {
         console.log(err);
@@ -12,7 +12,7 @@ export const listDepartment = async (page) => {
 
 export const createDepartment = async (department) => {
     try {
-        const {data} = await axiosInstance.post('department/department', department);
+        const {data} = await httpHelper.post('department/department', department);
         return data;
     } catch (err) {
         console.log(err);
@@ -22,7 +22,7 @@ export const createDepartment = async (department) => {
 
 export const editDepartment = async (department) => {
     try {
-        const {data} = await axiosInstance.put(`department/department/${department.id}`, department);
+        const {data} = await httpHelper.put(`department/department/${department.id}`, department);
         return data;
     } catch (err) {
         console.log(err);
@@ -32,7 +32,7 @@ export const editDepartment = async (department) => {
 
 export const getDepartment = async (departmentId) => {
     try {
-        const {data} = await axiosInstance.get(`department/department/${departmentId}`);
+        const {data} = await httpHelper.get(`department/department/${departmentId}`);
     return data;
     } catch (err) {
         console.log(err);
@@ -42,7 +42,7 @@ export const getDepartment = async (departmentId) => {
 
 export const deleteDepartment = async (departmentId) => {
     try {
-        const {data} = await axiosInstance.delete(`department/department/${departmentId}`);
+        const {data} = await httpHelper.delete(`department/department/${departmentId}`);
         return data;
     } catch (err) {
         console.log(err);
@@ -52,7 +52,7 @@ export const deleteDepartment = async (departmentId) => {
 
 export const dropdownDepartment = async () => {
     try {
-        const {data} = await axiosInstance.post('department/dropdown');
+        const {data} = await httpHelper.post('department/dropdown');
         return data;
     } catch (err) {
         console.log(err);

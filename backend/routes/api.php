@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\Checkin\CheckinResourceController;
+use App\Http\Controllers\API\Common\CommonController;
 use App\Http\Controllers\API\Department\DepartmentResourceController;
 use App\Http\Controllers\API\Request\RequestResourceController;
 use App\Http\Controllers\API\Storage\StorageController;
@@ -23,11 +24,20 @@ use Illuminate\Support\Facades\Route;
 // Auth Router
 Route::post('login', [AuthController::class, 'login']);
 
+// Active Account
+Route::get('active', [AuthController::class, 'active']);
+
 Route::middleware('auth:api')->group(function () {
     // Get User
     Route::get('me', [AuthController::class, 'me']);
     // Logout
     Route::get('logout', [AuthController::class, 'logout']);
+
+    // Change password
+    Route::post('change-password', [AuthController::class, 'changePassword']);
+
+    // Change User Info
+    Route::post('change-user-info', [AuthController::class, 'changeUserInfo']);
 
     // Storage
     Route::prefix('storage')->group(function () {
@@ -54,6 +64,11 @@ Route::middleware('auth:api')->group(function () {
     // Request
     Route::prefix('request')->group(function () {
         Route::resource('request', RequestResourceController::class);
+    });
+
+    // Common
+    Route::prefix('common')->group(function () {
+        Route::post('check-unique/{table}/{column}/{id?}', [CommonController::class, 'checkUnique']);
     });
 
 });

@@ -1,6 +1,6 @@
-import axiosInstance from '../utils/axiosInstance';
+import httpHelper from '../utils/httpHelper';
 
 export const storeFile = async (file) => {
-    const {data} = await axiosInstance.uploadFile(file);
+    const {data} = await httpHelper.uploadFile(file);
     return data;
 };

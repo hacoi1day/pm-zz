@@ -26,7 +26,7 @@
                     </span>
                   </b-td>
                   <b-td>{{ item.name }}</b-td>
-                  <b-td>{{ item.manager_id }}</b-td>
+                  <b-td>{{ item.manager | filterManager }}</b-td>
                 </b-tr>
               </b-tbody>
             </b-table-simple>
@@ -69,9 +69,7 @@ export default {
   },
   methods: {
     async getDepartments () {
-      this.$Progress.start();
       const {data, last_page, total} = await listDepartment(this.currentPage);
-      this.$Progress.finish();
       this.items = data;
       this.lastPage = last_page;
       this.total = total;
@@ -98,6 +96,14 @@ export default {
           });
         }
       });
+    }
+  },
+  filters: {
+    filterManager (manager) {
+      if (manager && manager.name) {
+        return manager.name;
+      }
+      return '';
     }
   }
 }

@@ -8,27 +8,31 @@
         <b-row>
           <b-col md="6">
             <p>Thông tin nhân viên</p>
-            <b-table-simple hover small responsive="sm">
+            <b-table-simple hover small responsive="sm" v-if="user">
               <b-tbody>
                 <b-tr>
                   <b-td>Họ và tên</b-td>
-                  <b-td>Vũ Thanh Hà</b-td>
+                  <b-td>{{ user.name }}</b-td>
                 </b-tr>
                 <b-tr>
                   <b-td>Địa chỉ Email</b-td>
-                  <b-td>vuha98.tn@gmail.com</b-td>
+                  <b-td>{{ user.email }}</b-td>
                 </b-tr>
                 <b-tr>
                   <b-td>Số điện thoại</b-td>
-                  <b-td>0984735879</b-td>
+                  <b-td>{{ user.phone }}</b-td>
                 </b-tr>
                 <b-tr>
                   <b-td>Ngày sinh</b-td>
-                  <b-td>05/12/1998</b-td>
+                  <b-td>{{ user.birthday | filterBirthday }}</b-td>
                 </b-tr>
                 <b-tr>
                   <b-td>Giới tính</b-td>
+                  <b-td>{{ user.gender | filterGender }}</b-td>
+                </b-tr>
+                <b-tr>
                   <b-td>Địa chỉ</b-td>
+                  <b-td>{{ user.address }}</b-td>
                 </b-tr>
               </b-tbody>
             </b-table-simple>
@@ -49,21 +53,52 @@
             </b-table-simple>
           </b-col>
           <b-col md="12">
-            <b-button variant="success">Sửa thông tin</b-button>
+            <b-button variant="success" @click="editUserInfo">Sửa thông tin</b-button>
           </b-col>
         </b-row>
-        
       </b-container>
     </b-card>
   </div>
 </template>
 
 <script>
+import moment from 'moment';
+import { mapState } from 'vuex'
 export default {
   name: 'user-info',
+  created () {
+  },
+  computed: mapState({
+    user: state => state.user.userInfo
+  }),
   data () {
     return {
       
+    }
+  },
+  methods: {
+    editUserInfo () {
+      this.$router.push({name: 'user-info-edit'});
+    }
+  },
+  filters: {
+    filterGender (value) {
+      switch (value) {
+        case true:
+        case 1:
+          return 'Nam';
+        case false:
+        case 0:
+          return 'Nữ';
+        default:
+          return '';
+      }
+    },
+    filterBirthday (value) {
+      if (!value) {
+        return '';
+      }
+      return moment(value, 'YYYY-MM-DD').format('DD/MM/YYYY');
     }
   }
 }

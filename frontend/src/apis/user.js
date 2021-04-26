@@ -1,8 +1,8 @@
-import axiosInstance from '../utils/axiosInstance';
+import httpHelper from '../utils/httpHelper';
 
 export const listUser = async (page) => {
     try {
-        const {data} = await axiosInstance.get(`user/user?page=${page}`);
+        const {data} = await httpHelper.get(`user/user?page=${page}`);
         return data;
     } catch (err) {
         console.log(err);
@@ -12,7 +12,7 @@ export const listUser = async (page) => {
 
 export const createUser = async (user) => {
     try {
-        const {data} = await axiosInstance.post('user/user', user);
+        const {data} = await httpHelper.post('user/user', user);
         return data;
     } catch (err) {
         console.log(err);
@@ -22,7 +22,7 @@ export const createUser = async (user) => {
 
 export const editUser = async (user) => {
     try {
-        const {data} = await axiosInstance.put(`user/user/${user.id}`, user);
+        const {data} = await httpHelper.put(`user/user/${user.id}`, user);
         return data;
     } catch (err) {
         console.log(err);
@@ -32,7 +32,7 @@ export const editUser = async (user) => {
 
 export const getUser = async (userId) => {
     try {
-        const {data} = await axiosInstance.get(`user/user/${userId}`);
+        const {data} = await httpHelper.get(`user/user/${userId}`);
     return data;
     } catch (err) {
         console.log(err);
@@ -42,7 +42,7 @@ export const getUser = async (userId) => {
 
 export const deleteUser = async (userId) => {
     try {
-        const {data} = await axiosInstance.delete(`user/user/${userId}`);
+        const {data} = await httpHelper.delete(`user/user/${userId}`);
         return data;
     } catch (err) {
         console.log(err);
@@ -52,7 +52,7 @@ export const deleteUser = async (userId) => {
 
 export const dropdownUser = async () => {
     try {
-        const {data} = await axiosInstance.post('user/dropdown');
+        const {data} = await httpHelper.post('user/dropdown');
         return data;
     } catch (err) {
         console.log(err);
