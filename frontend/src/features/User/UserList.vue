@@ -32,7 +32,7 @@
                   <b-td>{{ item.email }}</b-td>
                   <b-td>{{ item.phone }}</b-td>
                   <b-td>{{ item.birthday | filterDate }}</b-td>
-                  <b-td>{{ item.department }}</b-td>
+                  <b-td>{{ item.department.name }}</b-td>
                 </b-tr>
               </b-tbody>
             </b-table-simple>
@@ -100,6 +100,10 @@ export default {
         return moment(date).format('DD/MM/YYYY');
       }
       return date;
+    },
+    filterDepartment (department) {
+      console.log(department);
+      return '111';
     }
   }
 }

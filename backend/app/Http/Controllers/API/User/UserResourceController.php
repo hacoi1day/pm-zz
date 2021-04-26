@@ -31,8 +31,12 @@ class UserResourceController extends Controller
     public function index()
     {
         try {
-            $items = $this->user->paginate(10);
-            return response()->json($items, 200);
+            $paginate = $this->user->paginate(10);
+            $paginate->getCollection()->transform(function ($item) {
+                $item->department;
+                return $item;
+            });
+            return response()->json($paginate, 200);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
