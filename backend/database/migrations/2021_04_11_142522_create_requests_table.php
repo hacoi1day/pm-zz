@@ -22,7 +22,7 @@ class CreateRequestsTable extends Migration
             $table->string('phone')->nullable(true);
             $table->string('cause')->nullable(true);
             $table->string('project')->nullable(true);
-            $table->string('approval_by')->nullable(true);
+            $table->foreignId('approval_by')->nullable(true);
             $table->tinyInteger('status')->nullable(true);
             $table->timestamps();
         });

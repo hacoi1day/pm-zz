@@ -10,6 +10,16 @@ export const listRequest = async (page) => {
     }
 };
 
+export const myRequest = async (page) => {
+  try {
+      const {data} = await httpHelper.get(`request/my-request?page=${page}`);
+      return data;
+  } catch (err) {
+      console.log(err);
+      return [];
+  }
+};
+
 export const createRequest = async (user) => {
     try {
         const {data} = await httpHelper.post('request/request', user);

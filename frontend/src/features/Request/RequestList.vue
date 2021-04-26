@@ -16,7 +16,12 @@
                 </b-tr>
               </b-thead>
               <b-tbody>
-                
+                <b-tr v-for="(item, index) in items" :key="index">
+                  <b-td>{{ item.type | filterType }}</b-td>
+                  <b-td>{{ item.status | filterStatus }}</b-td>
+                  <b-td>{{ item.approval | filterApproval }}</b-td>
+                  <b-td>{{ item.start | filterDate }} - {{ item.end | filterDate }}</b-td>
+                </b-tr>
               </b-tbody>
             </b-table-simple>
             <span>Trang: {{ currentPage }}/{{ lastPage }} (tổng bản ghi: {{ total }})</span>
@@ -35,6 +40,9 @@
 </template>
 
 <script>
+import moment from 'moment';
+import { REQUEST_STATUS, REQUEST_TYPE } from '../../constants/request';
+import { myRequest } from '../../apis/request';
 export default {
   name: 'request-list',
   data () {
@@ -45,6 +53,50 @@ export default {
       total: 0
     };
   },
+  created () {
+    this.getMyRequest(1);
+  },
+  watch: {
+    currentPage (value) {
+      this.getMyRequest(value);
+    }
+  },
+  methods: {
+    async getMyRequest () {
+      const {data, last_page, total} = await myRequest(this.currentPage);
+      this.items = data;
+      this.lastPage = last_page;
+      this.total = total;
+    }
+  },
+  filters: {
+    filterDate (value) {
+      if (value) {
+        return moment(value).format('HH:mm DD/MM/YYYY');
+      }
+      return '';
+    },
+    filterType (value) {
+      let type = REQUEST_TYPE.find(item => item.id === value);
+      if (type && type.name) {
+        return type.name;
+      }
+      return '';
+    },
+    filterStatus (value) {
+      let status = REQUEST_STATUS.find(item => item.id === value);
+      if (status && status.name) {
+        return status.name;
+      }
+      return '';
+    },
+    filterApproval (value) {
+      if (value && value.name) {
+        return value.name;
+      }
+      return '';
+    }
+  }
 }
 </script>
 

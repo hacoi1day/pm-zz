@@ -27,4 +27,9 @@ class Request extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function approval()
+    {
+        return $this->belongsTo(User::class, 'approval_by', 'id');
+    }
 }

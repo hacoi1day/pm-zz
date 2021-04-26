@@ -1,111 +1,196 @@
 <template>
   <b-card
-      header="Tạo yêu cầu"
-      header-tag="header"
-    >
-      <b-container fluid>
-        <b-row>
-          <b-col md="12">
-            <b-form @submit.prevent="handleSubmit">
-              
-              <b-row class="my-2">
-                <b-col sm="2" class="d-flex align-items-center">
-                  <label for="type">Nội dung</label>
-                </b-col>
-                <b-col sm="4">
-                  <b-form-select
-                    id="type"
-                    v-model="request.type"
-                  >
-                    <b-form-select-option v-for="(requestType, index) in requestTypes" :key="index" :value="requestType.id">{{ requestType.name }}</b-form-select-option>
-                  </b-form-select>
-                </b-col>
-              </b-row>
+    header="Tạo yêu cầu"
+    header-tag="header"
+  >
+    <b-container fluid>
+      <b-row>
+        <b-col md="12">
+          <ValidationObserver v-slot="{ handleSubmit }">
+            <b-form @submit.prevent="handleSubmit(onSubmit)">
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Nội dung"
+              >
+              <b-form-group label="Nội dung:" label-for="type">
+                <b-form-select
+                  id="type"
+                  v-model="request.type"
+                  :state="errors.length !== 0 ? false : null"
+                >
+                  <b-form-select-option 
+                    v-for="(requestType, index) in requestTypes" 
+                    :key="index" 
+                    :value="requestType.id"
+                  >{{ requestType.name }}</b-form-select-option>
+                </b-form-select>
+                <b-form-invalid-feedback :state="errors ? false : true">
+                  {{ errors[0] }}
+                </b-form-invalid-feedback>
+              </b-form-group>
+              </ValidationProvider>
 
-              <b-row class="my-2">
-                <b-col sm="2" class="d-flex align-items-center">
-                  <label for="name">Từ</label>
-                </b-col>
-                <b-col sm="4">
-                  <date-time-picker :value="request.end" :onChange="handleOnChangeEnd" />
-                </b-col>
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Ngày"
+                v-if="!selectDate"
+              >
+                <label for="date">Ngày:</label>
+                <b-form-datepicker 
+                  id="date" 
+                  v-model="date" 
+                  class="mb-2"
+                  :state="errors.length !== 0 ? false : null"
+                ></b-form-datepicker>
+                <b-form-invalid-feedback :state="errors ? false : true">
+                  {{ errors[0] }}
+                </b-form-invalid-feedback>
+              </ValidationProvider>
 
-                <b-col sm="2" class="d-flex align-items-center">
-                  <label for="name">đến</label>
-                </b-col>
-                <b-col sm="4">
-                  <date-time-picker :value="request.start" :onChange="handleOnChangeStart" />
-                </b-col>
-              </b-row>
-              <b-row class="my-2">
-                <b-col sm="2" class="d-flex align-items-center">
-                  <label for="phone">Số điện thoại</label>
-                </b-col>
-                <b-col sm="4">
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Từ"
+              >
+                <label for="start">Từ:</label>
+                <b-form-datepicker 
+                  id="start" 
+                  v-model="request.start" 
+                  class="mb-2"
+                  :state="errors.length !== 0 ? false : null"
+                  v-if="selectDate"
+                ></b-form-datepicker>
+                <b-form-timepicker 
+                  id="start" 
+                  v-model="request.start" 
+                  class="mb-2"
+                  :state="errors.length !== 0 ? false : null"
+                  v-if="!selectDate"
+                ></b-form-timepicker>
+                <b-form-invalid-feedback :state="errors ? false : true">
+                  {{ errors[0] }}
+                </b-form-invalid-feedback>
+              </ValidationProvider>
+
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Đến"
+              >
+                <label for="end">Đến:</label>
+                <b-form-datepicker 
+                  id="end" 
+                  v-model="request.end" 
+                  class="mb-2"
+                  :state="errors.length !== 0 ? false : null"
+                  v-if="selectDate"
+                ></b-form-datepicker>
+                <b-form-timepicker 
+                  id="end" 
+                  v-model="request.end" 
+                  class="mb-2"
+                  :state="errors.length !== 0 ? false : null"
+                  v-if="!selectDate"
+                ></b-form-timepicker>
+                <b-form-invalid-feedback :state="errors ? false : true">
+                  {{ errors[0] }}
+                </b-form-invalid-feedback>
+              </ValidationProvider>
+
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Số điện thoại"
+              >
+                <b-form-group
+                  label="Số điện thoại:"
+                  label-for="phone"
+                >
                   <b-form-input
                     id="phone"
-                    type="text"
-                    placeholder="Nhập số điện thoại"
                     v-model="request.phone"
-                  />
-                </b-col>
-              </b-row>
+                    type="text"
+                    placeholder="Nhập Số điện thoại"
+                    :state="errors.length !== 0 ? false : null"
+                  ></b-form-input>
+                  <b-form-invalid-feedback :state="errors ? false : true">
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </ValidationProvider>
 
-              <b-row class="my-2">
-                <b-col sm="2" class="d-flex align-items-center">
-                  <label for="project">Dự án</label>
-                </b-col>
-                <b-col sm="4">
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Dự án"
+              >
+                <b-form-group
+                  label="Dự án:"
+                  label-for="project"
+                >
                   <b-form-input
                     id="project"
-                    type="text"
-                    placeholder="Nhập tên dự án"
                     v-model="request.project"
-                  />
-                </b-col>
-              </b-row>
-
-              <b-row class="my-2">
-                <b-col sm="2" class="d-flex align-items-center">
-                  <label for="cause">Lý do</label>
-                </b-col>
-                <b-col sm="4">
-                  <b-form-textarea
-                    id="cause"
                     type="text"
-                    placeholder="Nhập lý do"
-                    v-model="request.cause"
-                  />
-                </b-col>
-              </b-row>
+                    placeholder="Nhập Dự án"
+                    :state="errors.length !== 0 ? false : null"
+                  ></b-form-input>
+                  <b-form-invalid-feedback :state="errors ? false : true">
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </ValidationProvider>
 
-              <b-row>
-                <b-col sm="12" class="text-center mt-3">
-                  <b-button type="submit" variant="primary">Thêm mới</b-button>
-                </b-col>
-              </b-row>
+              <ValidationProvider 
+                v-slot="{errors}" 
+                rules="required" 
+                name="Lý do"
+              >
+                <b-form-group
+                  label="Lý do:"
+                  label-for="cause"
+                >
+                  <b-form-input
+                    id="cause"
+                    v-model="request.cause"
+                    type="text"
+                    placeholder="Nhập Lý do"
+                    :state="errors.length !== 0 ? false : null"
+                  ></b-form-input>
+                  <b-form-invalid-feedback :state="errors ? false : true">
+                    {{ errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </ValidationProvider>
+              <div class="text-center">
+                <b-button type="submit" variant="primary">Tạo yêu cầu</b-button>
+              </div>
             </b-form>
-          </b-col>
-        </b-row>
-      </b-container>
-    </b-card>
+          </ValidationObserver>
+        </b-col>
+      </b-row>
+    </b-container>
+  </b-card>
 </template>
 
 <script>
-import moment from 'moment';
 import { REQUEST_TYPE } from '../../constants/request';
 import { createRequest } from '../../apis/request';
-import DateTimePicker from '../../components/DateTimePicker.vue';
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
+
 export default {
   name: 'request-create',
   components: {
-    DateTimePicker
+    ValidationObserver, ValidationProvider,
   },
   data () {
     return {
-      requestTypes: [],
+      requestTypes: REQUEST_TYPE,
+      selectDate: true,
+      date: '',
       request: {
-        user_id: null,
         type: null,
         start: null,
         end: null,
@@ -115,8 +200,30 @@ export default {
       }
     };
   },
-  mounted () {
-    this.requestTypes = REQUEST_TYPE;
+  created () {
+    let user = this.$store.state.user.userInfo;
+    if (user) {
+      this.request.phone = user.phone;
+      this.request.project = user.department.name;
+    }
+  },
+  watch: {
+    request: {
+      handler (value) {
+        switch (value.type) {
+          case 1:
+          case 2:
+            // select date
+            this.selectDate = true;
+            break;
+          case 3:
+            // select time
+            this.selectDate = false;
+            break;
+        }
+      },
+      deep: true
+    }
   },
   methods: {
     handleOnChangeStart (value) {
@@ -125,26 +232,23 @@ export default {
     handleOnChangeEnd (value) {
       this.request.end = value;
     },
-    async handleSubmit () {
-      this.$Progress.start();
+    async onSubmit () {
       let request = this.request;
-      request.start = moment(request.start).format('YYYY-MM-DD HH:mm:ss');
-      request.end = moment(request.end).format('YYYY-MM-DD HH:mm:ss');
+      if (this.selectDate === false) {
+        request.start = `${this.date} ${request.start}`;
+        request.end = `${this.date} ${request.end}`;
+      }
       await createRequest(request);
-      this.$Progress.finish();
       this.$notify({
         type: 'success',
         title: 'Thành công',
         text: 'Tạo yêu cầu thành công !'
       });
       this.$router.push({name: 'request-list'});
-    }
+    },
   },
   filters: {
-    filterDate (date) {
-      if (!date) return '';
-      return moment(date, 'DD/MM/YYYY h:mm A').format('HH:mm DD/MM/YYYY');
-    }
+    
   }
 }
 </script>
