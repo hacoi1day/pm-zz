@@ -27,7 +27,7 @@
             </ValidationProvider>
             <ValidationProvider 
               v-slot="{errors}" 
-              rules="required|email|unique:users,email" 
+              :rules="`required|email|unique:users,email,${userId}`" 
               name="Địa chỉ email"
               :debounce="500"
             >
@@ -79,8 +79,8 @@
               name="Giới tính"
             >
               <b-form-group label="Giới tính">
-                <b-form-radio v-model="form.gender" name="gender" :value="true">Nam</b-form-radio>
-                <b-form-radio v-model="form.gender" name="gender" :value="false">Nữ</b-form-radio>
+                <b-form-radio v-model="form.gender" name="gender" :value="1">Nam</b-form-radio>
+                <b-form-radio v-model="form.gender" name="gender" :value="0">Nữ</b-form-radio>
               </b-form-group>
             </ValidationProvider>
 
@@ -99,7 +99,8 @@
                 ></b-form-textarea>
               </b-form-group>
             </ValidationProvider>
-            <b-button type="submit" variant="primary">Thêm mới</b-button>
+            <b-button type="submit" variant="primary" v-if="mode === 'create'">Thêm mới</b-button>
+            <b-button type="submit" variant="primary" v-if="mode === 'edit'">Cập nhật</b-button>
           </b-form>
         </ValidationObserver>
       </b-col>
@@ -121,30 +122,32 @@
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import SelectDepartment from '../../../components/select/SelectDepartment.vue';
 import Avatar from '../../../components/Avatar.vue';
+import { getUser } from '../../../apis/user';
 
 export default {
+  name: 'user-form',
   components: { 
     ValidationObserver, ValidationProvider,
     SelectDepartment,
     Avatar
   },
-  name: 'user-form',
   props: {
     mode: {
       type: String,
       default: 'create'
     },
     userId: {
-      type: Object,
+      type: [Number, String],
       default: null
     },
     onSubmit: {
       type: Function
     }
   },
-  created () {
-    if (this.mode === 'edit' && this.userId !== null) {
-      console.log(this.userId);
+  async created () {
+    if (this.userId !== null) {
+      let user = await getUser(this.userId);
+      this.form = user;
     }
   },
   data () {
