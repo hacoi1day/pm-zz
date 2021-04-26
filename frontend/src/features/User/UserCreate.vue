@@ -41,22 +41,5 @@ export default {
 </script>
 
 <style lang="scss">
-.upload-avatar {
-  text-align: center;
-  p {
-    margin-bottom: 10px;
-  }
-  .image-preview {
-    max-width: 150px;
-    max-height: 150px;
-  }
-  .input-upload {
-    .input-hidden {
-      display: none;
-    }
-    button {
 
-    }
-  }
-}
 </style>

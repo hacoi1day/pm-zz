@@ -1,25 +1,19 @@
 <template>
-  <b-row class="my-2">
-    <b-col sm="4">
-      <label for="department_id">Phòng ban</label>
-    </b-col>
-    <b-col sm="8">
-      <b-form-select
-        id="department_id"
-        name="department_id"
-        aria-placeholder="Chọn phòng ban"
-        :value="value"
-        @change="handleOnChange"
-      >
-        <b-form-select-option :value="null" seleted disabled>Chọn phòng ban</b-form-select-option>
-        <b-form-select-option
-          v-for="(item, index) in departments"
-          :key="index"
-          :value="item.id"
-        >{{item.name}}</b-form-select-option>
-      </b-form-select>
-    </b-col>
-  </b-row>
+  <b-form-group label="Chọn phòng ban:" label-for="department_id">
+    <b-form-select
+      id="department_id"
+      aria-placeholder="Chọn phòng ban"
+      :value="value"
+      @change="handleOnChange"
+    >
+      <b-form-select-option :value="null">Chọn phòng ban</b-form-select-option>
+      <b-form-select-option 
+        v-for="(item, index) in departments"
+        :value="item.id"
+        :key="index"
+      >{{ item.name }}</b-form-select-option>
+    </b-form-select>
+  </b-form-group>
 </template>
 
 <script>

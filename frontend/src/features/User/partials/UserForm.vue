@@ -104,37 +104,29 @@
         </ValidationObserver>
       </b-col>
       <b-col sm="6">
-        <div class="upload-avatar">
-          <p class="mb-2">Ảnh đại diện</p>
-          <img 
-            class="image-preview mb-3" 
-            :src="form.avatar" 
-            :alt="form.avatar"
-          />
-          <div class="input-upload">
-            <input 
-              type="file" 
-              name="input-avatar" 
-              class="input-hidden"
-              ref="inputAvatar"
-              accept="image/*"
-              @change="onSelectedFile"
-            >
-            <b-button variant="success" @click="onSelectFile">Tải lên</b-button>
-          </div>
-        </div>
+        <avatar
+          :value="form.avatar"
+          :onChange="handleChangeAvatar"
+        />
+        <select-department
+          :value="form.department_id"
+          :onChange="handleChangeDepartment"
+        />
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
-import { storeFile } from '../../../apis/storage';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
+import SelectDepartment from '../../../components/select/SelectDepartment.vue';
+import Avatar from '../../../components/Avatar.vue';
 
 export default {
   components: { 
-    ValidationObserver, ValidationProvider
+    ValidationObserver, ValidationProvider,
+    SelectDepartment,
+    Avatar
   },
   name: 'user-form',
   props: {
@@ -166,7 +158,8 @@ export default {
         avatar: 'https://via.placeholder.com/150',
         gender: true,
         address: '',
-        password: '123456'
+        password: '123456',
+        department_id: null
       }
     }
   },
@@ -174,14 +167,14 @@ export default {
     onHandleSubmit () {
       this.onSubmit(this.form);
     },
-    onSelectFile () {
-      this.$refs.inputAvatar.click();
+    handleChangeDepartment (department_id) {
+      if (department_id) {
+        this.form.department_id = department_id;
+      }
     },
-    async onSelectedFile (event) {
-      const files = event.target.files;
-      let {url} = await storeFile(files[0]);
-      this.form.avatar = url;
-    },
+    handleChangeAvatar (avatar) {
+      this.form.avatar = avatar;
+    }
   }
 }
 </script>
