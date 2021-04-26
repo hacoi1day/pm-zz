@@ -176,7 +176,6 @@
 </template>
 
 <script>
-import moment from 'moment';
 import { REQUEST_TYPE } from '../../constants/request';
 import { createRequest } from '../../apis/request';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
