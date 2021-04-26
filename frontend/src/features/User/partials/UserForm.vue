@@ -164,7 +164,7 @@ export default {
         phone: '',
         birthday: '',
         avatar: 'https://via.placeholder.com/150',
-        gender: '',
+        gender: true,
         address: '',
         password: '123456'
       }
