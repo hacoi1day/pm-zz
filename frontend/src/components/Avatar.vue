@@ -48,9 +48,13 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .upload-avatar {
   text-align: center;
+  img {
+    max-width: 150px;
+    max-height: 150px;
+  }
   p {
     margin-bottom: 10px;
   }
