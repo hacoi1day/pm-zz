@@ -1,5 +1,9 @@
 <template>
   <div class="reset-password">
+    <router-link to="/auth/login">
+      <font-awesome-icon class="mr-2" icon="angle-left"/>
+      <span>Đăng nhập</span>
+    </router-link>
     <h3 class="title">Quên mật khẩu</h3>
     <b-form @submit.prevent="onResetPassword">
       <b-form-group
