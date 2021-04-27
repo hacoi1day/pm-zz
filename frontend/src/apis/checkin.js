@@ -9,3 +9,33 @@ export const getCalendar = async (start_date, end_date) => {
     return [];
   }
 };
+
+export const getCheckIn = async () => {
+  try {
+    const {data} = await httpHelper.get('checkin/me/checkin');
+    return data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+export const getCheckOut = async () => {
+  try {
+    const {data} = await httpHelper.get('checkin/me/checkout');
+    return data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+export const getLastCheckIn = async () => {
+  try {
+    const {data} = await httpHelper.get('checkin/me/last-checkin');
+    return data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}

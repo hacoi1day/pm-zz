@@ -14,7 +14,8 @@ import FullCalendar from '@fullcalendar/vue';
 import viLocale from '@fullcalendar/core/locales/vi';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import moment from 'moment';
-import { getCalendar } from '../../apis/checkin';
+import { getCalendar, getLastCheckIn, getCheckIn, getCheckOut } from '../../apis/checkin';
+import swal from 'sweetalert';
 
 export default {
   name: 'check-in',
@@ -23,8 +24,10 @@ export default {
   },
   data () {
     return {
-      startDate: '',
-      endDate: '',
+      lasCheckin: null,
+      type: 'checkin',
+      startDate: '2021-04-01',
+      endDate: '2021-04-30',
       calendarOptions: {
         plugins: [ dayGridPlugin ],
         initialView: 'dayGridMonth',
@@ -35,35 +38,75 @@ export default {
         customButtons: {
           checkin: {
             text: 'Checkin',
-            click: this.checkin
+            click: this.checkInOut
           },
         },
         locales: [ viLocale ],
         locale: 'vi',
         events: [
-          { title: 'Test 1', date: '2021-04-15', time_in: '09:00:00', time_out: '18:00:00' },
+          // { date: '2021-04-15', time_in: '2021-04-15 09:00:00', time_out: '2021-04-15 18:00:00' },
         ],
         eventContent: (arg) => {
           let { time_in, time_out } = arg.event.extendedProps;
           return {
             html : `
-              <span class="time_in">${moment(time_in, 'HH:mm:ss').format('HH:mm')}</span>
-              <span class="time_out">${moment(time_out, 'HH:mm:ss').format('HH:mm')}</span>
+              ${time_in ? `<span class="time_in">${moment(time_in, 'YYYY-MM-DD HH:mm:ss').format('HH:mm')}</span>` : ''}
+              ${time_out ? `<span class="time_out">${moment(time_out, 'YYYY-MM-DD HH:mm:ss').format('HH:mm')}</span>` : ''}
             `
           };
         }
       }
     }
   },
+  created () {
+    this.fetchLastCheckin();
+    this.fetchCalendar();
+  },
+  watch: {
+    lasCheckin (lastCheckin) {
+      if (lastCheckin.time_out === null) {
+        this.calendarOptions.customButtons.checkin.text = 'Checkout';
+        this.type = 'checkout';
+      } else {
+        this.calendarOptions.customButtons.checkin.text = 'Checkin';
+        this.type = 'checkin';
+      }
+    },
+  },
   methods: {
     async fetchCalendar () {
-      let res = await getCalendar(this.startDate, this.endDate);
-      console.log(res);
+      let result = await getCalendar(this.startDate, this.endDate);
+      this.calendarOptions.events = result;
     },
-    checkin () {
-      console.log('checkin');
+    async fetchLastCheckin () {
+      let { item } = await getLastCheckIn();
+      this.lasCheckin = item;
     },
-    
+    async checkInOut () {
+      if (this.type === 'checkin') {
+        let {item} = await getCheckIn();
+        this.calendarOptions.events.push(item);
+        await this.fetchLastCheckin();
+        return;
+      }
+      if (this.type === 'checkout') {
+        swal({
+          title: "CheckOut ?",
+          text: "Xác nhận Checkout",
+          icon: "warning",
+          buttons: ['Huỷ', 'Đồng ý'],
+          dangerMode: true,
+        }).then(async (willDelete) => {
+          if (willDelete) {
+            let {item} = await getCheckOut();
+            this.calendarOptions.events.pop();
+            this.calendarOptions.events.push(item);
+            await this.fetchLastCheckin();
+          }
+        });
+        return;
+      }
+    },
   }
 }
 </script>

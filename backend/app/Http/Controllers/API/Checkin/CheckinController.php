@@ -35,8 +35,11 @@ class CheckinController extends Controller
     {
         try {
             $userId = Auth::guard('api')->id();
-            $lastCheckin = $this->checkin->where('user_id', $userId)->orderBy('date', 'desc')->first();
-            if ($lastCheckin->time_out === null) {
+            $lastCheckin = $this->checkin
+                ->where('user_id', $userId)
+                ->orderBy('time_in', 'desc')
+                ->first();
+            if ($lastCheckin && is_null($lastCheckin->time_out)) {
                 return response()->json([
                     'status' => 'has_checkin',
                     'message' => 'Bạn chưa Checkout!'
@@ -65,8 +68,12 @@ class CheckinController extends Controller
     {
         try {
             $userId = Auth::guard('api')->id();
-            $lastCheckin = $this->checkin->where('user_id', $userId)->orderBy('date', 'desc')->first();
-            if ($lastCheckin->time_out !== null) {
+            $lastCheckin = $this->checkin
+                ->where('user_id', $userId)
+                ->orderBy('time_in', 'desc')
+                ->first();
+
+            if (!$lastCheckin || ($lastCheckin && $lastCheckin->time_out !== null)) {
                 return response()->json([
                     'status' => 'don\'t_checkin',
                     'message' => 'Bạn chưa Checkin!'
@@ -95,7 +102,8 @@ class CheckinController extends Controller
             $userId = Auth::guard('api')->id();
             $lastCheckin = $this->checkin
                 ->where('user_id', $userId)
-                ->orderBy('date', 'desc')->first();
+                ->orderBy('time_in', 'desc')
+                ->first();
             return response()->json([
                 'status' => 'success',
                 'item' => $lastCheckin,
