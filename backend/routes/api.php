@@ -29,6 +29,9 @@ Route::post('login', [AuthController::class, 'login']);
 // Active Account
 Route::get('active', [AuthController::class, 'active']);
 
+// Reset Password
+Route::post('reset-password', [AuthController::class, 'resetPassword']);
+
 Route::middleware('auth:api')->group(function () {
     // Get User
     Route::get('me', [AuthController::class, 'me']);

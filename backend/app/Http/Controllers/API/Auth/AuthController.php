@@ -7,8 +7,11 @@ use App\Http\Requests\Auth\ActiveRequest;
 use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\ChangeUserInfoRequest;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\ResetPasswordRequest;
+use App\Jobs\Mail\Auth\ResetPassword;
 use App\Models\ChangePass;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -150,6 +153,26 @@ class AuthController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
-
     }
+
+    public function resetPassword (ResetPasswordRequest $request)
+    {
+        try {
+            $email = $request->input('email');
+            $data = [
+                'email' => $email
+            ];
+            ResetPassword::dispatch($email, $data)->delay(Carbon::now());
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Đã gửi một email về địa chỉ ' . $email . '.'
+            ], 200);
+        } catch(Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUser;
-use App\Jobs\SendMail;
+use App\Jobs\Mail\User\StoreUserMail;
 use App\Models\ChangePass;
 use App\Models\User;
 use Carbon\Carbon;
@@ -65,26 +65,19 @@ class UserResourceController extends Controller
     {
         try {
             $params = $request->all();
-            if (array_key_exists('password', $params)) {
-                $params['password'] = Hash::make($params['password']);
-            }
+            $password = (array_key_exists('password', $params) && !is_null($params['password'])) ? $params['password'] : Str::random(6);
+            $params['password'] = Hash::make($password);
+
             $item = $this->user->create($params);
-
-            $token = Str::random(40);
-
-            $this->changePass->create([
-                'user_id' => $item->id,
-                'token' => $token
-            ]);
 
             $message = [
                 'type' => 'Store user',
-                'mail' => $item->email,
+                'email' => $item->email,
+                'password' => $password,
                 'content' => 'User has been created!',
-                'token' => $token
             ];
 
-            SendMail::dispatch($message, $item)->delay(Carbon::now());
+            StoreUserMail::dispatch($message, $item)->delay(Carbon::now());
 
             return response()->json($item, 201);
         } catch (Exception $e) {
