@@ -69,6 +69,10 @@ export default {
         transform: rotate(-180deg);
       }
     }
+    a {
+      text-decoration: none;
+      color: #131314;
+    }
   }
   .dropdown {
     transition: 0.4s;
@@ -88,7 +92,7 @@ export default {
         }
         a {
           text-decoration: none;
-          color: #131314
+          color: #131314;
         }
       }
     }
