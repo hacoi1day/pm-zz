@@ -7,6 +7,7 @@
         <b-row>
           <b-col md="6">
             <DepartmentForm
+              mode="edit"
               :departmentId="departmentId"
               :onSubmit="handleSubmit"
             />
