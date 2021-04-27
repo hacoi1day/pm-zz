@@ -62,6 +62,11 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('checkin')->group(function () {
         Route::resource('checkin', CheckinResourceController::class);
         Route::get('calendar', [CheckinController::class, 'getCalendar']);
+        Route::prefix('me')->group(function () {
+            Route::get('checkin', [CheckinController::class, 'checkin']);
+            Route::get('checkout', [CheckinController::class, 'checkout']);
+            Route::get('last-checkin', [CheckinController::class, 'getLastCheckin']);
+        });
     });
 
     // Request

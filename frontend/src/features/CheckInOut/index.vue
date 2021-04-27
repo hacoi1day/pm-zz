@@ -3,7 +3,9 @@
       header="Lịch làm việc"
       header-tag="header"
     >
-    <FullCalendar :options="calendarOptions" />
+    <FullCalendar 
+      :options="calendarOptions"
+    />
   </b-card>
 </template>
 
@@ -12,6 +14,7 @@ import FullCalendar from '@fullcalendar/vue';
 import viLocale from '@fullcalendar/core/locales/vi';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import moment from 'moment';
+import { getCalendar } from '../../apis/checkin';
 
 export default {
   name: 'check-in',
@@ -20,16 +23,28 @@ export default {
   },
   data () {
     return {
+      startDate: '',
+      endDate: '',
       calendarOptions: {
         plugins: [ dayGridPlugin ],
         initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'title',
+          right: 'checkin today prev,next',
+        },
+        customButtons: {
+          checkin: {
+            text: 'Checkin',
+            click: this.checkin
+          },
+        },
         locales: [ viLocale ],
         locale: 'vi',
         events: [
           { title: 'Test 1', date: '2021-04-15', time_in: '09:00:00', time_out: '18:00:00' },
         ],
         eventContent: (arg) => {
-          let {time_in, time_out} = arg.event.extendedProps;
+          let { time_in, time_out } = arg.event.extendedProps;
           return {
             html : `
               <span class="time_in">${moment(time_in, 'HH:mm:ss').format('HH:mm')}</span>
@@ -39,6 +54,16 @@ export default {
         }
       }
     }
+  },
+  methods: {
+    async fetchCalendar () {
+      let res = await getCalendar(this.startDate, this.endDate);
+      console.log(res);
+    },
+    checkin () {
+      console.log('checkin');
+    },
+    
   }
 }
 </script>
