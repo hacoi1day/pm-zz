@@ -4,6 +4,7 @@
       header-tag="header"
     >
     <FullCalendar 
+      ref="fullCalendar"
       :options="calendarOptions"
     />
   </b-card>
@@ -40,6 +41,16 @@ export default {
             text: 'Checkin',
             click: this.checkInOut
           },
+          today: {
+            text: 'Hôm nay',
+            click: this.today
+          },
+          prev: {
+            click: this.prevMonth
+          },
+          next: {
+            click: this.nextMonth
+          }
         },
         locales: [ viLocale ],
         locale: 'vi',
@@ -60,6 +71,10 @@ export default {
   },
   created () {
     this.fetchLastCheckin();
+    
+  },
+  mounted () {
+    this.getRangeDate();
     this.fetchCalendar();
   },
   watch: {
@@ -71,6 +86,9 @@ export default {
         this.calendarOptions.customButtons.checkin.text = 'Checkin';
         this.type = 'checkin';
       }
+    },
+    startDate () {
+      this.fetchCalendar();
     },
   },
   methods: {
@@ -107,6 +125,23 @@ export default {
         return;
       }
     },
+    today () {
+      this.$refs.fullCalendar.getApi().today();
+      this.getRangeDate();
+    },
+    prevMonth () {
+      this.$refs.fullCalendar.getApi().prev();
+      this.getRangeDate();
+    },
+    nextMonth () {
+      this.$refs.fullCalendar.getApi().next();
+      this.getRangeDate();
+    },
+    getRangeDate () {
+      const { start, end } = this.$refs.fullCalendar.getApi().currentData.dateProfile.renderRange;
+      this.startDate = moment(start).format('YYYY-MM-DD');
+      this.endDate = moment(end).format('YYYY-MM-DD');
+    }
   }
 }
 </script>
