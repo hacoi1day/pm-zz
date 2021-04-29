@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -159,10 +160,22 @@ class AuthController extends Controller
     {
         try {
             $email = $request->input('email');
+            $user = $this->user->where('email', $email)->firstOrFail();
+            $token = Str::random(60);
+
+            // insert record to table change_passes
+            $this->changePass->create([
+                'user_id' => $user->id,
+                'token' => $token
+            ]);
+
+            // send token to email user
             $data = [
-                'email' => $email
+                'email' => $email,
+                'token' => $token
             ];
             ResetPassword::dispatch($email, $data)->delay(Carbon::now());
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Đã gửi một email về địa chỉ ' . $email . '.'

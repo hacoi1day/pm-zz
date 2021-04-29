@@ -15,8 +15,8 @@
 
 </style>
 <div class="store-user">
-    <h1>Tạo lại mật khẩu thành công</h1>
+    <h1>Lấy lại mật khẩu</h1>
     <p>Email (tài khoản) là: <strong>{{ $data['email'] }}</strong></p>
-    {{-- <p>Mật khẩu được tạo lại là: <strong>{{ $data['password'] }}</strong></p> --}}
-    <a href="http://pm.local/auth/login">Đăng nhập</a>
+    <p>Nhấn vào liên kết dưới đây để đổi lại mật khẩu.</p>
+    <a href="http://pm.local/auth/change-password?token={{ $data['token'] }}">Đổi mật khẩu</a>
 </div>
