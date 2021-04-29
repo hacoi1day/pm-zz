@@ -9,8 +9,9 @@
       <b-form @submit.prevent="handleSubmit(onSubmit)">
         <ValidationProvider 
           v-slot="{errors}" 
-          rules="required" 
+          rules="required|min:6" 
           name="Mật khẩu mới"
+          vid="password"
         >
           <b-form-group
             id="input-password"
@@ -32,7 +33,7 @@
 
         <ValidationProvider 
           v-slot="{errors}" 
-          rules="required" 
+          rules="required|min:6|confirmed:password"
           name="Xác nhận mật khẩu"
         >
           <b-form-group
@@ -62,6 +63,14 @@
 <script>
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
+import { extend } from 'vee-validate';
+import { confirmed } from 'vee-validate/dist/rules';
+
+extend('confirmed', {
+  ...confirmed,
+  message: '{_field_} chưa chính xác'
+});
+
 export default {
   name: 'change-password-token',
   components: {
@@ -73,6 +82,13 @@ export default {
         password: '',
         passwordConfirm: ''
       }
+    }
+  },
+  created () {
+    let {token} = this.$route.query;
+    // check has token
+    if (!token) {
+      this.$router.push({name: 'login'});
     }
   },
   methods: {
