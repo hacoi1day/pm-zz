@@ -5,6 +5,7 @@ use App\Http\Controllers\API\Checkin\CheckinController;
 use App\Http\Controllers\API\Checkin\CheckinResourceController;
 use App\Http\Controllers\API\Common\CommonController;
 use App\Http\Controllers\API\Department\DepartmentResourceController;
+use App\Http\Controllers\API\Manager\ManagerController;
 use App\Http\Controllers\API\Request\RequestController;
 use App\Http\Controllers\API\Request\RequestResourceController;
 use App\Http\Controllers\API\Storage\StorageController;
@@ -87,6 +88,12 @@ Route::middleware('auth:api')->group(function () {
     // Common
     Route::prefix('common')->group(function () {
         Route::post('check-unique/{table}/{column}/{id?}', [CommonController::class, 'checkUnique']);
+    });
+
+    // Manager
+    Route::prefix('manager')->group(function () {
+        Route::get('list-department', [ManagerController::class, 'listDepartment']);
+        Route::get('list-user-by-department/{department_id}', [ManagerController::class, 'listUserByDepartmentId']);
     });
 
 });
