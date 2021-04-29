@@ -101,3 +101,4 @@ Route::middleware('auth:api')->group(function () {
 });
 
 Route::get('export-user/{department_id}', [ManagerController::class, 'exportExcelUserByDepartmentId']);
+Route::get('export-checkin/{user_id}', [ManagerController::class, 'exportUserCheckinByUserId']);

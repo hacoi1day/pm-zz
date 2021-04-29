@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Manager;
 
+use App\Exports\UserCheckinExport;
 use App\Exports\UserDepartmentExport;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
@@ -69,6 +70,18 @@ class ManagerController extends Controller
         try {
             return Excel::download(new UserDepartmentExport($department_id), 'users-'.time().'.xlsx');
         } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function exportUserCheckinByUserId($user_id)
+    {
+        try {
+            return Excel::download(new UserCheckinExport($user_id), $user_id . '-checkin.xlsx');
+        } catch(Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
