@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ActiveRequest;
 use App\Http\Requests\Auth\ChangePasswordRequest;
+use App\Http\Requests\Auth\ChangePasswordTokenRequest;
 use App\Http\Requests\Auth\ChangeUserInfoRequest;
+use App\Http\Requests\Auth\CheckTokenRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Jobs\Mail\Auth\ResetPassword;
@@ -179,6 +181,71 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Đã gửi một email về địa chỉ ' . $email . '.'
+            ], 200);
+        } catch(Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function checkToken (CheckTokenRequest $request)
+    {
+        try {
+            $token = $request->input('token');
+            $change = $this->changePass->where('token', $token)->first();
+            if (!$change) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Token không chính xác hoặc đã hết hạn, xin thử lại.'
+                ], 500);
+            }
+            return response()->json([
+                'success',
+                'message' => 'Token hợp lệ.',
+            ], 200);
+        } catch(Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function changePasswordToken(ChangePasswordTokenRequest $request)
+    {
+        try {
+            $token = $request->input('token');
+            $password = $request->input('password');
+
+            // check has token
+            $change = $this->changePass->where('token', $token)->first();
+            if (!$change) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Token không hợp lệ.'
+                ], 500);
+            }
+
+            // check has user
+            $user = $this->user->where('id', $change->user_id)->first();
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Tài khoản không tồn tại hoặc đã bị vô hiệu hoá.'
+                ], 500);
+            }
+
+            $user->update([
+                'password' => Hash::make($password)
+            ]);
+
+            $change->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Thay đổi mật khẩu thành công.'
             ], 200);
         } catch(Exception $e) {
             return response()->json([

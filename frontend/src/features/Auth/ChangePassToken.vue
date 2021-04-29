@@ -65,6 +65,7 @@ import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 import { extend } from 'vee-validate';
 import { confirmed } from 'vee-validate/dist/rules';
+import { changePasswordWithToken, checkToken } from '../../apis/auth';
 
 extend('confirmed', {
   ...confirmed,
@@ -81,19 +82,36 @@ export default {
       form: {
         password: '',
         passwordConfirm: ''
-      }
+      },
+      token: ''
     }
   },
   created () {
-    let {token} = this.$route.query;
+    let { token } = this.$route.query;
     // check has token
     if (!token) {
       this.$router.push({name: 'login'});
     }
+    this.token = token;
+    // check token is valid
+    checkToken(token).catch(() => {
+      this.$notify({
+        type: 'error',
+        title: 'Có lỗi',
+        text: 'Token không hợp lệ'
+      });
+      this.$router.push({name: 'login'});
+    });
   },
   methods: {
-    onSubmit () {
-      console.log(this.form);
+    async onSubmit () {
+      const res = await changePasswordWithToken(this.form, this.token);
+      this.$notify({
+        type: 'success',
+        title: 'Thành công',
+        text: res.message ? res.message : 'Đổi mật khẩu thành công.'
+      });
+      this.$router.push({name: 'login'});
     }
   }
 }

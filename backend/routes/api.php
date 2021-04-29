@@ -32,6 +32,12 @@ Route::get('active', [AuthController::class, 'active']);
 // Reset Password
 Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
+// Check Token is valid
+Route::get('check-token', [AuthController::class, 'checkToken']);
+
+// Change Password With Token
+Route::post('change-password-token', [AuthController::class, 'changePasswordToken']);
+
 Route::middleware('auth:api')->group(function () {
     // Get User
     Route::get('me', [AuthController::class, 'me']);
