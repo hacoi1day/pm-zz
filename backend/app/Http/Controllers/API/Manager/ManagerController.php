@@ -68,7 +68,7 @@ class ManagerController extends Controller
     public function exportExcelUserByDepartmentId($department_id)
     {
         try {
-            return Excel::download(new UserDepartmentExport($department_id), 'users-'.time().'.xlsx');
+            return Excel::download(new UserDepartmentExport($department_id), 'users_'.time().'.xlsx');
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -80,7 +80,7 @@ class ManagerController extends Controller
     public function exportUserCheckinByUserId($user_id)
     {
         try {
-            return Excel::download(new UserCheckinExport($user_id), $user_id . '-checkin.xlsx');
+            return Excel::download(new UserCheckinExport($user_id), $user_id . '_checkin.xlsx');
         } catch(Exception $e) {
             return response()->json([
                 'status' => 'error',
