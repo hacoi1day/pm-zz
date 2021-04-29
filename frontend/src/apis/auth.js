@@ -23,7 +23,21 @@ export const resetPassword = async (email) => {
     console.log(err);
     return false;
   }
-}
+};
+
+export const checkToken = (token) => {
+  return httpHelper.get(`check-token?token=${token}`);
+};
+
+export const changePasswordWithToken = async (form, token) => {
+  try {
+    const {data} = await httpHelper.post(`change-password-token?token=${token}`, form);
+    return data;
+  } catch(err) {
+    console.log(err);
+    return null;
+  }
+};
 
 export const me = async () => {
   try {

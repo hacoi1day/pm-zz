@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Mail\Auth;
 
-use App\Mail\MailStoreUser;
+use App\Mail\Auth\MailResetPassword;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,22 +11,22 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class SendMail implements ShouldQueue
+class ResetPassword implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    protected $email;
     protected $data;
-    protected $user;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($data, $user)
+    public function __construct($email, $data)
     {
+        $this->email = $email;
         $this->data = $data;
-        $this->user = $user;
     }
 
     /**
@@ -36,6 +36,6 @@ class SendMail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->user->email)->send(new MailStoreUser($this->data));
+        Mail::to($this->email)->send(new MailResetPassword($this->data));
     }
 }

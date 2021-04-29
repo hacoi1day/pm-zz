@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Auth;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class MailStoreUser extends Mailable
+class MailResetPassword extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,8 +30,7 @@ class MailStoreUser extends Mailable
     public function build()
     {
         return $this
-            ->from('vuha98.tn@gmail.com')
-            ->view('mails.store_user')
-            ->subject('Store User');
+            ->from('admin@gmail.com')
+            ->view('mails.auth.reset_password');
     }
 }

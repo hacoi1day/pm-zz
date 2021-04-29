@@ -8,6 +8,7 @@ import HomePage from './features/Dashboard/HomePage';
 import Auth from './features/Auth';
 import LoginPage from './features/Auth/LoginPage';
 import ResetPassword from './features/Auth/ResetPassword';
+import ChangePassToken from './features/Auth/ChangePassToken';
 
 // Dashboard
 import UserInfo from './features/Dashboard/UserInfo';
@@ -45,7 +46,8 @@ const routes = [
     redirect: { name: 'login' },
     children: [
       { path: 'login', name: 'login', component: LoginPage },
-      { path: 'reset-password', name: 'reset-password', component: ResetPassword }
+      { path: 'reset-password', name: 'reset-password', component: ResetPassword },
+      { path: 'change-password', name: 'change-password-token', component: ChangePassToken },
     ]
   },
   {
