@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\API\Manager;
 
+use App\Exports\UserDepartmentExport;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ManagerController extends Controller
 {
@@ -63,10 +64,10 @@ class ManagerController extends Controller
         }
     }
 
-    public function exportExcelUserByDepartmentId()
+    public function exportExcelUserByDepartmentId($department_id)
     {
         try {
-
+            return Excel::download(new UserDepartmentExport($department_id), 'users-'.time().'.xlsx');
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
