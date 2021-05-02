@@ -25,6 +25,8 @@
             <b-table-simple id="table-data" hover>
               <b-thead>
                 <b-tr>
+                  <b-th>Họ tên</b-th>
+                  <b-th>Email</b-th>
                   <b-th>Nội dung</b-th>
                   <b-th>Trạng thái</b-th>
                   <b-th>Người xử lý</b-th>
@@ -33,6 +35,8 @@
               </b-thead>
               <b-tbody>
                 <b-tr v-for="(item, index) in items" :key="index" @click="openModalRequest(item.id)">
+                  <b-td>{{ item.name }}</b-td>
+                  <b-td>{{ item.email }}</b-td>
                   <b-td>{{ item.type | filterType }}</b-td>
                   <b-td>{{ item.status | filterStatus }}</b-td>
                   <b-td>{{ item.approval | filterApproval }}</b-td>

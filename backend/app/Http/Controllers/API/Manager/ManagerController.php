@@ -104,7 +104,7 @@ class ManagerController extends Controller
                 }
             })
             ->where('users.department_id', $department_id)
-            ->select('requests.*')
+            ->select('requests.*', 'users.email', 'users.name')
             ->paginate(10);
 
             $paginate->getCollection()->transform(function ($item) {
