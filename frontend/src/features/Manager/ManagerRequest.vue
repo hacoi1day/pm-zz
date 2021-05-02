@@ -59,16 +59,18 @@
     </b-container>
     <b-modal ref="modalRequest" hide-footer title="Thông tin yêu cầu">
       <div class="d-block" v-if="requestSelected">
-        <p><strong>Dự án:</strong> {{ requestSelected.project }}</p>
-        <p><strong>Lý do:</strong> {{ requestSelected.cause }}</p>
+        <p><strong>Họ tên:</strong> {{ requestSelected.user.name }}</p>
+        <p><strong>Email:</strong> {{ requestSelected.user.email }}</p>
         <p><strong>Từ:</strong> {{ requestSelected.start | filterDate }}</p>
         <p><strong>Đến:</strong> {{ requestSelected.end | filterDate }}</p>
+        <p><strong>Dự án:</strong> {{ requestSelected.project }}</p>
+        <p><strong>Lý do:</strong> {{ requestSelected.cause }}</p>
+        <hr>
         <div class="text-center">
           <b-button variant="success" class="mr-2" @click="onApproval">Phê duyệt</b-button>
           <b-button variant="danger" @click="onRefuse">Từ chôi</b-button>
         </div>
       </div>
-      
     </b-modal>
   </b-card>
 </template>
