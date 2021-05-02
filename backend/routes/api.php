@@ -96,6 +96,10 @@ Route::middleware('auth:api')->group(function () {
         Route::get('list-user-by-department/{department_id}', [ManagerController::class, 'listUserByDepartmentId']);
 
         Route::get('export-user/{department_id}', [ManagerController::class, 'exportExcelUserByDepartmentId']);
+        Route::get('export-checkin/{user_id}', [ManagerController::class, 'exportUserCheckinByUserId']);
+
+        Route::get('list-request/{department_id}', [ManagerController::class, 'listRequestByDepartmentId']);
+
     });
 
 });

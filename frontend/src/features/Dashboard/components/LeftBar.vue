@@ -46,6 +46,14 @@ export default {
             { id: 401, title: 'Yêu cầu của tôi', link: '/request/list' },
             { id: 402, title: 'Tạo yêu cầu', link: '/request/create' },
           ]
+        },
+        {
+          id: 500,
+          title: 'Quản lý',
+          children: [
+            { id: 501, title: 'Phòng ban', link: '/manager/department' },
+            { id: 502, title: 'Xủ lý yêu cầu', link: '/manager/request' },
+          ]
         }
       ]
     }

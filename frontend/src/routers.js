@@ -37,7 +37,10 @@ import Request from './features/Request';
 import RequestCreate from './features/Request/RequestCreate';
 import RequestList from './features/Request/RequestList';
 
-// import { me } from './apis/auth';
+// Manager
+import Manager from './features/Manager';
+import ManagerDepartment from './features/Manager/ManagerDepartment';
+import ManagerRequest from './features/Manager/ManagerRequest';
 
 const routes = [
   { 
@@ -90,6 +93,15 @@ const routes = [
         children: [
           { path: 'create', name: 'request-create', component: RequestCreate },
           { path: 'list', name: 'request-list', component: RequestList },
+        ]
+      },
+      {
+        path: 'manager',
+        name: 'manager',
+        component: Manager,
+        children: [
+          { path: 'department', name: 'manager-department', component: ManagerDepartment },
+          { path: 'request', name: 'manager-request', component: ManagerRequest },
         ]
       }
     ]

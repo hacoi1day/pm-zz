@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API\Manager;
 use App\Exports\UserCheckinExport;
 use App\Exports\UserDepartmentExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Manager\ListRequestRequest;
 use App\Models\Department;
+use App\Models\Request;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -15,10 +17,12 @@ class ManagerController extends Controller
 {
     private $user;
     private $department;
+    private $request;
 
-    public function __construct(User $user, Department $department) {
+    public function __construct(User $user, Department $department, Request $request) {
         $this->user = $user;
         $this->department = $department;
+        $this->request = $request;
     }
 
     public function listDepartment()
@@ -82,6 +86,34 @@ class ManagerController extends Controller
         try {
             return Excel::download(new UserCheckinExport($user_id), $user_id . '_checkin.xlsx');
         } catch(Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function listRequestByDepartmentId(ListRequestRequest $request, $department_id)
+    {
+        try {
+            $paginate = $this->request
+            ->join('users', 'users.id', 'requests.user_id')
+            ->where(function ($query) use ($request) {
+                if ($request->has('status')) {
+                    $query->where('status', $request->input('status'));
+                }
+            })
+            ->where('users.department_id', $department_id)
+            ->select('requests.*')
+            ->paginate(10);
+
+            $paginate->getCollection()->transform(function ($item) {
+                $item->approval = $item->approval;
+                return $item;
+            });
+
+            return response()->json($paginate);
+        } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
