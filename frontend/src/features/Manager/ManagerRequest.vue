@@ -22,7 +22,7 @@
             </b-tab>
           </b-tabs>
           <div class="tab-content">
-            <b-table-simple id="table-data">
+            <b-table-simple id="table-data" hover>
               <b-thead>
                 <b-tr>
                   <b-th>Nội dung</b-th>
@@ -32,7 +32,7 @@
                 </b-tr>
               </b-thead>
               <b-tbody>
-                <b-tr v-for="(item, index) in items" :key="index">
+                <b-tr v-for="(item, index) in items" :key="index" @click="openModalRequest(item.id)">
                   <b-td>{{ item.type | filterType }}</b-td>
                   <b-td>{{ item.status | filterStatus }}</b-td>
                   <b-td>{{ item.approval | filterApproval }}</b-td>
@@ -53,13 +53,28 @@
         </b-col>
       </b-row>
     </b-container>
+    <b-modal ref="modalRequest" hide-footer title="Thông tin yêu cầu">
+      <div class="d-block" v-if="requestSelected">
+        <p><strong>Dự án:</strong> {{ requestSelected.project }}</p>
+        <p><strong>Lý do:</strong> {{ requestSelected.cause }}</p>
+        <p><strong>Từ:</strong> {{ requestSelected.start | filterDate }}</p>
+        <p><strong>Đến:</strong> {{ requestSelected.end | filterDate }}</p>
+        <div class="text-center">
+          <b-button variant="success" class="mr-2" @click="onApproval">Phê duyệt</b-button>
+          <b-button variant="danger" @click="onRefuse">Từ chôi</b-button>
+        </div>
+      </div>
+      
+    </b-modal>
   </b-card>
 </template>
 
 <script>
 import moment from 'moment';
 import { REQUEST_STATUS, REQUEST_TYPE } from '../../constants/request';
-import { listManagerDepartment, listRequestByDepartment } from '../../apis/manager';
+import { approvalRequest, listManagerDepartment, listRequestByDepartment, refuseRequest } from '../../apis/manager';
+import { getRequest } from '../../apis/request';
+import swal from 'sweetalert';
 
 export default {
   name: 'manager-request',
@@ -74,7 +89,10 @@ export default {
       currentPage: 1,
       lastPage: 1,
       items: [],
-      total: 0
+      total: 0,
+
+      requestSelectedId: null,
+      requestSelected: null,
     }
   },
   watch: {
@@ -91,6 +109,9 @@ export default {
       this.fetchRequestList();
     },
     
+    requestSelectedId () {
+      this.fetchRequest();
+    }
   },
   created () {
     this.getListDepartment();
@@ -104,13 +125,61 @@ export default {
     },
     async fetchRequestList () {
       const {data, last_page, total} = await listRequestByDepartment(this.departmentId, this.currentStatusId);
-      console.log(data, last_page, total);
       this.items = data;
       this.lastPage = last_page;
       this.total = total;
     },
+    async fetchRequest () {
+      const res = await getRequest(this.requestSelectedId);
+      this.requestSelected = res;
+    },
     changeStatus (statusId) {
       this.currentStatusId = statusId
+    },
+    openModalRequest (requestId) {
+      this.requestSelectedId = requestId;
+      this.$refs['modalRequest'].show()
+    },
+    async onApproval () {
+      swal({
+        title: "Phê duyệt ?",
+        text: "Xác nhận Phê duyệt yêu cầu",
+        icon: "warning",
+        buttons: ['Huỷ', 'Đồng ý'],
+        dangerMode: true,
+      }).then(async (willAccept) => {
+        if (willAccept) {
+          await approvalRequest(this.requestSelectedId);
+          this.$refs['modalRequest'].hide()
+          this.$notify({
+            type: 'success',
+            title: 'Thành công',
+            text: 'Phê duyệt yêu cầu thành công !'
+          });
+          this.fetchRequestList();
+        }
+      });
+    },
+    async onRefuse () {
+      swal({
+        title: "Phê duyệt ?",
+        text: "Xác nhận Phê duyệt yêu cầu",
+        icon: "warning",
+        buttons: ['Huỷ', 'Đồng ý'],
+        dangerMode: true,
+      }).then(async (willAccept) => {
+        if (willAccept) {
+          await refuseRequest(this.requestSelectedId);
+          this.$refs['modalRequest'].hide()
+          this.$notify({
+            type: 'success',
+            title: 'Thành công',
+            text: 'Từ chối yêu cầu thành công !'
+          });
+          this.fetchRequestList();
+        }
+      });
+      
     },
   },
   filters: {

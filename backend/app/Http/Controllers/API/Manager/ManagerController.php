@@ -121,4 +121,44 @@ class ManagerController extends Controller
         }
     }
 
+    public function approvalRequest($request_id)
+    {
+        try {
+            $request = $this->request->find($request_id);
+            $request->update([
+                'status' => 2,
+                'approval_by' => Auth::guard('api')->id()
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Phê duyệt yêu cầu thành công.'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function refuseRequest($request_id)
+    {
+        try {
+            $request = $this->request->find($request_id);
+            $request->update([
+                'status' => 3,
+                'approval_by' => Auth::guard('api')->id()
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Từ chôi yêu cầu thành công.'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

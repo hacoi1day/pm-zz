@@ -99,6 +99,8 @@ Route::middleware('auth:api')->group(function () {
         Route::get('export-checkin/{user_id}', [ManagerController::class, 'exportUserCheckinByUserId']);
 
         Route::get('list-request/{department_id}', [ManagerController::class, 'listRequestByDepartmentId']);
+        Route::get('approval-request/{request_id}', [ManagerController::class, 'approvalRequest']);
+        Route::get('refuse-request/{request_id}', [ManagerController::class, 'refuseRequest']);
 
     });
 

@@ -22,8 +22,27 @@ export const listUserByDepartment = async (departmentId) => {
 
 export const listRequestByDepartment = async (departmentId, status = '') => {
   try {
-    console.log(status);
     const {data} = await httpHelper.get(`manager/list-request/${departmentId}?status=${status}`);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+export const approvalRequest = async (requestId) => {
+  try {
+    const {data} = await httpHelper.get(`manager/approval-request/${requestId}`);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+export const refuseRequest = async (requestId) => {
+  try {
+    const {data} = await httpHelper.get(`manager/refuse-request/${requestId}`);
     return data;
   } catch (err) {
     console.log(err);
