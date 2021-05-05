@@ -179,19 +179,14 @@
 import { REQUEST_TYPE } from '../../constants/request';
 import { createRequest } from '../../apis/request';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
-import { mapState } from 'vuex';
 
 export default {
   name: 'request-create',
   components: {
     ValidationObserver, ValidationProvider,
   },
-  computed: mapState({
-    // userInfo: state => state.user.userInfo
-  }),
   data () {
     return {
-      userInfo: null,
       requestTypes: REQUEST_TYPE,
       selectDate: true,
       date: '',
@@ -206,11 +201,11 @@ export default {
     };
   },
   created () {
-    // let user = this.$store.state.user.userInfo;
-    // if (user) {
-    //   this.request.phone = user.phone;
-    //   this.request.project = user.department.name;
-    // }
+    let user = this.$store.state.user.userInfo;
+    if (user) {
+      this.request.phone = user.phone;
+      this.request.project = user.department ? user.department.name : '';
+    }
   },
   watch: {
     userInfo () {

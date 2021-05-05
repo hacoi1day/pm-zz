@@ -57,6 +57,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomePage,
+    redirect: { name: 'check-in' },
     children: [
       { path: 'user-info', name: 'user-info', component: UserInfo },
       { path: 'user-info-edit', name: 'user-info-edit', component: UserInfoEdit },
