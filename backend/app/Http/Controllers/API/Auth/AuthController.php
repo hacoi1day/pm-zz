@@ -7,11 +7,13 @@ use App\Http\Requests\Auth\ActiveRequest;
 use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\ChangePasswordTokenRequest;
 use App\Http\Requests\Auth\ChangeUserInfoRequest;
+use App\Http\Requests\Auth\CheckPermissionRequest;
 use App\Http\Requests\Auth\CheckTokenRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Jobs\Mail\Auth\ResetPassword;
 use App\Models\ChangePass;
+use App\Models\Role;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -23,10 +25,12 @@ class AuthController extends Controller
 {
     private $user;
     private $changePass;
+    private $role;
 
-    public function __construct(User $user, ChangePass $changePass) {
+    public function __construct(User $user, ChangePass $changePass, Role $role) {
         $this->user = $user;
         $this->changePass = $changePass;
+        $this->role = $role;
     }
 
     public function login(LoginRequest $request)
@@ -247,6 +251,47 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Thay đổi mật khẩu thành công.'
+            ], 200);
+        } catch(Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function checkPermission(CheckPermissionRequest $request)
+    {
+        try {
+            $name = $request->input('name');
+
+            $listPermission = json_decode($this->role->find(1)->permissions);
+            if (!in_array($name, $listPermission)) {
+                return response()->json([
+                    'status' => true
+                ], 200);
+            }
+
+            $user = Auth::guard('api')->user();
+
+            // Check user has role
+            // If user hasn't rol => false
+            if (!$user->role_id) {
+                return response()->json([
+                    'status' => false
+                ], 200);
+            }
+
+            $role = $this->role->find($user->role_id);
+            $permissions = json_decode($role->permissions);
+            if (in_array($name, $permissions)) {
+                return response()->json([
+                    'status' => true
+                ], 200);
+            }
+
+            return response()->json([
+                'status' => false
             ], 200);
         } catch(Exception $e) {
             return response()->json([

@@ -51,6 +51,9 @@ Route::middleware('auth:api')->group(function () {
     // Change User Info
     Route::post('change-user-info', [AuthController::class, 'changeUserInfo']);
 
+    // Check Has Permission
+    Route::get('check-permission', [AuthController::class, 'checkPermission']);
+
     // Storage
     Route::prefix('storage')->group(function () {
         Route::post('store-file', [StorageController::class, 'storeFile']);
