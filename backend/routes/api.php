@@ -63,7 +63,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Department
-    Route::prefix('department')->group(function () {
+    Route::prefix('department')->middleware('check_role')->group(function () {
         Route::resource('department', DepartmentResourceController::class);
         Route::post('dropdown', [DepartmentResourceController::class, 'dropdown'])->name('department.dropdown');
     });
@@ -91,7 +91,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Manager
-    Route::prefix('manager')->group(function () {
+    Route::prefix('manager')->middleware('check_role')->group(function () {
         Route::get('list-department', [ManagerController::class, 'listDepartment'])->name('manager.list_department');
         Route::get('list-user-by-department/{department_id}', [ManagerController::class, 'listUserByDepartmentId'])->name('manager.list_user');
 
