@@ -18,7 +18,7 @@
               <b-tbody>
                 <b-tr v-for="(item, index) in items" :key="index">
                   <b-td>{{ item.type | filterType }}</b-td>
-                  <b-td>{{ item.status | filterStatus }}</b-td>
+                  <b-td><b-badge :variant="getVariantStatus(item.status)">{{ item.status | filterStatus }}</b-badge></b-td>
                   <b-td>{{ item.approval | filterApproval }}</b-td>
                   <b-td>{{ item.start | filterDate }} - {{ item.end | filterDate }}</b-td>
                 </b-tr>
@@ -67,6 +67,17 @@ export default {
       this.items = data;
       this.lastPage = last_page;
       this.total = total;
+    },
+    getVariantStatus (status) {
+      switch (status) {
+        case 1:
+          return 'secondary';
+        case 2:
+          return 'success';
+        case 3:
+          return 'danger';
+      }
+      return 'secondary';
     }
   },
   filters: {

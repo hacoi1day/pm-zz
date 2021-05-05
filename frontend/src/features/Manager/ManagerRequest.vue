@@ -38,7 +38,7 @@
                   <b-td>{{ item.name }}</b-td>
                   <b-td>{{ item.email }}</b-td>
                   <b-td>{{ item.type | filterType }}</b-td>
-                  <b-td>{{ item.status | filterStatus }}</b-td>
+                  <b-td><b-badge :variant="getVariantStatus(item.status)">{{ item.status | filterStatus }}</b-badge></b-td>
                   <b-td>{{ item.approval | filterApproval }}</b-td>
                   <b-td>{{ item.start | filterDate }} - {{ item.end | filterDate }}</b-td>
                 </b-tr>
@@ -187,6 +187,17 @@ export default {
       });
       
     },
+    getVariantStatus (status) {
+      switch (status) {
+        case 1:
+          return 'secondary';
+        case 2:
+          return 'success';
+        case 3:
+          return 'danger';
+      }
+      return 'secondary';
+    }
   },
   filters: {
     filterDate (value) {
@@ -219,6 +230,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+table tbody tr {
+  cursor: pointer;
+}
 </style>

@@ -12,7 +12,7 @@
         <b-nav-item-dropdown right>
           <!-- Using 'button-content' slot -->
           <template #button-content>
-            <em v-if="user.name">{{ user.name }}</em>
+            <em v-if="userInfo && userInfo.name">{{ userInfo.name }}</em>
           </template>
           <b-dropdown-item @click="showInfo">Thông tin</b-dropdown-item>
           <b-dropdown-item @click="changePassword">Đổi mật khẩu</b-dropdown-item>
@@ -36,7 +36,7 @@ export default {
     };
   },
   computed: mapState({
-    user: state => state.user.userInfo
+    userInfo: state => state.user.userInfo
   }),
   created () {
 
