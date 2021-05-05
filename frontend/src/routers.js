@@ -1,7 +1,9 @@
 import Vue from 'vue';
+import { me } from './apis/auth';
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
+// Home
 import HomePage from './features/Dashboard/HomePage';
 
 // Auth
@@ -42,6 +44,11 @@ import Manager from './features/Manager';
 import ManagerDepartment from './features/Manager/ManagerDepartment';
 import ManagerRequest from './features/Manager/ManagerRequest';
 
+// Error
+import Error from './features/Error';
+import Error401 from './features/Error/Error401';
+import Error404 from './features/Error/Error404';
+
 const routes = [
   { 
     path: '/auth',
@@ -57,6 +64,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomePage,
+    redirect: { name: 'check-in' },
     children: [
       { path: 'user-info', name: 'user-info', component: UserInfo },
       { path: 'user-info-edit', name: 'user-info-edit', component: UserInfoEdit },
@@ -103,7 +111,17 @@ const routes = [
           { path: 'department', name: 'manager-department', component: ManagerDepartment },
           { path: 'request', name: 'manager-request', component: ManagerRequest },
         ]
-      }
+      },
+      {
+        path: 'error',
+        name: 'error',
+        component: Error,
+        children: [
+          { path: '401', name: 'error-401', component: Error401 },
+          { path: '404', name: 'error-404', component: Error404 },
+        ]
+      },
+      { path: '*', redirect: {name: 'error-404'} }
     ]
   },
 ];
@@ -113,17 +131,20 @@ const router = new VueRouter({
   routes
 });
 
-// router.beforeEach(async (to, from, next) => {
-//   if (to.next === 'login' || to.name === 'reset-password') {
-//     return next();
-//   } else {
-//     const res = await me();
-//     if (res) {
-//       return next();
-//     } else {
-//       return next({name: 'login'});
-//     }
-//   }
-// });
+router.beforeEach(async (to, from, next) => {
+  const name = to.name;
+  if (name.indexOf('user') === -1 && name.indexOf('department') === -1 && name.indexOf('manager') === -1) {
+    next();
+  } else {
+    let user = await me();
+    if (user.role_id === 1) {
+      next();
+    } else if (user.role_id === 2 && name.indexOf('manager') !== -1) {
+      next();
+    } else {
+      next({name: 'error-401'});
+    }
+  }
+});
 
 export default router;

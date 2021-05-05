@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { baseUrl } from '../configs/api';
 import { getToken } from './token';
+import router from '../routers';
 
 const apiUrl = `${baseUrl}/api/`;
 
@@ -23,6 +24,12 @@ axiosInstance.interceptors.request.use((config) => {
 axiosInstance.interceptors.response.use((response) => {
   return response;
 }, (error) => {
+  let statusCode = error.response.code;
+  switch (statusCode) {
+    case 401:
+      router.push({name: 'login'});
+  }
+  
   return Promise.reject(error);
 });
 

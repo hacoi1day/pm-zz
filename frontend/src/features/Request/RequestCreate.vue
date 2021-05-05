@@ -204,10 +204,13 @@ export default {
     let user = this.$store.state.user.userInfo;
     if (user) {
       this.request.phone = user.phone;
-      this.request.project = user.department.name;
+      this.request.project = user.department ? user.department.name : '';
     }
   },
   watch: {
+    userInfo () {
+      console.log(this.userInfo);
+    },
     request: {
       handler (value) {
         switch (value.type) {
