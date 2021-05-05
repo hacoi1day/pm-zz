@@ -16,5 +16,19 @@ export default {
     let formData = new FormData();
     formData.append('file', file);
     return axiosInstance.post('storage/store-file', formData);
+  },
+  download(url) {
+    return axiosInstance.get(url, {
+      responseType: 'blob'
+    }).then(res => {
+      let fileURL = window.URL.createObjectURL(new Blob([res.data]));
+      let fileLink = document.createElement('a');
+
+      fileLink.href = fileURL;
+      fileLink.setAttribute('download', 'file.xlsx');
+      document.body.appendChild(fileLink);
+
+      fileLink.click();
+    })
   }
 };

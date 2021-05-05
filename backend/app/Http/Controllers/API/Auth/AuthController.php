@@ -50,6 +50,7 @@ class AuthController extends Controller
         try {
             $user = Auth::guard('api')->user();
             $user->department;
+            $user->department->manager;
             return response()->json($user);
         } catch(Exception $e) {
             return response()->json([
@@ -140,7 +141,7 @@ class AuthController extends Controller
                 'birthday',
                 'gender',
                 'address',
-                // 'avatar'
+                'avatar'
             );
             $user = $this->user
                 ->where('id', Auth::guard('api')->id())

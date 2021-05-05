@@ -20,9 +20,9 @@ export const myRequest = async (page) => {
   }
 };
 
-export const createRequest = async (user) => {
+export const createRequest = async (request) => {
     try {
-        const {data} = await httpHelper.post('request/request', user);
+        const {data} = await httpHelper.post('request/request', request);
         return data;
     } catch (err) {
         console.log(err);
@@ -30,9 +30,9 @@ export const createRequest = async (user) => {
     }
 };
 
-export const editRequest = async (user) => {
+export const editRequest = async (request) => {
     try {
-        const {data} = await httpHelper.put(`request/request/${user.id}`, user);
+        const {data} = await httpHelper.put(`request/request/${request.id}`, request);
         return data;
     } catch (err) {
         console.log(err);
@@ -40,9 +40,9 @@ export const editRequest = async (user) => {
     }
 };
 
-export const getRequest = async (userId) => {
+export const getRequest = async (requestId) => {
     try {
-        const {data} = await httpHelper.get(`request/request/${userId}`);
+        const {data} = await httpHelper.get(`request/request/${requestId}`);
     return data;
     } catch (err) {
         console.log(err);
@@ -50,9 +50,9 @@ export const getRequest = async (userId) => {
     }
 };
 
-export const deleteRequest = async (userId) => {
+export const deleteRequest = async (requestId) => {
     try {
-        const {data} = await httpHelper.delete(`request/request/${userId}`);
+        const {data} = await httpHelper.delete(`request/request/${requestId}`);
         return data;
     } catch (err) {
         console.log(err);

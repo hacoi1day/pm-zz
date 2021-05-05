@@ -5,6 +5,7 @@ use App\Http\Controllers\API\Checkin\CheckinController;
 use App\Http\Controllers\API\Checkin\CheckinResourceController;
 use App\Http\Controllers\API\Common\CommonController;
 use App\Http\Controllers\API\Department\DepartmentResourceController;
+use App\Http\Controllers\API\Manager\ManagerController;
 use App\Http\Controllers\API\Request\RequestController;
 use App\Http\Controllers\API\Request\RequestResourceController;
 use App\Http\Controllers\API\Storage\StorageController;
@@ -89,4 +90,21 @@ Route::middleware('auth:api')->group(function () {
         Route::post('check-unique/{table}/{column}/{id?}', [CommonController::class, 'checkUnique']);
     });
 
+    // Manager
+    Route::prefix('manager')->group(function () {
+        Route::get('list-department', [ManagerController::class, 'listDepartment']);
+        Route::get('list-user-by-department/{department_id}', [ManagerController::class, 'listUserByDepartmentId']);
+
+        Route::get('export-user/{department_id}', [ManagerController::class, 'exportExcelUserByDepartmentId']);
+        Route::get('export-checkin/{user_id}', [ManagerController::class, 'exportUserCheckinByUserId']);
+
+        Route::get('list-request/{department_id}', [ManagerController::class, 'listRequestByDepartmentId']);
+        Route::get('approval-request/{request_id}', [ManagerController::class, 'approvalRequest']);
+        Route::get('refuse-request/{request_id}', [ManagerController::class, 'refuseRequest']);
+
+    });
+
 });
+
+Route::get('export-user/{department_id}', [ManagerController::class, 'exportExcelUserByDepartmentId']);
+Route::get('export-checkin/{user_id}', [ManagerController::class, 'exportUserCheckinByUserId']);

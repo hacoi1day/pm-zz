@@ -78,7 +78,8 @@ class RequestResourceController extends Controller
     {
         try {
             $item = $this->request->find($id);
-            return response()->json($item, 202);
+            $item->user;
+            return response()->json($item, 200);
         } catch(Exception $e) {
             return response()->json([
                 'status' => 'error',

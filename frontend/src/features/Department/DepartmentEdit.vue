@@ -1,20 +1,20 @@
 <template>
   <b-card
-      header="Sửa thông tin phòng ban"
-      header-tag="header"
-    >
-      <b-container fluid>
-        <b-row>
-          <b-col md="6">
-            <DepartmentForm
-              mode="edit"
-              :departmentId="departmentId"
-              :onSubmit="handleSubmit"
-            />
-          </b-col>
-        </b-row>
-      </b-container>
-    </b-card>
+    header="Sửa thông tin phòng ban"
+    header-tag="header"
+  >
+    <b-container fluid>
+      <b-row>
+        <b-col md="6">
+          <DepartmentForm
+            mode="edit"
+            :departmentId="departmentId"
+            :onSubmit="handleSubmit"
+          />
+        </b-col>
+      </b-row>
+    </b-container>
+  </b-card>
 </template>
 
 <script>
