@@ -156,7 +156,7 @@ import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import { changeUserInfo } from '../../apis/auth';
 
 export default {
-  name: 'user-info-edit',
+  name: 'info-edit',
   components: {
     ValidationObserver,
     ValidationProvider,
@@ -182,7 +182,7 @@ export default {
         title: 'Thành công',
         text: 'Sửa thông tin thành công !'
       });
-      this.$router.push({name: 'user-info'});
+      this.$router.push({name: 'info'});
     },
     onSelectFile () {
       this.$refs.inputAvatar.click();

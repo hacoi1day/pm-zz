@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     showInfo () {
-      this.$router.push({name: 'user-info'});
+      this.$router.push({name: 'info'});
     },
     changePassword () {
       this.$router.push({name: 'change-password'});

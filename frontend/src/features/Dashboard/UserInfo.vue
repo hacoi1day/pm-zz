@@ -65,7 +65,7 @@
 import moment from 'moment';
 import { mapState } from 'vuex'
 export default {
-  name: 'user-info',
+  name: 'info',
   computed: mapState({
     userInfo: state => state.user.userInfo
   }),
@@ -75,11 +75,11 @@ export default {
     }
   },
   created () {
-    
+    console.log(this.userInfo);
   },
   methods: {
     editUserInfo () {
-      this.$router.push({name: 'user-info-edit'});
+      this.$router.push({name: 'info-edit'});
     }
   },
   filters: {

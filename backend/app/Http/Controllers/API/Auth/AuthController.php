@@ -39,6 +39,12 @@ class AuthController extends Controller
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $user = $this->user->where('email', $request->email)->first();
                 $user->token = $user->createToken('token')->accessToken;
+                $user->role;
+                if ($user->role) {
+                    $user->role->permissions = json_decode($user->role->permissions);
+                }
+                $user->department;
+                $user->department->manager;
                 return response()->json($user, 200);
             }
         } catch(Exception $e) {

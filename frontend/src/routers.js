@@ -66,8 +66,8 @@ const routes = [
     component: HomePage,
     redirect: { name: 'check-in' },
     children: [
-      { path: 'user-info', name: 'user-info', component: UserInfo },
-      { path: 'user-info-edit', name: 'user-info-edit', component: UserInfoEdit },
+      { path: 'info', name: 'info', component: UserInfo },
+      { path: 'info-edit', name: 'info-edit', component: UserInfoEdit },
       { path: 'change-password', name: 'change-password', component: ChangePassword },
       { path: 'test', name: 'test', component: Test },
       { path: 'test-form-validate', name: 'test-form-validate', component: TestFormValidate },
