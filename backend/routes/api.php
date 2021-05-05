@@ -57,15 +57,15 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // User
-    Route::prefix('user')->group(function () {
+    Route::prefix('user')->middleware('check_role')->group(function () {
         Route::resource('user', UserResourceController::class);
-        Route::post('dropdown', [UserResourceController::class, 'dropdown']);
+        Route::post('dropdown', [UserResourceController::class, 'dropdown'])->name('user.dropdown');
     });
 
     // Department
     Route::prefix('department')->group(function () {
         Route::resource('department', DepartmentResourceController::class);
-        Route::post('dropdown', [DepartmentResourceController::class, 'dropdown']);
+        Route::post('dropdown', [DepartmentResourceController::class, 'dropdown'])->name('department.dropdown');
     });
 
     // Checkin
@@ -92,15 +92,15 @@ Route::middleware('auth:api')->group(function () {
 
     // Manager
     Route::prefix('manager')->group(function () {
-        Route::get('list-department', [ManagerController::class, 'listDepartment']);
-        Route::get('list-user-by-department/{department_id}', [ManagerController::class, 'listUserByDepartmentId']);
+        Route::get('list-department', [ManagerController::class, 'listDepartment'])->name('manager.list_department');
+        Route::get('list-user-by-department/{department_id}', [ManagerController::class, 'listUserByDepartmentId'])->name('manager.list_user');
 
-        Route::get('export-user/{department_id}', [ManagerController::class, 'exportExcelUserByDepartmentId']);
-        Route::get('export-checkin/{user_id}', [ManagerController::class, 'exportUserCheckinByUserId']);
+        Route::get('export-user/{department_id}', [ManagerController::class, 'exportExcelUserByDepartmentId'])->name('manager.export_user');
+        Route::get('export-checkin/{user_id}', [ManagerController::class, 'exportUserCheckinByUserId'])->name('user.export_checkin');
 
-        Route::get('list-request/{department_id}', [ManagerController::class, 'listRequestByDepartmentId']);
-        Route::get('approval-request/{request_id}', [ManagerController::class, 'approvalRequest']);
-        Route::get('refuse-request/{request_id}', [ManagerController::class, 'refuseRequest']);
+        Route::get('list-request/{department_id}', [ManagerController::class, 'listRequestByDepartmentId'])->name('manager.list_request');
+        Route::get('approval-request/{request_id}', [ManagerController::class, 'approvalRequest'])->name('manager.approval_request');
+        Route::get('refuse-request/{request_id}', [ManagerController::class, 'refuseRequest'])->name('manager.refuse_request');
 
     });
 
