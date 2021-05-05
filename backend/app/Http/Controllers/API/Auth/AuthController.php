@@ -53,6 +53,10 @@ class AuthController extends Controller
     {
         try {
             $user = Auth::guard('api')->user();
+            $user->role;
+            if ($user->role) {
+                $user->role->permissions = json_decode($user->role->permissions);
+            }
             $user->department;
             $user->department->manager;
             return response()->json($user);

@@ -78,3 +78,13 @@ export const changeUserInfo = async (params) => {
     return false;
   }
 }
+
+export const checkPermission = async (name) => {
+  try {
+    const {data} = await httpHelper.get(`check-permission?name=${name}`);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
