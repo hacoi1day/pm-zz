@@ -19,7 +19,7 @@ export default {
       this.$Progress.finish();
       return response;
     }, (error) => {
-      this.$Progress.fail()
+      this.$Progress.fail();
       return Promise.reject(error);
     });
   }

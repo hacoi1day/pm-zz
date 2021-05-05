@@ -19,8 +19,8 @@ class RoleSeeder extends Seeder
             'name' => 'Root',
             'description' => 'Quản lý',
             'permissions' => json_encode([
-                'user.index', 'user.store', 'user.show', 'user.update', 'user.destroy',
-                'department.index', 'department.store', 'department.show', 'department.update', 'department.destroy',
+                'user.index', 'user.store', 'user.show', 'user.update', 'user.destroy', 'user.dropdown',
+                'department.index', 'department.store', 'department.show', 'department.update', 'department.destroy', 'department.dropdown',
                 'manager.list_department', 'manager.list_user', 'manager.export_user', 'manager.export_checkin',
                 'manager.list_request', 'manager.approval_request', 'manager.refuse_request'
             ])

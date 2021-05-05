@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!isLoading">
     <top-bar></top-bar>
     <router-view></router-view>
     <notifications position="bottom left" width="350px" />
@@ -15,11 +15,19 @@ export default {
   components: {
     TopBar,
   },
+  data () {
+    return {
+      isLoading: true
+    };
+  },
   async created () {
-    if (getToken) {
+    if (getToken()) {
       let res = await me();
       this.$store.commit('setUser', res);
+    } else {
+      this.$router.push({name: 'login'});
     }
+    this.isLoading = false;
   },
   methods: {
 

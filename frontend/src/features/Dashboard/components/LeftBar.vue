@@ -1,30 +1,34 @@
 <template>
   <div class="left-bar">
-    <menu-dropdown
-      v-for="router of routers"
-      :key="router.id"
-      :router="router"
-    />
+    <div v-for="router of routers" :key="router.id">
+      <menu-dropdown
+        v-if="router.isShow"
+        :router="router"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import MenuDropdown from '../../../components/menu/MenuDropdown'
 export default {
   name: 'left-bar',
   components: {
     'menu-dropdown': MenuDropdown
   },
-  data () {
-    return {
-      routers: [
+  computed: mapState({
+    userInfo: state => state.user.userInfo,
+    routers: state => {
+      return [
         {
           id: 100,
           title: 'Nhân viên',
           children: [
             { id: 101, title: 'Danh sách', link: '/user/list' },
             { id: 102, title: 'Thêm mới', link: '/user/create' },
-          ]
+          ],
+          isShow: state.user.userInfo.role_id === 1
         },
         {
           id: 200,
@@ -32,12 +36,14 @@ export default {
           children: [
             { id: 201, title: 'Danh sách', link: '/department/list' },
             { id: 202, title: 'Thêm mới', link: '/department/create' },
-          ]
+          ],
+          isShow: state.user.userInfo.role_id === 1
         },
         {
           id: 300,
           title: 'Lịch làm việc',
-          link: '/check-in'
+          link: '/check-in',
+          isShow: true,
         },
         {
           id: 400,
@@ -45,7 +51,8 @@ export default {
           children: [
             { id: 401, title: 'Yêu cầu của tôi', link: '/request/list' },
             { id: 402, title: 'Tạo yêu cầu', link: '/request/create' },
-          ]
+          ],
+          isShow: true,
         },
         {
           id: 500,
@@ -53,9 +60,15 @@ export default {
           children: [
             { id: 501, title: 'Phòng ban', link: '/manager/department' },
             { id: 502, title: 'Xủ lý yêu cầu', link: '/manager/request' },
-          ]
+          ],
+          isShow: state.user.userInfo.role_id === 1 || state.user.userInfo.role_id === 2
         }
-      ]
+      ];
+    }
+  }),
+  data () {
+    return {
+      
     }
   }
 }
