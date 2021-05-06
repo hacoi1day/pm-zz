@@ -24,6 +24,7 @@ import User from './features/User';
 import UserList from './features/User/UserList';
 import UserCreate from './features/User/UserCreate';
 import UserEdit from './features/User/UserEdit';
+import UserRequest from './features/User/UserRequest';
 import UserResetPassword from './features/User/UserResetPassword';
 
 // Department
@@ -81,7 +82,8 @@ const routes = [
           { path: 'list', name: 'user-list', component: UserList },
           { path: 'create', name: 'user-create', component: UserCreate },
           { path: 'edit/:id', name: 'user-edit', component: UserEdit },
-          { path: 'reset-password', name: 'user-reset-password', component: UserResetPassword }
+          { path: 'request', name: 'user-request', component: UserRequest },
+          { path: 'reset-password', name: 'user-reset-password', component: UserResetPassword },
         ]
       },
       {

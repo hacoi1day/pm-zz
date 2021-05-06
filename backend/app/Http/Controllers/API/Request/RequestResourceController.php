@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Request;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Request\IndexRequest;
 use App\Http\Requests\Request\StoreRequest;
 use App\Http\Requests\Request\UpdateRequest;
 use App\Models\Request;
@@ -21,11 +22,23 @@ class RequestResourceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexRequest $request)
     {
         try {
-            $items = $this->request->paginate(10);
-            return response()->json($items, 200);
+
+            $paginate = $this->request
+                ->where(function ($query) use ($request) {
+                    if ($request->has('status')) {
+                        $query->where('status', $request->input('status'));
+                    }
+                })
+                ->paginate(10);
+            $paginate->getCollection()->transform(function ($item) {
+                $item->user;
+                $item->approval;
+                return $item;
+            });
+            return response()->json($paginate, 200);
         } catch(Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -136,6 +149,46 @@ class RequestResourceController extends Controller
                 'message' => 'Delete successfully'
             ], 200);
         } catch(Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function approvalRequest($request_id)
+    {
+        try {
+            $request = $this->request->find($request_id);
+            $request->update([
+                'status' => 2,
+                'approval_by' => Auth::guard('api')->id()
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Phê duyệt yêu cầu thành công.'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function refuseRequest($request_id)
+    {
+        try {
+            $request = $this->request->find($request_id);
+            $request->update([
+                'status' => 3,
+                'approval_by' => Auth::guard('api')->id()
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Từ chôi yêu cầu thành công.'
+            ], 200);
+        } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()

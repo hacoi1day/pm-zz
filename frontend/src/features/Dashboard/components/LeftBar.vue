@@ -27,7 +27,8 @@ export default {
           children: [
             { id: 101, title: 'Danh sách', link: '/user/list' },
             { id: 102, title: 'Thêm mới', link: '/user/create' },
-            { id: 103, title: 'Đặt lại mật khẩu', link: '/user/reset-password' },
+            { id: 103, title: 'Xủ lý yêu cầu', link: '/user/request' },
+            { id: 104, title: 'Đặt lại mật khẩu', link: '/user/reset-password' },
           ],
           isShow: state.user.userInfo.role_id === 1
         },
@@ -62,7 +63,7 @@ export default {
             { id: 501, title: 'Phòng ban', link: '/manager/department' },
             { id: 502, title: 'Xủ lý yêu cầu', link: '/manager/request' },
           ],
-          isShow: state.user.userInfo.role_id === 1 || state.user.userInfo.role_id === 2
+          isShow: state.user.userInfo.role_id === 2
         }
       ];
     }

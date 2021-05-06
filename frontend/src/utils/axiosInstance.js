@@ -49,7 +49,7 @@ axiosInstance.interceptors.response.use((response) => {
               title: 'Có lỗi',
               text: message
             });
-          })
+          });
         }
       }
       break;
