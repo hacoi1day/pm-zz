@@ -12,11 +12,21 @@ export const listRequest = async (page, status = null) => {
 
 export const myRequest = async (page) => {
   try {
-    const {data} = await httpHelper.get(`request/my-request?page=${page}`);
+    const {data} = await httpHelper.get(`my-request?page=${page}`);
     return data;
   } catch (err) {
     console.log(err);
     return [];
+  }
+};
+
+export const createMyRequest = async (request) => {
+  try {
+    const {data} = await httpHelper.post('create-my-request', request);
+    return data;
+  } catch (err) {
+    console.log(err);
+    return false;
   }
 };
 

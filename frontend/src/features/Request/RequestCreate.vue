@@ -177,7 +177,7 @@
 
 <script>
 import { REQUEST_TYPE } from '../../constants/request';
-import { createRequest } from '../../apis/request';
+import { createMyRequest } from '../../apis/request';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 export default {
@@ -241,7 +241,7 @@ export default {
         request.start = `${this.date} ${request.start}`;
         request.end = `${this.date} ${request.end}`;
       }
-      await createRequest(request);
+      await createMyRequest(request);
       this.$notify({
         type: 'success',
         title: 'Thành công',

@@ -60,6 +60,12 @@ Route::middleware('auth:api')->group(function () {
         Route::post('store-file', [StorageController::class, 'storeFile']);
     });
 
+    // My Request
+    Route::get('my-request', [RequestController::class, 'myRequest']);
+
+    // Create Request
+    Route::post('create-my-request', [RequestController::class, 'createMyRequest']);
+
     // User
     Route::prefix('user')->middleware('check_role')->group(function () {
         Route::resource('user', UserResourceController::class);
@@ -85,11 +91,10 @@ Route::middleware('auth:api')->group(function () {
     });
 
     // Request
-    Route::prefix('request')->group(function () {
+    Route::prefix('request')->middleware('check_role')->group(function () {
         Route::resource('request', RequestResourceController::class);
-        Route::get('approval-request/{request_id}', [RequestResourceController::class, 'approvalRequest'])->middleware('check_role')->name('request.approval_request');
-        Route::get('refuse-request/{request_id}', [RequestResourceController::class, 'refuseRequest'])->middleware('check_role')->name('request.refuse_request');
-        Route::get('my-request', [RequestController::class, 'myRequest']);
+        Route::get('approval-request/{request_id}', [RequestResourceController::class, 'approvalRequest'])->name('request.approval_request');
+        Route::get('refuse-request/{request_id}', [RequestResourceController::class, 'refuseRequest'])->name('request.refuse_request');
     });
 
     // Common
