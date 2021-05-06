@@ -176,13 +176,10 @@ export default {
   },
   methods: {
     async onSubmit () {
-      await changeUserInfo(this.form);
-      this.$notify({
-        type: 'success',
-        title: 'Thành công',
-        text: 'Sửa thông tin thành công !'
-      });
-      this.$router.push({name: 'info'});
+      let res = await changeUserInfo(this.form);
+      if (res) {
+        this.$router.push({name: 'info'});
+      }
     },
     onSelectFile () {
       this.$refs.inputAvatar.click();

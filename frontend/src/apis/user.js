@@ -59,3 +59,19 @@ export const dropdownUser = async () => {
         return [];
     }
 }
+
+export const resetPasswordUser = async (userIds, password = '') => {
+  try {
+      const req = {
+        user_ids: userIds,
+      };
+      if (password) {
+        req.password = password;
+      }
+      const {data} = await httpHelper.post('user/reset-password', req);
+      return data;
+  } catch (err) {
+      console.log(err);
+      return false;
+  }
+};

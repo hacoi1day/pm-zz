@@ -28,13 +28,15 @@ export default {
   },
   methods: {
     async handleOnSubmit (form) {
-      await createUser(form);
-      this.$notify({
-        type: 'success',
-        title: 'Thành công',
-        text: 'Thêm Nhân viên mới thành công !'
-      });
-      this.$router.push({name: 'user-list'});
+      let res = await createUser(form);
+      if (res) {
+        this.$notify({
+          type: 'success',
+          title: 'Thành công',
+          text: 'Thêm Nhân viên mới thành công !'
+        });
+        this.$router.push({name: 'user-list'});
+      }
     }
   }
 }

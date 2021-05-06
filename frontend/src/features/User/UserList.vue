@@ -96,11 +96,6 @@ export default {
           await deleteUser(userId);
           this.currentPage = 1;
           await this.getUsers();
-          this.$notify({
-            type: 'success',
-            title: 'Thành công',
-            text: 'Xoá Nhân viên mới thành công !'
-          });
         }
       });
       

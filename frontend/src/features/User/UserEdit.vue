@@ -28,13 +28,16 @@ export default {
   },
   methods: {
     async handleSubmit (form) {
-      await editUser(form);
-      this.$notify({
-        type: 'success',
-        title: 'Thành công',
-        text: 'Sửa Nhân viên mới thành công !'
-      });
-      this.$router.push({name: 'user-list'});
+      let res = await editUser(form);
+      if (res) {
+        this.$notify({
+          type: 'success',
+          title: 'Thành công',
+          text: 'Sửa Nhân viên mới thành công !'
+        });
+        this.$router.push({name: 'user-list'});
+      }
+      
     }
   }
 }

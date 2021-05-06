@@ -27,6 +27,7 @@ export default {
           children: [
             { id: 101, title: 'Danh sách', link: '/user/list' },
             { id: 102, title: 'Thêm mới', link: '/user/create' },
+            { id: 103, title: 'Đặt lại mật khẩu', link: '/user/reset-password' },
           ],
           isShow: state.user.userInfo.role_id === 1
         },

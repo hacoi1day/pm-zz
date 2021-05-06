@@ -9,6 +9,7 @@ use App\Http\Controllers\API\Manager\ManagerController;
 use App\Http\Controllers\API\Request\RequestController;
 use App\Http\Controllers\API\Request\RequestResourceController;
 use App\Http\Controllers\API\Storage\StorageController;
+use App\Http\Controllers\API\User\UserController;
 use App\Http\Controllers\API\User\UserResourceController;
 
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,7 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('user')->middleware('check_role')->group(function () {
         Route::resource('user', UserResourceController::class);
         Route::post('dropdown', [UserResourceController::class, 'dropdown'])->name('user.dropdown');
+        Route::post('reset-password', [UserController::class, 'resetPassword'])->name('user.reset_password');
     });
 
     // Department

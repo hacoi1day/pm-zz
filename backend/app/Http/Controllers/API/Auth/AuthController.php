@@ -84,7 +84,7 @@ class AuthController extends Controller
                 }
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'Logout successfully'
+                    'message' => 'Đăng xuất thành công.'
                 ], 200);
             }
         } catch(Exception $e) {

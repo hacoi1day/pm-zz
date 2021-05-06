@@ -157,11 +157,6 @@ export default {
         if (willAccept) {
           await approvalRequest(this.requestSelectedId);
           this.$refs['modalRequest'].hide()
-          this.$notify({
-            type: 'success',
-            title: 'Thành công',
-            text: 'Phê duyệt yêu cầu thành công !'
-          });
           this.fetchRequestList();
         }
       });
@@ -177,11 +172,6 @@ export default {
         if (willAccept) {
           await refuseRequest(this.requestSelectedId);
           this.$refs['modalRequest'].hide()
-          this.$notify({
-            type: 'success',
-            title: 'Thành công',
-            text: 'Từ chối yêu cầu thành công !'
-          });
           this.fetchRequestList();
         }
       });

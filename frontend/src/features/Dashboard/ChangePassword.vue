@@ -103,8 +103,17 @@ export default {
   },
   methods: {
     async onSubmit () {
-      await changePassword(this.form);
-      this.$router.push({name: 'user-info'});
+      let res = await changePassword(this.form);
+      if (!res) {
+        this.resetForm();
+      } else {
+        this.$router.push({name: 'info'});
+      }
+    },
+    resetForm () {
+      this.form.currentPassword = '';
+      this.form.password = '';
+      this.form.passwordConfirm = '';
     }
   },
 }

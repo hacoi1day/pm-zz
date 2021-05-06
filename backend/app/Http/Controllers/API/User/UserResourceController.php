@@ -156,7 +156,7 @@ class UserResourceController extends Controller
             $item->delete();
             return response()->json([
                 'status' => 'success',
-                'message' => 'Delete successfully'
+                'message' => 'Xoá nhân viên thành công.'
             ], 200);
         } catch (Exception $e) {
             return response()->json([
