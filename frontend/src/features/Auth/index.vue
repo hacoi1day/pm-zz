@@ -5,8 +5,15 @@
 </template>
 
 <script>
+import { me } from '../../apis/auth';
+import { getToken } from '../../utils/token';
 export default {
-
+  name: 'auth',
+  created () {
+    if (getToken() !== '' && me()) {
+      this.$router.push({name: 'home'});
+    }
+  },
 }
 </script>
 

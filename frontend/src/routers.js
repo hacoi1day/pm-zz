@@ -66,7 +66,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomePage,
-    redirect: { name: 'check-in' },
+    redirect: {name: 'check-in'},
     children: [
       { path: 'info', name: 'info', component: UserInfo },
       { path: 'info-edit', name: 'info-edit', component: UserInfoEdit },
@@ -125,7 +125,7 @@ const routes = [
           { path: '404', name: 'error-404', component: Error404 },
         ]
       },
-      { path: '*', redirect: {name: 'error-404'} }
+      { path: '*', redirect: {name: 'login'} }
     ]
   },
 ];
@@ -137,16 +137,20 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, from, next) => {
   const name = to.name;
-  if (name.indexOf('user') === -1 && name.indexOf('department') === -1 && name.indexOf('manager') === -1) {
+  if (name === 'change-password-token') {
     next();
   } else {
-    let user = await me();
-    if (user.role_id === 1) {
-      next();
-    } else if (user.role_id === 2 && name.indexOf('manager') !== -1) {
+    if (name.indexOf('user') === -1 && name.indexOf('department') === -1 && name.indexOf('manager') === -1) {
       next();
     } else {
-      next({name: 'error-401'});
+      let user = await me();
+      if (user.role_id === 1) {
+        next();
+      } else if (user.role_id === 2 && name.indexOf('manager') !== -1) {
+        next();
+      } else {
+        next({name: 'error-401'});
+      }
     }
   }
 });

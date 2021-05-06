@@ -24,10 +24,6 @@ export default {
     if (getToken()) {
       let res = await me();
       this.$store.commit('setUser', res);
-    } else {
-      if (!this.$route.name === 'change-password-token') {
-        this.$router.push({name: 'login'});
-      }
     }
     this.isLoading = false;
   },

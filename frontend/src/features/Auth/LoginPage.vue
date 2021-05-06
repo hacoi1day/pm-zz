@@ -58,8 +58,8 @@
 </template>
 
 <script>
-import { login, me } from '../../apis/auth';
-import { getToken, setToken } from '../../utils/token';
+import { login } from '../../apis/auth';
+import { setToken } from '../../utils/token';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 export default {
@@ -74,11 +74,6 @@ export default {
         password: ''
       }
     };
-  },
-  created () {
-    if (getToken() !== '' && me()) {
-      this.$router.push({name: 'home'});
-    }
   },
   methods: {
     async onLogin () {

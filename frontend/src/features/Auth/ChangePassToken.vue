@@ -88,7 +88,6 @@ export default {
   },
   created () {
     let { token } = this.$route.query;
-    console.log(token);
     // check has token
     if (!token) {
       this.$router.push({name: 'login'});
