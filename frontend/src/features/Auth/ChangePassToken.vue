@@ -88,6 +88,7 @@ export default {
   },
   created () {
     let { token } = this.$route.query;
+    console.log(token);
     // check has token
     if (!token) {
       this.$router.push({name: 'login'});
@@ -106,12 +107,9 @@ export default {
   methods: {
     async onSubmit () {
       const res = await changePasswordWithToken(this.form, this.token);
-      this.$notify({
-        type: 'success',
-        title: 'Thành công',
-        text: res.message ? res.message : 'Đổi mật khẩu thành công.'
-      });
-      this.$router.push({name: 'login'});
+      if (res) {
+        this.$router.push({name: 'login'});
+      }
     }
   }
 }

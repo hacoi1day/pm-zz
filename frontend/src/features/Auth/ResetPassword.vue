@@ -61,12 +61,9 @@ export default {
       this.$Progress.start();
       const res = await resetPassword(this.email);
       this.$Progress.finish();
-      this.$notify({
-        type: 'success',
-        title: 'Thành công',
-        text: res.message ? res.message : `Đã gửi một mail về địa chỉ ${this.email}.`
-      });
-      this.$router.push({name: 'login'});
+      if (res) {
+        this.$router.push({name: 'login'});
+      }
     }
   },
   
