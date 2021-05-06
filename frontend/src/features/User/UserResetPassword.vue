@@ -3,7 +3,13 @@
     header="Đặt lại mật khẩu"
     header-tag="header"
   >
-    <multiselect v-model="value" :options="options" label="name" :multiple="true" track-by="id"></multiselect>
+    <b-form-group label="Nhân viên" label-for="user_ids" description="Chọn nhân viên cần đặt lại mật khẩu">
+      <multiselect id="user_ids" v-model="value" :options="options" label="name" :multiple="true" track-by="id"></multiselect>
+    </b-form-group>
+    <b-form-group label="Mật khẩu" label-for="password" description="Nếu không nhập mật khẩu thì mật khẩu được đặt ngẫu nhiên.">
+      <b-form-input type="password" name="password" id="password" placeholder="Nhập mật khẩu" v-model="password"/>
+    </b-form-group>
+    
     <b-button variant="success" class="mt-2" size="sm" @click="resetPassword()">Đặt lại mật khẩu</b-button>
   </b-card>
 </template>
@@ -21,6 +27,7 @@ export default {
     return {
       options: [],
       value: null,
+      password: ''
     };
   },
   created () {
@@ -45,9 +52,10 @@ export default {
       let userIds = this.value.map(item => item.id);
       
       // post to server
-      let res = await resetPasswordUser(userIds);
+      let res = await resetPasswordUser(userIds, this.password);
       if (res) {
         this.value = null;
+        this.password = '';
       }
     }
   }
