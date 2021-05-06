@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Request;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Request\StoreRequest;
 use App\Models\Request;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,25 @@ class RequestController extends Controller
                 return $item;
             });
             return response()->json($paginate, 200);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function createMyRequest(StoreRequest $request)
+    {
+        try {
+            $params = $request->all();
+            $params['user_id'] = Auth::guard('api')->id();
+            if (!$request->has('status')) {
+                $params['status'] = 1;
+            }
+            $item = $this->request->create($params);
+            return response()->json($item, 201);
+        } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()

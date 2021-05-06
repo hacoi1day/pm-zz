@@ -50,7 +50,7 @@ export default {
       }
 
       let userIds = this.value.map(item => item.id);
-      
+
       // post to server
       let res = await resetPasswordUser(userIds, this.password);
       if (res) {

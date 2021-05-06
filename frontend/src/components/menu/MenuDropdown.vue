@@ -10,11 +10,11 @@
         :class="{'active': isShow}"
         icon="angle-up"/>
     </p>
-    <p class="title" v-else><router-link :to="router.link"><span>{{ router.title }}</span></router-link></p>
+    <p class="title" v-else><router-link :to="router.link" active-class="active"><span>{{ router.title }}</span></router-link></p>
     <div class="dropdown" :class="{'active': isShow}" v-if="router.children && router.children.length > 0" v-show="isShow">
       <ul>
         <li v-for="child of router.children" :key="child.id">
-          <router-link :to="child.link">{{ child.title }}</router-link>
+          <router-link :to="child.link" active-class="active">{{ child.title }}</router-link>
         </li>
       </ul>
     </div>
@@ -72,6 +72,10 @@ export default {
     a {
       text-decoration: none;
       color: #131314;
+
+      &.active {
+        color: #2d90ca!important;
+      }
     }
   }
   .dropdown {
@@ -93,6 +97,11 @@ export default {
         a {
           text-decoration: none;
           color: #131314;
+
+          &.active {
+            color: #2d90ca;
+            font-weight: bold;
+          }
         }
       }
     }
