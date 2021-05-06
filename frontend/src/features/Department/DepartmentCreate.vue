@@ -36,13 +36,16 @@ export default {
       this.users = data;
     },
     async handleSubmit(form) {
-      await createDepartment(form);
-      this.$notify({
-        type: 'success',
-        title: 'Thành công',
-        text: 'Thêm Phòng ban mới thành công !'
-      });
-      this.$router.push({name: 'department-list'});
+      let res = await createDepartment(form);
+      if (res) {
+        this.$notify({
+          type: 'success',
+          title: 'Thành công',
+          text: 'Thêm Phòng ban mới thành công !'
+        });
+        this.$router.push({name: 'department-list'});
+      }
+      
     }
   }
 }

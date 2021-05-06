@@ -33,13 +33,16 @@ export default {
   },
   methods: {
     async handleSubmit(form) {
-      await editDepartment(form);
-      this.$notify({
-        type: 'success',
-        title: 'Thành công',
-        text: 'Sửa Phòng ban mới thành công !'
-      });
-      this.$router.push({name: 'department-list'});
+      let res = await editDepartment(form);
+      if (res) {
+        this.$notify({
+          type: 'success',
+          title: 'Thành công',
+          text: 'Sửa Phòng ban mới thành công !'
+        });
+        this.$router.push({name: 'department-list'});
+      }
+      
     }
   }
 }

@@ -83,7 +83,6 @@ export default {
   async created () {
     if (this.departmentId !== null) {
       let department = await getDepartment(this.departmentId);
-      console.log(department);
       this.form = department;
     }
   },
