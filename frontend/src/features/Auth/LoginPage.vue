@@ -83,6 +83,15 @@ export default {
   methods: {
     async onLogin () {
       const user = await login(this.user.email, this.user.password);
+      if (!user) {
+        this.$notify({
+          type: 'error',
+          title: 'Có lỗi',
+          text: 'Tài khoản hoặc mật khẩu không chính xác !'
+        });
+        this.user.password = '';
+        return false;
+      }
       this.$store.commit('setUser', user);
       const { token } = user;
       setToken(token);
