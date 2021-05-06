@@ -55,8 +55,8 @@ export default {
       let res = await resetPasswordUser(userIds, this.password);
       if (res) {
         this.value = null;
-        this.password = '';
       }
+      this.password = '';
     }
   }
 }

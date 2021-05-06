@@ -34,10 +34,24 @@ axiosInstance.interceptors.response.use((response) => {
   return response;
 }, (error) => {
   let res = error.response.data;
-  let statusCode = error.response.code;
+  let statusCode = error.response.status;
   switch (statusCode) {
     case 401:
       router.push({name: 'error-401'});
+      break;
+    case 422:
+      if (res.errors) {
+        let { errors } = res;
+        for (let error in errors) {
+          errors[error].map(message => {
+            Vue.notify({
+              type: 'error',
+              title: 'Có lỗi',
+              text: message
+            });
+          })
+        }
+      }
       break;
     case 500:
       if (res.message) {
