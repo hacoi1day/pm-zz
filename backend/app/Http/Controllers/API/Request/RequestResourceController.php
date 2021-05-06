@@ -186,7 +186,7 @@ class RequestResourceController extends Controller
             ]);
             return response()->json([
                 'status' => 'success',
-                'message' => 'Từ chôi yêu cầu thành công.'
+                'message' => 'Từ chối yêu cầu thành công.'
             ], 200);
         } catch (Exception $e) {
             return response()->json([
