@@ -37,8 +37,7 @@
 </template>
 
 <script>
-import { me, resetPassword } from '../../apis/auth';
-import { getToken } from '../../utils/token';
+import { resetPassword } from '../../apis/auth';
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 export default {
@@ -52,9 +51,7 @@ export default {
     }
   },
   created () {
-    if (getToken() !== '' && me()) {
-      this.$router.push({name: 'home'});
-    }
+    
   },
   methods: {
     async onResetPassword () {
