@@ -25,6 +25,17 @@ export default {
 
     };
   },
+  created () {
+    let {change_password} = this.$store.state.user.userInfo;
+    if (change_password.length > 0) {
+      this.$notify({
+        type: 'warn',
+        title: 'Đổi mật khẩu',
+        text: 'Vui lòng đổi mật khẩu khi đăng nhập lần đầu !'
+      });
+      
+    }
+  },
   methods: {
     
   }
