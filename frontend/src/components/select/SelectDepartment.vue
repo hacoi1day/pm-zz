@@ -5,14 +5,18 @@
       aria-placeholder="Chọn phòng ban"
       :value="value"
       @change="handleOnChange"
+      :state="errors.length !== 0 ? false : null"
     >
-      <b-form-select-option :value="null">Chọn phòng ban</b-form-select-option>
+      <b-form-select-option :value="null" disabled>Chọn phòng ban</b-form-select-option>
       <b-form-select-option 
         v-for="(item, index) in departments"
         :value="item.id"
         :key="index"
       >{{ item.name }}</b-form-select-option>
     </b-form-select>
+    <b-form-invalid-feedback :state="errors ? false : true">
+      {{ errors[0] }}
+    </b-form-invalid-feedback>
   </b-form-group>
 </template>
 
@@ -25,7 +29,8 @@ export default {
       type: Number,
       default: null
     },
-    onChange: Function
+    onChange: Function,
+    errors: Array
   },
   data () {
     return {

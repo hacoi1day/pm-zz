@@ -117,6 +117,9 @@ export default {
     
     requestSelectedId () {
       this.fetchRequest();
+    },
+    currentPage () {
+      this.fetchRequestList();
     }
   },
   created () {
@@ -130,7 +133,7 @@ export default {
       }
     },
     async fetchRequestList () {
-      const {data, last_page, total} = await listRequestByDepartment(this.departmentId, this.currentStatusId);
+      const {data, last_page, total} = await listRequestByDepartment(this.departmentId, this.currentPage, this.currentStatusId);
       this.items = data;
       this.lastPage = last_page;
       this.total = total;

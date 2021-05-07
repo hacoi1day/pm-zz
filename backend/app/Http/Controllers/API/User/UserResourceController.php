@@ -70,6 +70,12 @@ class UserResourceController extends Controller
 
             $item = $this->user->create($params);
 
+            $this->changePass->create([
+                'type_id' => 1,
+                'token' => '',
+                'user_id' => $item->id
+            ]);
+
             $message = [
                 'type' => 'Store user',
                 'email' => $item->email,

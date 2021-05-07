@@ -1,9 +1,9 @@
 <template>
   <b-container fluid>
-    <b-row>
-      <b-col sm="6">
-        <ValidationObserver v-slot="{ handleSubmit }">
-          <b-form @submit.prevent="handleSubmit(onHandleSubmit)">
+    <ValidationObserver v-slot="{ handleSubmit }">
+      <b-form @submit.prevent="handleSubmit(onHandleSubmit)">
+        <b-row>
+          <b-col sm="6">
             <ValidationProvider 
               v-slot="{errors}" 
               rules="required" 
@@ -74,7 +74,6 @@
               <label for="birthday">Ngày sinh</label>
               <b-form-datepicker id="birthday" v-model="form.birthday" class="mb-2"></b-form-datepicker>
             </ValidationProvider>
-
             <ValidationProvider 
               name="Giới tính"
             >
@@ -83,7 +82,6 @@
                 <b-form-radio v-model="form.gender" name="gender" :value="0">Nữ</b-form-radio>
               </b-form-group>
             </ValidationProvider>
-
             <ValidationProvider 
               name="Địa chỉ"
             >
@@ -99,22 +97,35 @@
                 ></b-form-textarea>
               </b-form-group>
             </ValidationProvider>
-            <b-button type="submit" variant="primary" v-if="mode === 'create'">Thêm mới</b-button>
-            <b-button type="submit" variant="primary" v-if="mode === 'edit'">Cập nhật</b-button>
-          </b-form>
-        </ValidationObserver>
-      </b-col>
-      <b-col sm="6">
-        <avatar
-          :value="form.avatar"
-          :onChange="handleChangeAvatar"
-        />
-        <select-department
-          :value="form.department_id"
-          :onChange="handleChangeDepartment"
-        />
-      </b-col>
-    </b-row>
+          </b-col>
+          <b-col sm="6">
+            <avatar
+              :value="form.avatar"
+              :onChange="handleChangeAvatar"
+            />
+            <select-role
+              :value="form.role_id"
+              :onChange="handleChangeRole"
+            />
+            <ValidationProvider 
+              v-slot="{errors}" 
+              rules="required" 
+              name="Phòng ban"
+            >
+              <select-department
+                :value="form.department_id"
+                :onChange="handleChangeDepartment"
+                :errors="errors"
+              />
+            </ValidationProvider>
+            
+          </b-col>
+        </b-row>
+        
+        <b-button type="submit" variant="primary" v-if="mode === 'create'">Thêm mới</b-button>
+        <b-button type="submit" variant="primary" v-if="mode === 'edit'">Cập nhật</b-button>
+      </b-form>
+    </ValidationObserver>
   </b-container>
 </template>
 
@@ -122,6 +133,7 @@
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import SelectDepartment from '../../../components/select/SelectDepartment.vue';
 import Avatar from '../../../components/Avatar.vue';
+import SelectRole from './SelectRole';
 import { getUser } from '../../../apis/user';
 
 export default {
@@ -129,7 +141,7 @@ export default {
   components: { 
     ValidationObserver, ValidationProvider,
     SelectDepartment,
-    Avatar
+    Avatar, SelectRole
   },
   props: {
     mode: {
@@ -162,7 +174,8 @@ export default {
         gender: true,
         address: '',
         password: '123456',
-        department_id: null
+        department_id: null,
+        role_id: 3,
       }
     }
   },
@@ -173,6 +186,11 @@ export default {
     handleChangeDepartment (department_id) {
       if (department_id) {
         this.form.department_id = department_id;
+      }
+    },
+    handleChangeRole (role_id) {
+      if (role_id) {
+        this.form.role_id = role_id;
       }
     },
     handleChangeAvatar (avatar) {

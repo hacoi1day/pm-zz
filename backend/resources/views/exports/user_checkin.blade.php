@@ -31,7 +31,7 @@
             @if(array_key_exists($i, $items))
                 <td width="5"
                     style="text-align: center; background-color: {{ $items[$i]['color'] }}"
-                >{{ $items[$i]['calc'] }}</td>
+                >{{ $items[$i]['calc'] !== 0 ? $items[$i]['calc'] : '' }}</td>
             @else
                 <td width="5" style="text-align: center; background-color: gray;"></td>
             @endif
