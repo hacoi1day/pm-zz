@@ -45,6 +45,10 @@ class AuthController extends Controller
                 }
                 $user->department;
                 $user->department->manager;
+                $change = $this->changePass
+                    ->where('user_id', $user->id)
+                    ->where('type_id', 1)->get();
+                $user->change_password = $change;
                 return response()->json($user, 200);
             }
         } catch(Exception $e) {
@@ -65,6 +69,10 @@ class AuthController extends Controller
             }
             $user->department;
             $user->department->manager;
+            $change = $this->changePass
+                ->where('user_id', $user->id)
+                ->where('type_id', 1)->get();
+            $user->change_password = $change;
             return response()->json($user);
         } catch(Exception $e) {
             return response()->json([
@@ -120,8 +128,7 @@ class AuthController extends Controller
             $currentPassword = $params['currentPassword'];
             $newPassword = $params['password'];
 
-            $user = $this->user->where('id', Auth::guard('api')->id())
-            ->firstOrFail();
+            $user = $this->user->where('id', Auth::guard('api')->id())->firstOrFail();
             if (!Hash::check($currentPassword, $user->password)) {
                 return response()->json([
                     'status' => 'error',
@@ -131,6 +138,13 @@ class AuthController extends Controller
             $user->update([
                 'password' => Hash::make($newPassword)
             ]);
+
+            $change = $this->changePass
+                ->where('user_id', $user->id)
+                ->where('type_id', 1)->first();
+            if ($change) {
+                $change->delete();
+            }
             return response()->json([
                 'status' => 'success',
                 'message' => 'Đổi mật khẩu thành công.'
@@ -183,7 +197,8 @@ class AuthController extends Controller
             // insert record to table change_passes
             $this->changePass->create([
                 'user_id' => $user->id,
-                'token' => $token
+                'token' => $token,
+                'type_id' => 2
             ]);
 
             // send token to email user
