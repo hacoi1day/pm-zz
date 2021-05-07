@@ -27,6 +27,7 @@
                 <b-th>Ngày sinh</b-th>
                 <b-th>Email</b-th>
                 <b-th>Số điện thoại</b-th>
+                <b-th>Xuất Excel</b-th>
               </b-tr>
             </b-thead>
             <b-tbody>
@@ -36,6 +37,9 @@
                 <b-td>{{ item.birthday | filterBirthday }}</b-td>
                 <b-td>{{ item.email }}</b-td>
                 <b-td>{{ item.phone }}</b-td>
+                <b-td>
+                  <b-button variant="success" size="sm" @click="exportExcelCheckin(item.id)">Xuất Excel giờ làm</b-button>
+                </b-td>
               </b-tr>
             </b-tbody>
           </b-table-simple>
@@ -53,7 +57,7 @@
 <script>
 import moment from 'moment';
 import { listManagerDepartment, listUserByDepartment } from '../../apis/manager';
-import { getToken } from '../../utils/token';
+import { exportDepartment, exportUserCheckin } from '../../apis/export';
 export default {
   name: 'manager-department',
   data () {
@@ -90,12 +94,11 @@ export default {
         this.users = users;
       }
     },
-    async onExportExcel () {
-      // await exportExcelDepartment(this.departmentId);
-      let token = getToken();
-      console.log(token);
-      window.location.href = `http://api.pm.local/api/export-user/${this.departmentId}`;
-
+    onExportExcel () {
+      exportDepartment(this.departmentId);
+    },
+    exportExcelCheckin (userId) {
+      exportUserCheckin(userId);
     }
   },
   filters: {

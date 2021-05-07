@@ -9,44 +9,65 @@ use Maatwebsite\Excel\Concerns\FromView;
 
 class UserCheckinExport implements FromView
 {
-    private $user_id;
+    private $user;
     private $month;
     private $year;
 
-    public function __construct($user_id, $month = null, $year = null) {
-        $this->user_id = $user_id;
-        if (is_null($month)) {
-            $this->month = Carbon::now()->month;
-        }
-        if (is_null($year)) {
-            $this->year = Carbon::now()->year;
-        }
+    public function __construct($user, $month = null, $year = null) {
+        $this->user = $user;
+        $this->month = $month ? $month : Carbon::now()->month;
+        $this->year = $year ? $year : Carbon::now()->year;
     }
 
     public function view(): View
     {
-        $items = Checkin::where('user_id', $this->user_id)
-            ->whereYear('date', '=' , $this->year)
-            ->whereMonth('date', '=', $this->month)
+        $items = Checkin::where('user_id', $this->user->id)
+            ->whereYear('date', $this->year)
+            ->whereMonth('date', $this->month)
             ->get();
+
         $result = [];
         $totalDay = 0;
         $totalHours = 0;
+
+        $daysInMonth = Carbon::create($this->year, $this->month)->daysInMonth;
+
         foreach ($items as $item) {
+            $date = Carbon::parse($item->date);
+            $day = $date->day;
             $time_in = Carbon::parse($item->time_in);
             $time_out = Carbon::parse($item->time_out);
-            $data = [
-                'date' => Carbon::parse($item->date)->format('d-m-Y'),
+
+            $calc = $time_in->diffInMinutes($time_out);
+            $calc = round(($calc / 60), 2);
+
+            $color = 'gray';
+            if ($calc !== 0 && $calc < 8) {
+                $color = 'red';
+            }
+            if ($calc !== 0 && $calc >= 8) {
+                $color = 'green';
+            }
+
+            $totalDay++;
+            $totalHours += $calc;
+
+            $result[$day] = [
                 'time_in' => $time_in,
                 'time_out' => $time_out,
-                'count' => $time_in->diff($time_out)->format('%H:%I')
+                'calc' => $calc,
+                'color' => $color
             ];
-            array_push($result, $data);
         }
         return view('exports.user_checkin', [
+            'user' => $this->user,
             'items' => $result,
             'totalHours' => $totalHours,
-            'totalDay' => $totalDay
+            'totalDay' => $totalDay,
+
+            'daysInMonth' => $daysInMonth,
+            'year' => $this->year,
+            'month' => $this->month
         ]);
     }
 
