@@ -15,21 +15,12 @@ class UserCheckinExport implements FromView
 
     public function __construct($user, $month = null, $year = null) {
         $this->user = $user;
-        if (!$month) {
-            $this->month = Carbon::now()->month;
-        } else {
-            $this->month = $month;
-        }
-        if (!$year) {
-            $this->year = Carbon::now()->year;
-        } else {
-            $this->year = $year;
-        }
+        $this->month = $month ? $month : Carbon::now()->month;
+        $this->year = $year ? $year : Carbon::now()->year;
     }
 
     public function view(): View
     {
-        // dd($this->year);
         $items = Checkin::where('user_id', $this->user->id)
             ->whereYear('date', $this->year)
             ->whereMonth('date', $this->month)
@@ -42,12 +33,21 @@ class UserCheckinExport implements FromView
         $daysInMonth = Carbon::create($this->year, $this->month)->daysInMonth;
 
         foreach ($items as $item) {
-            $day = Carbon::parse($item->date)->day;
+            $date = Carbon::parse($item->date);
+            $day = $date->day;
             $time_in = Carbon::parse($item->time_in);
             $time_out = Carbon::parse($item->time_out);
 
             $calc = $time_in->diffInMinutes($time_out);
-            $calc = round($calc / 60, 2);
+            $calc = round(($calc / 60), 2);
+
+            $color = 'gray';
+            if ($calc !== 0 && $calc < 8) {
+                $color = 'red';
+            }
+            if ($calc !== 0 && $calc >= 8) {
+                $color = 'green';
+            }
 
             $totalDay++;
             $totalHours += $calc;
@@ -55,7 +55,8 @@ class UserCheckinExport implements FromView
             $result[$day] = [
                 'time_in' => $time_in,
                 'time_out' => $time_out,
-                'calc' => $calc
+                'calc' => $calc,
+                'color' => $color
             ];
         }
         return view('exports.user_checkin', [

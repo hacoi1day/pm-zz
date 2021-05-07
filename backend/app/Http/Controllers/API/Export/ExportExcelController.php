@@ -61,7 +61,7 @@ class ExportExcelController extends Controller
                     'message' => 'Nhân viên không tồn tại'
                 ], 500);
             }
-            $fileName = $user->name . '_' . time() . '.xlsx';
+            $fileName = $user->name . '_' . $month . '_' . $year . '_' . time() . '.xlsx';
             return Excel::download(new UserCheckinExport($user, $month, $year), $fileName);
         } catch(Exception $e) {
             return response()->json([
