@@ -4,47 +4,40 @@ namespace App\Exports;
 
 use App\Models\User;
 use Carbon\Carbon;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class UserDepartmentExport implements FromCollection, WithHeadings, WithMapping
+class UserDepartmentExport implements FromView
 {
-    private $department_id;
+    private $department;
 
-    public function __construct($department_id) {
-        $this->department_id = $department_id;
-    }
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
-    {
-        return User::where('department_id', $this->department_id)->get();
+    public function __construct($department) {
+        $this->department = $department;
     }
 
-    public function headings(): array
+    public function view(): View
     {
-        return [
-            'id' => 'ID',
-            'name' => 'Họ và tên',
-            'birthday' => 'Ngày sinh',
-            'email' => 'Email',
-            'phone' => 'Số điện thoại',
-            'address' => 'Địa chỉ'
-        ];
-    }
+        $users = User::where('department_id', $this->department->id)->get();
 
-    public function map($row): array
-    {
-        return [
-            'id' => $row->id,
-            'name' => $row->name,
-            'birthday' => Carbon::parse($row->birthday)->format('d-m-Y'),
-            'email' => $row->email,
-            'phone' => $row->phone,
-            'address' => $row->address
-        ];
+        $items = [];
+        $total = 0;
+
+        foreach ($users as $user) {
+            array_push($items, [
+                'id' => $user->id,
+                'name' => $user->name,
+                'birthday' => Carbon::parse($user->birthday)->format('d-m-Y'),
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'address' => $user->address,
+            ]);
+            $total++;
+        }
+        return view('exports.department_user', [
+            'department' => $this->department,
+            'items' => $items,
+            'total' => $total
+        ]);
     }
 
 }

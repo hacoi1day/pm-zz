@@ -52,7 +52,8 @@
 
 <script>
 import moment from 'moment';
-import { listManagerDepartment, listUserByDepartment, exportExcelDepartment } from '../../apis/manager';
+import { listManagerDepartment, listUserByDepartment } from '../../apis/manager';
+import { getToken } from '../../utils/token';
 export default {
   name: 'manager-department',
   data () {
@@ -90,7 +91,11 @@ export default {
       }
     },
     async onExportExcel () {
-      await exportExcelDepartment(this.departmentId);
+      // await exportExcelDepartment(this.departmentId);
+      let token = getToken();
+      console.log(token);
+      window.location.href = `http://api.pm.local/api/export-user/${this.departmentId}`;
+
     }
   },
   filters: {

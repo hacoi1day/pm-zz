@@ -72,7 +72,19 @@ class ManagerController extends Controller
     public function exportExcelUserByDepartmentId($department_id)
     {
         try {
-            return Excel::download(new UserDepartmentExport($department_id), 'users_'.time().'.xlsx');
+            $department = $this->department->find($department_id);
+            if (!$department) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Phòng ban không tồn tại.'
+                ], 500);
+            }
+
+            $department->manager;
+
+            $fileName = 'Danh sách nhân viên ' . $department->name . '_' . time() . '.xlsx';
+
+            return Excel::download(new UserDepartmentExport($department), $fileName);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',

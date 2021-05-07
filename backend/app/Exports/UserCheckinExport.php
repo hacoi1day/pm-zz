@@ -4,11 +4,10 @@ namespace App\Exports;
 
 use App\Models\Checkin;
 use Carbon\Carbon;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class UserCheckinExport implements FromCollection, WithHeadings, WithMapping
+class UserCheckinExport implements FromView
 {
     private $user_id;
     private $month;
@@ -23,35 +22,32 @@ class UserCheckinExport implements FromCollection, WithHeadings, WithMapping
             $this->year = Carbon::now()->year;
         }
     }
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+
+    public function view(): View
     {
-        return Checkin::where('user_id', $this->user_id)
+        $items = Checkin::where('user_id', $this->user_id)
             ->whereYear('date', '=' , $this->year)
             ->whereMonth('date', '=', $this->month)
             ->get();
-    }
-
-    public function headings(): array
-    {
-        return [
-            'id' => 'ID',
-            'date' => 'Ngày',
-            'time_in' => 'Giờ vào',
-            'time_out' => 'Giờ ra',
-        ];
-    }
-
-    public function map($row): array
-    {
-        return [
-            'id' => $row->id,
-            'date' => Carbon::parse($row->date)->format('d-m-Y'),
-            'time_in' => $row->time_in ? Carbon::parse($row->time_in)->format('h:i') : '',
-            'time_out' => $row->time_out ? Carbon::parse($row->time_out)->format('h:i') : '',
-        ];
+        $result = [];
+        $totalDay = 0;
+        $totalHours = 0;
+        foreach ($items as $item) {
+            $time_in = Carbon::parse($item->time_in);
+            $time_out = Carbon::parse($item->time_out);
+            $data = [
+                'date' => Carbon::parse($item->date)->format('d-m-Y'),
+                'time_in' => $time_in,
+                'time_out' => $time_out,
+                'count' => $time_in->diff($time_out)->format('%H:%I')
+            ];
+            array_push($result, $data);
+        }
+        return view('exports.user_checkin', [
+            'items' => $result,
+            'totalHours' => $totalHours,
+            'totalDay' => $totalDay
+        ]);
     }
 
 }

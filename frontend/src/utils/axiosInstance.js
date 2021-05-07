@@ -14,10 +14,10 @@ const axiosInstance = axios.create({
   },
 });
 
-axiosInstance.interceptors.request.use((config) => {
+axiosInstance.interceptors.request.use((request) => {
   let token = getToken();
-  config.headers.Authorization = `Bearer ${token}`
-  return config;
+  request.headers.Authorization = `Bearer ${token}`
+  return request;
 }, function (error) {
   return Promise.reject(error);
 });
