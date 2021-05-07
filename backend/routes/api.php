@@ -5,6 +5,7 @@ use App\Http\Controllers\API\Checkin\CheckinController;
 use App\Http\Controllers\API\Checkin\CheckinResourceController;
 use App\Http\Controllers\API\Common\CommonController;
 use App\Http\Controllers\API\Department\DepartmentResourceController;
+use App\Http\Controllers\API\Export\ExportExcelController;
 use App\Http\Controllers\API\Manager\ManagerController;
 use App\Http\Controllers\API\Request\RequestController;
 use App\Http\Controllers\API\Request\RequestResourceController;
@@ -118,5 +119,5 @@ Route::middleware('auth:api')->group(function () {
 
 });
 
-Route::get('export-user/{department_id}', [ManagerController::class, 'exportExcelUserByDepartmentId']);
-Route::get('export-checkin/{user_id}', [ManagerController::class, 'exportUserCheckinByUserId']);
+Route::get('export-department/{department_id}', [ExportExcelController::class, 'exportDepartment']);
+Route::get('export-user-checkin/{user_id}', [ExportExcelController::class, 'exportUserCheckin']);

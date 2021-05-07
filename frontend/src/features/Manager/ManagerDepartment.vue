@@ -94,7 +94,7 @@ export default {
       // await exportExcelDepartment(this.departmentId);
       let token = getToken();
       console.log(token);
-      window.location.href = `http://api.pm.local/api/export-user/${this.departmentId}`;
+      window.location.href = `http://api.pm.local/api/export-department/${this.departmentId}`;
 
     }
   },
