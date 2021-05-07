@@ -21,9 +21,10 @@ class RoleSeeder extends Seeder
             'permissions' => json_encode([
                 'user.index', 'user.store', 'user.show', 'user.update', 'user.destroy', 'user.dropdown', 'user.reset_password',
                 'department.index', 'department.store', 'department.show', 'department.update', 'department.destroy', 'department.dropdown',
-                'manager.list_department', 'manager.list_user', 'manager.export_user', 'manager.export_checkin',
+                'manager.list_department', 'manager.list_user',
                 'request.index', 'request.show', 'request.update', 'request.destroy', 'request.approval_request', 'request.refuse_request',
-                'manager.list_request', 'manager.approval_request', 'manager.refuse_request'
+                'manager.list_request', 'manager.approval_request', 'manager.refuse_request',
+                'export.department', 'export.user_checkin'
             ])
         ]);
         Role::create([
@@ -33,7 +34,8 @@ class RoleSeeder extends Seeder
             'permissions' => json_encode([
                 'manager.list_department', 'manager.list_user', 'manager.export_user', 'manager.export_checkin',
                 'request.show',
-                'manager.list_request', 'manager.approval_request', 'manager.refuse_request'
+                'manager.list_request', 'manager.approval_request', 'manager.refuse_request',
+                'export.department', 'export.user_checkin'
             ])
         ]);
     }
