@@ -20,9 +20,9 @@ export const listUserByDepartment = async (departmentId) => {
   }
 }
 
-export const listRequestByDepartment = async (departmentId, status = '') => {
+export const listRequestByDepartment = async (departmentId, page = 1, status = '') => {
   try {
-    const {data} = await httpHelper.get(`manager/list-request/${departmentId}?status=${status}`);
+    const {data} = await httpHelper.get(`manager/list-request/${departmentId}?page=${page}&status=${status}`);
     return data;
   } catch (err) {
     console.log(err);

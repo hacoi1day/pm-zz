@@ -109,6 +109,10 @@
           :value="form.avatar"
           :onChange="handleChangeAvatar"
         />
+        <select-role
+          :value="form.role_id"
+          :onChange="handleChangeRole"
+        />
         <select-department
           :value="form.department_id"
           :onChange="handleChangeDepartment"
@@ -122,6 +126,7 @@
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 import SelectDepartment from '../../../components/select/SelectDepartment.vue';
 import Avatar from '../../../components/Avatar.vue';
+import SelectRole from './SelectRole';
 import { getUser } from '../../../apis/user';
 
 export default {
@@ -129,7 +134,7 @@ export default {
   components: { 
     ValidationObserver, ValidationProvider,
     SelectDepartment,
-    Avatar
+    Avatar, SelectRole
   },
   props: {
     mode: {
@@ -162,7 +167,8 @@ export default {
         gender: true,
         address: '',
         password: '123456',
-        department_id: null
+        department_id: null,
+        role_id: 3,
       }
     }
   },
@@ -173,6 +179,11 @@ export default {
     handleChangeDepartment (department_id) {
       if (department_id) {
         this.form.department_id = department_id;
+      }
+    },
+    handleChangeRole (role_id) {
+      if (role_id) {
+        this.form.role_id = role_id;
       }
     },
     handleChangeAvatar (avatar) {
