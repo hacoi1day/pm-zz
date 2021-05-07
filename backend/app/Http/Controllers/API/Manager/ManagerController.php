@@ -79,11 +79,8 @@ class ManagerController extends Controller
                     'message' => 'Phòng ban không tồn tại.'
                 ], 500);
             }
-
             $department->manager;
-
             $fileName = 'Danh sách nhân viên ' . $department->name . '_' . time() . '.xlsx';
-
             return Excel::download(new UserDepartmentExport($department), $fileName);
         } catch (Exception $e) {
             return response()->json([
@@ -96,6 +93,13 @@ class ManagerController extends Controller
     public function exportUserCheckinByUserId($user_id)
     {
         try {
+            $user = $this->user->find($user_id);
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Nhân viên không tồn tại'
+                ], 500);
+            }
             return Excel::download(new UserCheckinExport($user_id), $user_id . '_checkin.xlsx');
         } catch(Exception $e) {
             return response()->json([
