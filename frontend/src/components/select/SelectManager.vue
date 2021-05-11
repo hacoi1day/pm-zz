@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     async getManager() {
-      let res = await dropdownUser();
+      let res = await dropdownUser(2);
       this.managers = res;
     },
     handleOnChange (value) {
