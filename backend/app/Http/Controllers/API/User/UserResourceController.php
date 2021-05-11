@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\DropdownUserRequest;
 use App\Http\Requests\User\StoreUser;
 use App\Jobs\Mail\User\StoreUserMail;
 use App\Models\ChangePass;
@@ -172,10 +173,16 @@ class UserResourceController extends Controller
         }
     }
 
-    public function dropdown()
+    public function dropdown(DropdownUserRequest $request)
     {
         try {
-            $items = $this->user->all();
+            $items = $this->user
+                ->where(function ($query) use ($request) {
+                    if ($request->has('role_id') && $request->input('role_id') !== '') {
+                        $query->where('role_id', $request->input('role_id'));
+                    }
+                })
+                ->get();
             $result = [];
             foreach ($items as $item) {
                 array_push($result, [
