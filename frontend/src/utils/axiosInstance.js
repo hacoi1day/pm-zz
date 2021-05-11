@@ -4,7 +4,7 @@ import { baseUrl } from '../configs/api';
 import { getToken } from './token';
 import router from '../routers';
 
-const apiUrl = `${baseUrl}/api/`;
+const apiUrl = `${baseUrl}/api/v1`;
 
 const axiosInstance = axios.create({
   baseURL: apiUrl,
