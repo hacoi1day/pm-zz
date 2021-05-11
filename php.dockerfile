@@ -7,7 +7,6 @@ WORKDIR /var/www/html/backend
 
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-RUN install-php-extensions pdo pdo_mysql zip gd simplexml
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-# Install Compose
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN install-php-extensions pdo pdo_mysql zip gd simplexml

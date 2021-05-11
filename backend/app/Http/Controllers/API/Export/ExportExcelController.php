@@ -29,45 +29,31 @@ class ExportExcelController extends Controller
 
     public function exportDepartment($department_id)
     {
-        try {
-            $department = $this->department->find($department_id);
-            if (!$department) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Phòng ban không tồn tại.'
-                ], 500);
-            }
-            $department->manager;
-            $fileName = 'Danh sách nhân viên ' . $department->name . '_' . time() . '.xlsx';
-            return Excel::download(new UserDepartmentExport($department), $fileName);
-        } catch (Exception $e) {
+        $department = $this->department->find($department_id);
+        if (!$department) {
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => 'Phòng ban không tồn tại.'
             ], 500);
         }
+        $department->manager;
+        $fileName = 'Danh sách nhân viên ' . $department->name . '_' . time() . '.xlsx';
+        return Excel::download(new UserDepartmentExport($department), $fileName);
     }
 
     public function exportUserCheckin(UserCheckinRequest $request, $user_id)
     {
-        try {
-            $year = $request->has('year') ? intval($request->input('year')) : Carbon::now()->year;
-            $month = $request->has('month') ? intval($request->input('month')) : Carbon::now()->month;
+        $year = $request->has('year') ? intval($request->input('year')) : Carbon::now()->year;
+        $month = $request->has('month') ? intval($request->input('month')) : Carbon::now()->month;
 
-            $user = $this->user->find($user_id);
-            if (!$user) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Nhân viên không tồn tại'
-                ], 500);
-            }
-            $fileName = $user->name . '_' . $month . '_' . $year . '_' . time() . '.xlsx';
-            return Excel::download(new UserCheckinExport($user, $month, $year), $fileName);
-        } catch(Exception $e) {
+        $user = $this->user->find($user_id);
+        if (!$user) {
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => 'Nhân viên không tồn tại'
             ], 500);
         }
+        $fileName = $user->name . '_' . $month . '_' . $year . '_' . time() . '.xlsx';
+        return Excel::download(new UserCheckinExport($user, $month, $year), $fileName);
     }
 }

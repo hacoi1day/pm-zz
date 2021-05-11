@@ -14,7 +14,7 @@ services:
             - ./:/var/www/html
             - ./nginx/conf.d:/etc/nginx/conf.d
         depends_on:
-            - php
+            - backend
             - mysql
         networks:
             - app-network
@@ -34,7 +34,7 @@ services:
             SERVICE_NAME: mysql
         networks: 
             - app-network
-    php:
+    backend:
         build:
             context: .
             dockerfile: php.dockerfile
@@ -47,7 +47,7 @@ services:
         networks: 
             - app-network
 
-    node:
+    frontend:
         build:
             context: .
             dockerfile: node.dockerfile

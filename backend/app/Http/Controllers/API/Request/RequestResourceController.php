@@ -24,27 +24,19 @@ class RequestResourceController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        try {
-
-            $paginate = $this->request
-                ->where(function ($query) use ($request) {
-                    if ($request->has('status')) {
-                        $query->where('status', $request->input('status'));
-                    }
-                })
-                ->paginate(10);
-            $paginate->getCollection()->transform(function ($item) {
-                $item->user;
-                $item->approval;
-                return $item;
-            });
-            return response()->json($paginate, 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $paginate = $this->request
+            ->where(function ($query) use ($request) {
+                if ($request->has('status')) {
+                    $query->where('status', $request->input('status'));
+                }
+            })
+            ->paginate(10);
+        $paginate->getCollection()->transform(function ($item) {
+            $item->user;
+            $item->approval;
+            return $item;
+        });
+        return response()->json($paginate, 200);
     }
 
     /**
@@ -65,20 +57,13 @@ class RequestResourceController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        try {
-            $params = $request->all();
-            $params['user_id'] = Auth::guard('api')->id();
-            if (!$request->has('status')) {
-                $params['status'] = 1;
-            }
-            $item = $this->request->create($params);
-            return response()->json($item, 201);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
+        $params = $request->all();
+        $params['user_id'] = Auth::guard('api')->id();
+        if (!$request->has('status')) {
+            $params['status'] = 1;
         }
+        $item = $this->request->create($params);
+        return response()->json($item, 201);
     }
 
     /**
@@ -89,16 +74,9 @@ class RequestResourceController extends Controller
      */
     public function show($id)
     {
-        try {
-            $item = $this->request->find($id);
-            $item->user;
-            return response()->json($item, 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $item = $this->request->find($id);
+        $item->user;
+        return response()->json($item, 200);
     }
 
     /**
@@ -121,16 +99,9 @@ class RequestResourceController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        try {
-            $item = $this->request->find($id);
-            $item->update($request->all());
-            return response()->json($item, 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $item = $this->request->find($id);
+        $item->update($request->all());
+        return response()->json($item, 200);
     }
 
     /**
@@ -141,58 +112,37 @@ class RequestResourceController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $item = $this->request->find($id);
-            $item->delete();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Delete successfully'
-            ], 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $item = $this->request->find($id);
+        $item->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Delete successfully'
+        ], 200);
     }
 
     public function approvalRequest($request_id)
     {
-        try {
-            $request = $this->request->find($request_id);
-            $request->update([
-                'status' => 2,
-                'approval_by' => Auth::guard('api')->id()
-            ]);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Phê duyệt yêu cầu thành công.'
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $request = $this->request->find($request_id);
+        $request->update([
+            'status' => 2,
+            'approval_by' => Auth::guard('api')->id()
+        ]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Phê duyệt yêu cầu thành công.'
+        ], 200);
     }
 
     public function refuseRequest($request_id)
     {
-        try {
-            $request = $this->request->find($request_id);
-            $request->update([
-                'status' => 3,
-                'approval_by' => Auth::guard('api')->id()
-            ]);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Từ chối yêu cầu thành công.'
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $request = $this->request->find($request_id);
+        $request->update([
+            'status' => 3,
+            'approval_by' => Auth::guard('api')->id()
+        ]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Từ chối yêu cầu thành công.'
+        ], 200);
     }
 }

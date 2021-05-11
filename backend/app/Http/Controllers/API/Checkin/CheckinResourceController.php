@@ -23,15 +23,8 @@ class CheckinResourceController extends Controller
      */
     public function index()
     {
-        try {
-            $items = $this->checkin->latest()->paginate(10);
-            return response()->json($items, 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $items = $this->checkin->latest()->paginate(10);
+        return response()->json($items, 200);
     }
 
     /**
@@ -52,15 +45,8 @@ class CheckinResourceController extends Controller
      */
     public function store(StoreCheckin $request)
     {
-        try {
-            $item = $this->checkin->create($request->all());
-            return response()->json($item, 201);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $item = $this->checkin->create($request->all());
+        return response()->json($item, 201);
     }
 
     /**
@@ -71,15 +57,8 @@ class CheckinResourceController extends Controller
      */
     public function show($id)
     {
-        try {
-            $item = $this->checkin->find($id);
-            return response()->json($item, 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $item = $this->checkin->find($id);
+        return response()->json($item, 200);
     }
 
     /**
@@ -102,16 +81,9 @@ class CheckinResourceController extends Controller
      */
     public function update(UpdateCheckin $request, $id)
     {
-        try {
-            $item = $this->checkin->find($id);
-            $item->update($request->all());
-            return response()->json($item, 202);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $item = $this->checkin->find($id);
+        $item->update($request->all());
+        return response()->json($item, 202);
     }
 
     /**
@@ -122,18 +94,11 @@ class CheckinResourceController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $item = $this->checkin->find($id);
-            $item->delete();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Delete successfully'
-            ], 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $item = $this->checkin->find($id);
+        $item->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Delete successfully'
+        ], 200);
     }
 }
