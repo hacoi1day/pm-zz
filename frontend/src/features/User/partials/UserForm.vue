@@ -109,7 +109,6 @@
             />
             <ValidationProvider 
               v-slot="{errors}" 
-              rules="required" 
               name="Phòng ban"
             >
               <select-department

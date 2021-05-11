@@ -35,7 +35,8 @@ class RoleSeeder extends Seeder
                 'manager.list_department', 'manager.list_user', 'manager.export_user', 'manager.export_checkin',
                 'request.show',
                 'manager.list_request', 'manager.approval_request', 'manager.refuse_request',
-                'export.department', 'export.user_checkin'
+                'export.department', 'export.user_checkin',
+                'user.show',
             ])
         ]);
     }

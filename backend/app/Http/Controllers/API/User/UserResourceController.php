@@ -178,7 +178,7 @@ class UserResourceController extends Controller
         try {
             $items = $this->user
                 ->where(function ($query) use ($request) {
-                    if ($request->has('role_id') && $request->input('role_id') !== '') {
+                    if ($request->has('role_id') && $request->input('role_id') !== null) {
                         $query->where('role_id', $request->input('role_id'));
                     }
                 })

@@ -44,7 +44,10 @@ class AuthController extends Controller
                     $user->role->permissions = json_decode($user->role->permissions);
                 }
                 $user->department;
-                $user->department->manager;
+                if ($user->department) {
+                    $user->department->manager;
+                }
+
                 $change = $this->changePass
                     ->where('user_id', $user->id)
                     ->where('type_id', 1)->get();
@@ -68,7 +71,9 @@ class AuthController extends Controller
                 $user->role->permissions = json_decode($user->role->permissions);
             }
             $user->department;
-            $user->department->manager;
+            if ($user->department) {
+                $user->department->manager;
+            }
             $change = $this->changePass
                 ->where('user_id', $user->id)
                 ->where('type_id', 1)->get();

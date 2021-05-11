@@ -24,7 +24,7 @@ class DropdownUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'role_id' => 'sometimes|integer'
+            //
         ];
     }
 }
