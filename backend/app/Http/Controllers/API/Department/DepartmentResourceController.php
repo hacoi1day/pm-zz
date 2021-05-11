@@ -22,19 +22,12 @@ class DepartmentResourceController extends Controller
      */
     public function index()
     {
-        try {
-            $paginate = $this->department->paginate(10);
-            $paginate->getCollection()->transform(function ($item) {
-                $item->manager;
-                return $item;
-            });
-            return response()->json($paginate, 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $paginate = $this->department->paginate(10);
+        $paginate->getCollection()->transform(function ($item) {
+            $item->manager;
+            return $item;
+        });
+        return response()->json($paginate, 200);
     }
 
     /**
@@ -55,15 +48,8 @@ class DepartmentResourceController extends Controller
      */
     public function store(StoreDepartment $request)
     {
-        try {
-            $item = $this->department->create($request->all());
-            return response()->json($item, 201);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $item = $this->department->create($request->all());
+        return response()->json($item, 201);
     }
 
     /**
@@ -74,15 +60,8 @@ class DepartmentResourceController extends Controller
      */
     public function show($id)
     {
-        try {
-            $item = $this->department->find($id);
-            return response()->json($item, 202);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $item = $this->department->find($id);
+        return response()->json($item, 202);
     }
 
     /**
@@ -105,16 +84,9 @@ class DepartmentResourceController extends Controller
      */
     public function update(UpdateDepartment $request, $id)
     {
-        try {
-            $item = $this->department->find($id);
-            $item->update($request->all());
-            return response()->json($item, 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $item = $this->department->find($id);
+        $item->update($request->all());
+        return response()->json($item, 200);
     }
 
     /**
@@ -125,38 +97,24 @@ class DepartmentResourceController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $item = $this->department->find($id);
-            $item->delete();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Delete successfully'
-            ], 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $item = $this->department->find($id);
+        $item->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Delete successfully'
+        ], 200);
     }
 
     public function dropdown()
     {
-        try {
-            $items = $this->department->all();
-            $result = [];
-            foreach ($items as $item) {
-                array_push($result, [
-                    'id' => $item->id,
-                    'name' => $item->name,
-                ]);
-            }
-            return response()->json($result, 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
+        $items = $this->department->all();
+        $result = [];
+        foreach ($items as $item) {
+            array_push($result, [
+                'id' => $item->id,
+                'name' => $item->name,
+            ]);
         }
+        return response()->json($result, 200);
     }
 }

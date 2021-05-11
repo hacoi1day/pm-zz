@@ -121,10 +121,3 @@ Route::prefix('v1')->group(function () {
         });
     });
 });
-
-// Route::any('{any}', function(){
-//     return response()->json([
-//         'status'    => 'error',
-//         'message'   => 'Page Not Found.',
-//     ], 404);
-// })->where('any', '.*');

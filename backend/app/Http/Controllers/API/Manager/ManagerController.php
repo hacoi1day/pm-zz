@@ -27,154 +27,105 @@ class ManagerController extends Controller
 
     public function listDepartment()
     {
-        try {
-            $user_id = Auth::guard('api')->id();
-            $departments = $this->department->where('manager_id', $user_id)->get();
-            return response()->json([
-                'status' => 'success',
-                'departments' => $departments
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $user_id = Auth::guard('api')->id();
+        $departments = $this->department->where('manager_id', $user_id)->get();
+        return response()->json([
+            'status' => 'success',
+            'departments' => $departments
+        ], 200);
     }
 
     public function listUserByDepartmentId($department_id)
     {
-        try {
-            $user_id = Auth::guard('api')->id();
-            $department = $this->department
-                ->where('manager_id', $user_id)
-                ->where('id', $department_id)
-                ->first();
-            if (!$department) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Phòng ban không thuộc quản lý.'
-                ], 500);
-            }
-            $users = $department->users;
-            return response()->json([
-                'status' => 'success',
-                'users' => $users
-            ], 200);
-        } catch (Exception $e) {
+        $user_id = Auth::guard('api')->id();
+        $department = $this->department
+            ->where('manager_id', $user_id)
+            ->where('id', $department_id)
+            ->first();
+        if (!$department) {
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => 'Phòng ban không thuộc quản lý.'
             ], 500);
         }
+        $users = $department->users;
+        return response()->json([
+            'status' => 'success',
+            'users' => $users
+        ], 200);
     }
 
     public function exportExcelUserByDepartmentId($department_id)
     {
-        try {
-            $department = $this->department->find($department_id);
-            if (!$department) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Phòng ban không tồn tại.'
-                ], 500);
-            }
-            $department->manager;
-            $fileName = 'Danh sách nhân viên ' . $department->name . '_' . time() . '.xlsx';
-            return Excel::download(new UserDepartmentExport($department), $fileName);
-        } catch (Exception $e) {
+        $department = $this->department->find($department_id);
+        if (!$department) {
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => 'Phòng ban không tồn tại.'
             ], 500);
         }
+        $department->manager;
+        $fileName = 'Danh sách nhân viên ' . $department->name . '_' . time() . '.xlsx';
+        return Excel::download(new UserDepartmentExport($department), $fileName);
     }
 
     public function exportUserCheckinByUserId($user_id)
     {
-        try {
-            $user = $this->user->find($user_id);
-            if (!$user) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Nhân viên không tồn tại'
-                ], 500);
-            }
-            return Excel::download(new UserCheckinExport($user_id), $user_id . '_checkin.xlsx');
-        } catch(Exception $e) {
+        $user = $this->user->find($user_id);
+        if (!$user) {
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => 'Nhân viên không tồn tại'
             ], 500);
         }
+        return Excel::download(new UserCheckinExport($user_id), $user_id . '_checkin.xlsx');
     }
 
     public function listRequestByDepartmentId(ListRequestRequest $request, $department_id)
     {
-        try {
-            $paginate = $this->request
-            ->join('users', 'users.id', 'requests.user_id')
-            ->where(function ($query) use ($request) {
-                if ($request->has('status')) {
-                    $query->where('status', $request->input('status'));
-                }
-            })
-            ->where('users.department_id', $department_id)
-            ->select('requests.*', 'users.email', 'users.name')
-            ->paginate(10);
+        $paginate = $this->request
+        ->join('users', 'users.id', 'requests.user_id')
+        ->where(function ($query) use ($request) {
+            if ($request->has('status')) {
+                $query->where('status', $request->input('status'));
+            }
+        })
+        ->where('users.department_id', $department_id)
+        ->select('requests.*', 'users.email', 'users.name')
+        ->paginate(10);
 
-            $paginate->getCollection()->transform(function ($item) {
-                $item->approval = $item->approval;
-                return $item;
-            });
+        $paginate->getCollection()->transform(function ($item) {
+            $item->approval = $item->approval;
+            return $item;
+        });
 
-            return response()->json($paginate);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json($paginate);
     }
 
     public function approvalRequest($request_id)
     {
-        try {
-            $request = $this->request->find($request_id);
-            $request->update([
-                'status' => 2,
-                'approval_by' => Auth::guard('api')->id()
-            ]);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Phê duyệt yêu cầu thành công.'
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $request = $this->request->find($request_id);
+        $request->update([
+            'status' => 2,
+            'approval_by' => Auth::guard('api')->id()
+        ]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Phê duyệt yêu cầu thành công.'
+        ], 200);
     }
 
     public function refuseRequest($request_id)
     {
-        try {
-            $request = $this->request->find($request_id);
-            $request->update([
-                'status' => 3,
-                'approval_by' => Auth::guard('api')->id()
-            ]);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Từ chôi yêu cầu thành công.'
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $request = $this->request->find($request_id);
+        $request->update([
+            'status' => 3,
+            'approval_by' => Auth::guard('api')->id()
+        ]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Từ chôi yêu cầu thành công.'
+        ], 200);
     }
 
 }

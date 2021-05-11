@@ -69,7 +69,6 @@ class AuthController extends Controller
         if ($user->role) {
             $user->role->permissions = json_decode($user->role->permissions);
         }
-        $user->department->manager;
         if ($user->department) {
             $user->department->manager;
         }
@@ -82,246 +81,190 @@ class AuthController extends Controller
 
     public function logout()
     {
-        try {
-            if (Auth::guard('api')->check()) {
-                $tokens = Auth::guard('api')->user()->tokens;
-                foreach($tokens as $token) {
-                    $token->revoke();
-                }
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'Đăng xuất thành công.'
-                ], 200);
+        if (Auth::guard('api')->check()) {
+            $tokens = Auth::guard('api')->user()->tokens;
+            foreach($tokens as $token) {
+                $token->revoke();
             }
-        } catch(Exception $e) {
             return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
+                'status' => 'success',
+                'message' => 'Đăng xuất thành công.'
+            ], 200);
         }
     }
 
     public function active(ActiveRequest $request)
     {
-        try {
-            $token = $request->token;
-            $item = $this->changePass->where('token', $token)->firstOrFail();
-            $item->delete();
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Kích hoạt tài khoản thành công !'
-            ], 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $token = $request->token;
+        $item = $this->changePass->where('token', $token)->firstOrFail();
+        $item->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Kích hoạt tài khoản thành công !'
+        ], 200);
     }
 
     public function changePassword (ChangePasswordRequest $request)
     {
-        try {
-            $params = $request->all();
-            $currentPassword = $params['currentPassword'];
-            $newPassword = $params['password'];
+        $params = $request->all();
+        $currentPassword = $params['currentPassword'];
+        $newPassword = $params['password'];
 
-            $user = $this->user->where('id', Auth::guard('api')->id())->firstOrFail();
-            if (!Hash::check($currentPassword, $user->password)) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Mật khẩu cũ không chính xác.'
-                ], 500);
-            }
-            $user->update([
-                'password' => Hash::make($newPassword)
-            ]);
-
-            $change = $this->changePass
-                ->where('user_id', $user->id)
-                ->where('type_id', 1)->first();
-            if ($change) {
-                $change->delete();
-            }
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Đổi mật khẩu thành công.'
-            ], 200);
-        } catch(Exception $e) {
+        $user = $this->user->where('id', Auth::guard('api')->id())->firstOrFail();
+        if (!Hash::check($currentPassword, $user->password)) {
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => 'Mật khẩu cũ không chính xác.'
             ], 500);
         }
+        $user->update([
+            'password' => Hash::make($newPassword)
+        ]);
+
+        $change = $this->changePass
+            ->where('user_id', $user->id)
+            ->where('type_id', 1)->first();
+        if ($change) {
+            $change->delete();
+        }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Đổi mật khẩu thành công.'
+        ], 200);
     }
 
     public function changeUserInfo (ChangeUserInfoRequest $request)
     {
-        try {
-            if (!Auth::guard('api')->check()) {
-                abort(401);
-            }
-            $params = $request->only(
-                'name',
-                'phone',
-                'birthday',
-                'gender',
-                'address',
-                'avatar'
-            );
-            $user = $this->user
-                ->where('id', Auth::guard('api')->id())
-                ->firstOrFail();
-            $user->update($params);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Cập nhật dữ liệu thành công'
-            ], 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
+        if (!Auth::guard('api')->check()) {
+            abort(401);
         }
+        $params = $request->only(
+            'name',
+            'phone',
+            'birthday',
+            'gender',
+            'address',
+            'avatar'
+        );
+        $user = $this->user
+            ->where('id', Auth::guard('api')->id())
+            ->firstOrFail();
+        $user->update($params);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Cập nhật dữ liệu thành công'
+        ], 200);
     }
 
     public function resetPassword (ResetPasswordRequest $request)
     {
-        try {
-            $email = $request->input('email');
-            $user = $this->user->where('email', $email)->firstOrFail();
-            $token = Str::random(60);
+        $email = $request->input('email');
+        $user = $this->user->where('email', $email)->firstOrFail();
+        $token = Str::random(60);
 
-            // insert record to table change_passes
-            $this->changePass->create([
-                'user_id' => $user->id,
-                'token' => $token,
-                'type_id' => 2
-            ]);
+        // insert record to table change_passes
+        $this->changePass->create([
+            'user_id' => $user->id,
+            'token' => $token,
+            'type_id' => 2
+        ]);
 
-            // send token to email user
-            $data = [
-                'email' => $email,
-                'token' => $token
-            ];
-            ResetPassword::dispatch($email, $data)->delay(Carbon::now());
+        // send token to email user
+        $data = [
+            'email' => $email,
+            'token' => $token
+        ];
+        ResetPassword::dispatch($email, $data)->delay(Carbon::now());
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Đã gửi một email về địa chỉ ' . $email . '.'
-            ], 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Đã gửi một email về địa chỉ ' . $email . '.'
+        ], 200);
     }
 
     public function checkToken (CheckTokenRequest $request)
     {
-        try {
-            $token = $request->input('token');
-            $change = $this->changePass->where('token', $token)->first();
-            if (!$change) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Token không chính xác hoặc đã hết hạn, xin thử lại.'
-                ], 500);
-            }
-            return response()->json([
-                'success',
-                'message' => 'Token hợp lệ.',
-            ], 200);
-        } catch(Exception $e) {
+        $token = $request->input('token');
+        $change = $this->changePass->where('token', $token)->first();
+        if (!$change) {
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => 'Token không chính xác hoặc đã hết hạn, xin thử lại.'
             ], 500);
         }
+        return response()->json([
+            'success',
+            'message' => 'Token hợp lệ.',
+        ], 200);
     }
 
     public function changePasswordToken(ChangePasswordTokenRequest $request)
     {
-        try {
-            $token = $request->input('token');
-            $password = $request->input('password');
+        $token = $request->input('token');
+        $password = $request->input('password');
 
-            // check has token
-            $change = $this->changePass->where('token', $token)->first();
-            if (!$change) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Token không hợp lệ.'
-                ], 500);
-            }
-
-            // check has user
-            $user = $this->user->where('id', $change->user_id)->first();
-            if (!$user) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Tài khoản không tồn tại hoặc đã bị vô hiệu hoá.'
-                ], 500);
-            }
-
-            $user->update([
-                'password' => Hash::make($password)
-            ]);
-
-            $change->delete();
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Thay đổi mật khẩu thành công.'
-            ], 200);
-        } catch(Exception $e) {
+        // check has token
+        $change = $this->changePass->where('token', $token)->first();
+        if (!$change) {
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => 'Token không hợp lệ.'
             ], 500);
         }
+
+        // check has user
+        $user = $this->user->where('id', $change->user_id)->first();
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Tài khoản không tồn tại hoặc đã bị vô hiệu hoá.'
+            ], 500);
+        }
+
+        $user->update([
+            'password' => Hash::make($password)
+        ]);
+
+        $change->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Thay đổi mật khẩu thành công.'
+        ], 200);
     }
 
     public function checkPermission(CheckPermissionRequest $request)
     {
-        try {
-            $name = $request->input('name');
+        $name = $request->input('name');
 
-            $listPermission = json_decode($this->role->find(1)->permissions);
-            if (!in_array($name, $listPermission)) {
-                return response()->json([
-                    'status' => true
-                ], 200);
-            }
+        $listPermission = json_decode($this->role->find(1)->permissions);
+        if (!in_array($name, $listPermission)) {
+            return response()->json([
+                'status' => true
+            ], 200);
+        }
 
-            $user = Auth::guard('api')->user();
+        $user = Auth::guard('api')->user();
 
-            // Check user has role
-            // If user hasn't rol => false
-            if (!$user->role_id) {
-                return response()->json([
-                    'status' => false
-                ], 200);
-            }
-
-            $role = $this->role->find($user->role_id);
-            $permissions = json_decode($role->permissions);
-            if (in_array($name, $permissions)) {
-                return response()->json([
-                    'status' => true
-                ], 200);
-            }
-
+        // Check user has role
+        // If user hasn't rol => false
+        if (!$user->role_id) {
             return response()->json([
                 'status' => false
             ], 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
         }
+
+        $role = $this->role->find($user->role_id);
+        $permissions = json_decode($role->permissions);
+        if (in_array($name, $permissions)) {
+            return response()->json([
+                'status' => true
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => false
+        ], 200);
     }
 
 }
