@@ -64,27 +64,20 @@ class AuthController extends Controller
 
     public function me()
     {
-        try {
-            $user = Auth::guard('api')->user();
-            $user->role;
-            if ($user->role) {
-                $user->role->permissions = json_decode($user->role->permissions);
-            }
-            $user->department;
-            if ($user->department) {
-                $user->department->manager;
-            }
-            $change = $this->changePass
-                ->where('user_id', $user->id)
-                ->where('type_id', 1)->get();
-            $user->change_password = $change;
-            return response()->json($user);
-        } catch(Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
+        $user = Auth::guard('api')->user();
+        $user->role;
+        if ($user->role) {
+            $user->role->permissions = json_decode($user->role->permissions);
         }
+        $user->department->manager;
+        if ($user->department) {
+            $user->department->manager;
+        }
+        $change = $this->changePass
+            ->where('user_id', $user->id)
+            ->where('type_id', 1)->get();
+        $user->change_password = $change;
+        return response()->json($user);
     }
 
     public function logout()
