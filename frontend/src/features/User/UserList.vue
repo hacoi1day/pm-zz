@@ -14,6 +14,7 @@
                   <b-th>Tên Nhân viên</b-th>
                   <b-th>Email</b-th>
                   <b-th>Số điện thoại</b-th>
+                  <b-th>Kiểu nhân viên</b-th>
                   <b-th>Ngày sinh</b-th>
                   <b-th>Phòng ban</b-th>
                 </b-tr>
@@ -31,6 +32,7 @@
                   <b-td>{{ item.name }}</b-td>
                   <b-td>{{ item.email }}</b-td>
                   <b-td>{{ item.phone }}</b-td>
+                  <b-td>{{ item.role_id | filterRole }}</b-td>
                   <b-td>{{ item.birthday | filterDate }}</b-td>
                   <b-td>{{ item.department | filterDepartment }}</b-td>
                 </b-tr>
@@ -56,6 +58,7 @@
 import moment from 'moment';
 import swal from 'sweetalert';
 import { listUser, deleteUser } from '../../apis/user';
+import { USER_ROLE } from '../../constants/user';
 export default {
   name: 'user-list',
   data () {
@@ -111,6 +114,13 @@ export default {
     filterDepartment (department) {
       if (department && department.name) {
         return department.name;
+      }
+      return '';
+    },
+    filterRole (roleId) {
+      let role = USER_ROLE.find(role => role.id === roleId);
+      if (role) {
+        return role.name;
       }
       return '';
     }
