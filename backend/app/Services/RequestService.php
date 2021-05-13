@@ -88,11 +88,11 @@ class RequestService
     public function myRequest()
     {
         $userId = Auth::guard('api')->id();
-        $paginate = $this->request->where('user_id', $userId)->oldest()->paginate(10);
-        $paginate->getCollection()->transform(function ($item) {
-            $item->approval = $item->approval;
-            return $item;
-        });
+        $paginate = $this->request->where('user_id', $userId)->oldest()->with('approval')->paginate(10);
+        // $paginate->getCollection()->transform(function ($item) {
+        //     $item->approval = $item->approval;
+        //     return $item;
+        // });
         return $paginate;
     }
 

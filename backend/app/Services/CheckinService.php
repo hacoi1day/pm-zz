@@ -15,7 +15,7 @@ class CheckinService
 
     public function paginate()
     {
-        $paginate = $this->checkin->latest()->paginate(10);
+        $paginate = $this->checkin->latest()->with('user')->paginate(10);
         return $paginate;
     }
 

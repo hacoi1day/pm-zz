@@ -51,12 +51,13 @@ class ManagerService
         })
         ->where('users.department_id', $departmentId)
         ->select('requests.*', 'users.email', 'users.name')
+        ->with('approval')
         ->paginate(10);
 
-        $paginate->getCollection()->transform(function ($item) {
-            $item->approval = $item->approval;
-            return $item;
-        });
+        // $paginate->getCollection()->transform(function ($item) {
+        //     $item->approval = $item->approval;
+        //     return $item;
+        // });
 
         return $paginate;
     }
