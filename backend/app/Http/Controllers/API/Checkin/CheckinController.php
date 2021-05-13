@@ -5,48 +5,33 @@ namespace App\Http\Controllers\API\Checkin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Checkin\CalendarRequest;
 use App\Models\Checkin;
+use App\Services\CheckinService;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class CheckinController extends Controller
 {
-    private $checkin;
+    private $checkinService;
 
-    public function __construct(Checkin $checkin) {
-        $this->checkin = $checkin;
+    public function __construct(CheckinService $checkinService) {
+        $this->checkinService = $checkinService;
     }
 
     public function getCalendar(CalendarRequest $request)
     {
-        $start_date = date($request->input('start_date'));
-        $end_date = date($request->input('end_date'));
-        $userId = Auth::guard('api')->id();
-        $result = $this->checkin
-            ->where('user_id', $userId)
-            ->whereBetween('date', [$start_date, $end_date])
-            ->get();
+        $result = $this->checkinService->calendar($request->get('start_date'), $request->get('end_date'));
         return response()->json($result, 200);
     }
 
     public function checkin()
     {
-        $userId = Auth::guard('api')->id();
-        $lastCheckin = $this->checkin
-            ->where('user_id', $userId)
-            ->orderBy('time_in', 'desc')
-            ->first();
-        if ($lastCheckin && is_null($lastCheckin->time_out)) {
+        if (!$this->checkinService->checkHasCheckin()) {
             return response()->json([
                 'status' => 'has_checkin',
                 'message' => 'Bạn chưa Checkout!'
             ], 500);
         }
-        $checkin = [
-            'user_id' => $userId,
-            'date' => date('Y-m-d', time()),
-            'time_in' => date('Y-m-d H:i:s', time())
-        ];
-        $result = $this->checkin->create($checkin);
+        $result = $this->checkinService->checkin();
         return response()->json([
             'status' => 'success',
             'item' => $result,
@@ -56,36 +41,23 @@ class CheckinController extends Controller
 
     public function checkout()
     {
-        $userId = Auth::guard('api')->id();
-        $lastCheckin = $this->checkin
-            ->where('user_id', $userId)
-            ->orderBy('time_in', 'desc')
-            ->first();
-
-        if (!$lastCheckin || ($lastCheckin && $lastCheckin->time_out !== null)) {
+        if ($this->checkinService->checkHasCheckin()) {
             return response()->json([
                 'status' => 'don\'t_checkin',
                 'message' => 'Bạn chưa Checkin!'
             ], 500);
         }
-        $checkout = [
-            'time_out' => date('Y-m-d H:i:s', time())
-        ];
-        $lastCheckin->update($checkout);
+        $result = $this->checkinService->checkout();
         return response()->json([
             'status' => 'success',
-            'item' => $lastCheckin,
+            'item' => $result,
             'message' => 'Checkout thành công.'
         ], 200);
     }
 
     public function getLastCheckin()
     {
-        $userId = Auth::guard('api')->id();
-        $lastCheckin = $this->checkin
-            ->where('user_id', $userId)
-            ->orderBy('time_in', 'desc')
-            ->first();
+        $lastCheckin = $this->checkinService->getLastCheckin();
         return response()->json([
             'status' => 'success',
             'item' => $lastCheckin,

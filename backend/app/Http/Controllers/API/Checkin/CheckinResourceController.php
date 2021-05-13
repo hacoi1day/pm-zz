@@ -5,15 +5,14 @@ namespace App\Http\Controllers\API\Checkin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Checkin\StoreCheckin;
 use App\Http\Requests\Checkin\UpdateCheckin;
-use App\Models\Checkin;
-use Exception;
+use App\Services\CheckinService;
 
 class CheckinResourceController extends Controller
 {
-    private $checkin;
+    private $checkinService;
 
-    public function __construct(Checkin $checkin) {
-        $this->checkin = $checkin;
+    public function __construct(CheckinService $checkinService) {
+        $this->checkinService = $checkinService;
     }
 
     /**
@@ -23,8 +22,8 @@ class CheckinResourceController extends Controller
      */
     public function index()
     {
-        $items = $this->checkin->latest()->paginate(10);
-        return response()->json($items, 200);
+        $paginate = $this->checkinService->paginate();
+        return response()->json($paginate, 200);
     }
 
     /**
@@ -45,7 +44,7 @@ class CheckinResourceController extends Controller
      */
     public function store(StoreCheckin $request)
     {
-        $item = $this->checkin->create($request->all());
+        $item = $this->checkinService->create($request->all());
         return response()->json($item, 201);
     }
 
@@ -57,8 +56,8 @@ class CheckinResourceController extends Controller
      */
     public function show($id)
     {
-        $item = $this->checkin->find($id);
-        return response()->json($item, 200);
+        $checkin = $this->checkinService->get($id);
+        return response()->json($checkin, 200);
     }
 
     /**
@@ -81,8 +80,7 @@ class CheckinResourceController extends Controller
      */
     public function update(UpdateCheckin $request, $id)
     {
-        $item = $this->checkin->find($id);
-        $item->update($request->all());
+        $item = $this->checkinService->update($request->all(), $id);
         return response()->json($item, 202);
     }
 
@@ -94,11 +92,10 @@ class CheckinResourceController extends Controller
      */
     public function destroy($id)
     {
-        $item = $this->checkin->find($id);
-        $item->delete();
+        $this->checkinService->delete($id);
         return response()->json([
             'status' => 'success',
-            'message' => 'Delete successfully'
+            'message' => 'Xoá Checkin thành công.'
         ], 200);
     }
 }
