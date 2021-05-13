@@ -41,7 +41,7 @@ export const changePasswordWithToken = async (form, token) => {
 
 export const me = async () => {
   try {
-    const {data} = await httpHelper.get('me');
+    const {data} = await httpHelper.get('auth/me');
     return data;
   } catch(err) {
     console.log(err);
@@ -51,7 +51,7 @@ export const me = async () => {
 
 export const logout = async () => {
   try {
-    const {data} = await httpHelper.get('logout');
+    const {data} = await httpHelper.get('auth/logout');
     return data;
   } catch (err) {
     console.log(err);
@@ -61,7 +61,7 @@ export const logout = async () => {
 
 export const changePassword = async (params) => {
   try {
-    const {data} = await httpHelper.post('change-password', params);
+    const {data} = await httpHelper.post('auth/change-password', params);
     return data;
   } catch (err) {
     console.log(err);
@@ -71,7 +71,7 @@ export const changePassword = async (params) => {
 
 export const changeUserInfo = async (params) => {
   try {
-    const {data} = await httpHelper.post('change-user-info', params);
+    const {data} = await httpHelper.post('auth/change-user-info', params);
     return data;
   } catch (err) {
     console.log(err);
@@ -81,7 +81,7 @@ export const changeUserInfo = async (params) => {
 
 export const checkPermission = async (name) => {
   try {
-    const {data} = await httpHelper.get(`check-permission?name=${name}`);
+    const {data} = await httpHelper.get(`auth/check-permission?name=${name}`);
     return data;
   } catch (err) {
     console.log(err);

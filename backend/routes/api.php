@@ -43,19 +43,22 @@ Route::prefix('v1')->group(function () {
     Route::post('change-password-token', [AuthController::class, 'changePasswordToken']);
 
     Route::middleware('auth:api')->group(function () {
-        // Get User
-        Route::get('me', [AuthController::class, 'me']);
-        // Logout
-        Route::get('logout', [AuthController::class, 'logout']);
+        Route::prefix('auth')->group(function () {
+            // Get User
+            Route::get('me', [AuthController::class, 'me']);
+            // Logout
+            Route::get('logout', [AuthController::class, 'logout']);
 
-        // Change password
-        Route::post('change-password', [AuthController::class, 'changePassword']);
+            // Change password
+            Route::post('change-password', [AuthController::class, 'changePassword']);
 
-        // Change User Info
-        Route::post('change-user-info', [AuthController::class, 'changeUserInfo']);
+            // Change User Info
+            Route::post('change-user-info', [AuthController::class, 'changeUserInfo']);
 
-        // Check Has Permission
-        Route::get('check-permission', [AuthController::class, 'checkPermission']);
+            // Check Has Permission
+            Route::get('check-permission', [AuthController::class, 'checkPermission']);
+        });
+
 
         // Storage
         Route::prefix('storage')->group(function () {
