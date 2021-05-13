@@ -6,47 +6,40 @@ use App\Exports\UserCheckinExport;
 use App\Exports\UserDepartmentExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Export\ExportExcel\UserCheckinRequest;
-use App\Models\Department;
-use App\Models\Request;
-use App\Models\User;
-use Carbon\Carbon;
-use Exception;
+use App\Services\DepartmentService;
+use App\Services\UserService;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ExportExcelController extends Controller
 {
-    private $user;
-    private $department;
-    private $request;
+    private $userService;
+    private $departmentService;
 
-    public function __construct(User $user,
-                                Department $department,
-                                Request $request) {
-        $this->user = $user;
-        $this->department = $department;
-        $this->request = $request;
+    public function __construct(UserService $userService,
+                                DepartmentService $departmentService) {
+        $this->userService = $userService;
+        $this->departmentService = $departmentService;
     }
 
-    public function exportDepartment($department_id)
+    public function exportDepartment($departmentId)
     {
-        $department = $this->department->find($department_id);
+        $department = $this->departmentService->get($departmentId);
         if (!$department) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Phòng ban không tồn tại.'
             ], 500);
         }
-        $department->manager;
         $fileName = 'Danh sách nhân viên ' . $department->name . '_' . time() . '.xlsx';
         return Excel::download(new UserDepartmentExport($department), $fileName);
     }
 
-    public function exportUserCheckin(UserCheckinRequest $request, $user_id)
+    public function exportUserCheckin(UserCheckinRequest $request, $userId)
     {
-        $year = $request->has('year') ? intval($request->input('year')) : Carbon::now()->year;
-        $month = $request->has('month') ? intval($request->input('month')) : Carbon::now()->month;
+        $year = $request->has('year') ? intval($request->input('year')) : now()->year;
+        $month = $request->has('month') ? intval($request->input('month')) : now()->month;
 
-        $user = $this->user->find($user_id);
+        $user = $this->userService->get($userId);
         if (!$user) {
             return response()->json([
                 'status' => 'error',

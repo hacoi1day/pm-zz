@@ -5,23 +5,19 @@ namespace App\Http\Controllers\API\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\DropdownUserRequest;
 use App\Http\Requests\User\StoreUser;
-use App\Jobs\Mail\User\StoreUserMail;
 use App\Models\ChangePass;
 use App\Models\User;
-use Carbon\Carbon;
-use Exception;
+use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class UserResourceController extends Controller
 {
-    private $user;
-    private $changePass;
+    private $userService;
 
-    public function __construct(User $user, ChangePass $changePass) {
-        $this->user = $user;
-        $this->changePass = $changePass;
+    public function __construct(
+        UserService $userService
+    ) {
+        $this->userService = $userService;
     }
 
     /**
@@ -31,11 +27,7 @@ class UserResourceController extends Controller
      */
     public function index()
     {
-        $paginate = $this->user->paginate(10);
-        $paginate->getCollection()->transform(function ($item) {
-            $item->department;
-            return $item;
-        });
+        $paginate = $this->userService->paginate();
         return response()->json($paginate, 200);
     }
 
@@ -58,27 +50,8 @@ class UserResourceController extends Controller
     public function store(StoreUser $request)
     {
         $params = $request->all();
-        $password = (array_key_exists('password', $params) && !is_null($params['password'])) ? $params['password'] : Str::random(6);
-        $params['password'] = Hash::make($password);
-
-        $item = $this->user->create($params);
-
-        $this->changePass->create([
-            'type_id' => 1,
-            'token' => '',
-            'user_id' => $item->id
-        ]);
-
-        $message = [
-            'type' => 'Store user',
-            'email' => $item->email,
-            'password' => $password,
-            'content' => 'User has been created!',
-        ];
-
-        StoreUserMail::dispatch($message, $item)->delay(Carbon::now());
-
-        return response()->json($item, 201);
+        $user = $this->userService->create($params);
+        return response()->json($user, 201);
     }
 
     /**
@@ -89,7 +62,7 @@ class UserResourceController extends Controller
      */
     public function show($id)
     {
-        $item = $this->user->find($id);
+        $item = $this->userService->get($id);
         return response()->json($item, 200);
     }
 
@@ -113,13 +86,9 @@ class UserResourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = $this->user->find($id);
         $params = $request->all();
-        if (array_key_exists('password', $params)) {
-            $params['password'] = Hash::make($params['password']);
-        }
-        $item->update($params);
-        return response()->json($item, 202);
+        $user = $this->userService->update($params, $id);
+        return response()->json($user, 202);
     }
 
     /**
@@ -130,8 +99,7 @@ class UserResourceController extends Controller
      */
     public function destroy($id)
     {
-        $item = $this->user->find($id);
-        $item->delete();
+        $this->userService->delete($id);
         return response()->json([
             'status' => 'success',
             'message' => 'Xoá nhân viên thành công.'
@@ -140,20 +108,8 @@ class UserResourceController extends Controller
 
     public function dropdown(DropdownUserRequest $request)
     {
-        $items = $this->user
-            ->where(function ($query) use ($request) {
-                if ($request->has('role_id') && $request->input('role_id') !== null) {
-                    $query->where('role_id', $request->input('role_id'));
-                }
-            })
-            ->get();
-        $result = [];
-        foreach ($items as $item) {
-            array_push($result, [
-                'id' => $item->id,
-                'name' => $item->name,
-            ]);
-        }
+        $role_id = $request->get('role_id', '');
+        $result = $this->userService->dropdown($role_id);
         return response()->json($result, 200);
     }
 }

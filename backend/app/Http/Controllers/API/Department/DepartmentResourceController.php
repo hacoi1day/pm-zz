@@ -5,15 +5,14 @@ namespace App\Http\Controllers\API\Department;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Department\StoreDepartment;
 use App\Http\Requests\Department\UpdateDepartment;
-use App\Models\Department;
-use Exception;
+use App\Services\DepartmentService;
 
 class DepartmentResourceController extends Controller
 {
-    private $department;
+    private $departmentService;
 
-    public function __construct(Department $department) {
-        $this->department = $department;
+    public function __construct(DepartmentService $departmentService) {
+        $this->departmentService = $departmentService;
     }
     /**
      * Display a listing of the resource.
@@ -22,11 +21,7 @@ class DepartmentResourceController extends Controller
      */
     public function index()
     {
-        $paginate = $this->department->paginate(10);
-        $paginate->getCollection()->transform(function ($item) {
-            $item->manager;
-            return $item;
-        });
+        $paginate = $this->departmentService->paginate();
         return response()->json($paginate, 200);
     }
 
@@ -48,8 +43,8 @@ class DepartmentResourceController extends Controller
      */
     public function store(StoreDepartment $request)
     {
-        $item = $this->department->create($request->all());
-        return response()->json($item, 201);
+        $department = $this->departmentService->create($request->all());
+        return response()->json($department, 201);
     }
 
     /**
@@ -60,8 +55,8 @@ class DepartmentResourceController extends Controller
      */
     public function show($id)
     {
-        $item = $this->department->find($id);
-        return response()->json($item, 202);
+        $department = $this->departmentService->get($id);
+        return response()->json($department, 200);
     }
 
     /**
@@ -84,9 +79,8 @@ class DepartmentResourceController extends Controller
      */
     public function update(UpdateDepartment $request, $id)
     {
-        $item = $this->department->find($id);
-        $item->update($request->all());
-        return response()->json($item, 200);
+        $department = $this->departmentService->update($request->all(), $id);
+        return response()->json($department, 200);
     }
 
     /**
@@ -97,24 +91,16 @@ class DepartmentResourceController extends Controller
      */
     public function destroy($id)
     {
-        $item = $this->department->find($id);
-        $item->delete();
+        $this->departmentService->delete($id);
         return response()->json([
             'status' => 'success',
-            'message' => 'Delete successfully'
+            'message' => 'Xoá Phòng ban thành công.'
         ], 200);
     }
 
     public function dropdown()
     {
-        $items = $this->department->all();
-        $result = [];
-        foreach ($items as $item) {
-            array_push($result, [
-                'id' => $item->id,
-                'name' => $item->name,
-            ]);
-        }
-        return response()->json($result, 200);
+        $dropdown = $this->departmentService->dropdown();
+        return response()->json($dropdown, 200);
     }
 }

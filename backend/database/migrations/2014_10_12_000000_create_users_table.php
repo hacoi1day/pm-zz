@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('gender')->default(true);
             $table->string('address')->nullable(true);
             $table->json('info')->nullable(true);
-            $table->foreignId('role_id')->nullable(true);
+            $table->foreignId('role_id')->default(3);
             $table->foreignId('department_id')->nullable(true);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

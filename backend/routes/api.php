@@ -43,19 +43,22 @@ Route::prefix('v1')->group(function () {
     Route::post('change-password-token', [AuthController::class, 'changePasswordToken']);
 
     Route::middleware('auth:api')->group(function () {
-        // Get User
-        Route::get('me', [AuthController::class, 'me']);
-        // Logout
-        Route::get('logout', [AuthController::class, 'logout']);
+        Route::prefix('auth')->group(function () {
+            // Get User
+            Route::get('me', [AuthController::class, 'me']);
+            // Logout
+            Route::get('logout', [AuthController::class, 'logout']);
 
-        // Change password
-        Route::post('change-password', [AuthController::class, 'changePassword']);
+            // Change password
+            Route::post('change-password', [AuthController::class, 'changePassword']);
 
-        // Change User Info
-        Route::post('change-user-info', [AuthController::class, 'changeUserInfo']);
+            // Change User Info
+            Route::post('change-user-info', [AuthController::class, 'changeUserInfo']);
 
-        // Check Has Permission
-        Route::get('check-permission', [AuthController::class, 'checkPermission']);
+            // Check Has Permission
+            Route::get('check-permission', [AuthController::class, 'checkPermission']);
+        });
+
 
         // Storage
         Route::prefix('storage')->group(function () {
@@ -95,8 +98,8 @@ Route::prefix('v1')->group(function () {
         // Request
         Route::prefix('request')->middleware('check_role')->group(function () {
             Route::resource('request', RequestResourceController::class);
-            Route::get('approval-request/{request_id}', [RequestResourceController::class, 'approvalRequest'])->name('request.approval_request');
-            Route::get('refuse-request/{request_id}', [RequestResourceController::class, 'refuseRequest'])->name('request.refuse_request');
+            Route::get('approval-request/{requestId}', [RequestResourceController::class, 'approvalRequest'])->name('request.approval_request');
+            Route::get('refuse-request/{requestId}', [RequestResourceController::class, 'refuseRequest'])->name('request.refuse_request');
         });
 
         // Common
@@ -107,17 +110,17 @@ Route::prefix('v1')->group(function () {
         // Manager
         Route::prefix('manager')->middleware('check_role')->group(function () {
             Route::get('list-department', [ManagerController::class, 'listDepartment'])->name('manager.list_department');
-            Route::get('list-user-by-department/{department_id}', [ManagerController::class, 'listUserByDepartmentId'])->name('manager.list_user');
+            Route::get('list-user-by-department/{departmentId}', [ManagerController::class, 'listUserByDepartmentId'])->name('manager.list_user');
 
-            Route::get('list-request/{department_id}', [ManagerController::class, 'listRequestByDepartmentId'])->name('manager.list_request');
-            Route::get('approval-request/{request_id}', [ManagerController::class, 'approvalRequest'])->name('manager.approval_request');
-            Route::get('refuse-request/{request_id}', [ManagerController::class, 'refuseRequest'])->name('manager.refuse_request');
+            Route::get('list-request/{departmentId}', [ManagerController::class, 'listRequestByDepartmentId'])->name('manager.list_request');
+            Route::get('approval-request/{requestId}', [ManagerController::class, 'approvalRequest'])->name('manager.approval_request');
+            Route::get('refuse-request/{requestId}', [ManagerController::class, 'refuseRequest'])->name('manager.refuse_request');
         });
 
         // Export Excel
         Route::prefix('export')->middleware('check_role')->group(function () {
-            Route::get('department/{department_id}', [ExportExcelController::class, 'exportDepartment'])->name('export.department');
-            Route::get('user-checkin/{user_id}', [ExportExcelController::class, 'exportUserCheckin'])->name('export.user_checkin');
+            Route::get('department/{departmentId}', [ExportExcelController::class, 'exportDepartment'])->name('export.department');
+            Route::get('user-checkin/{userId}', [ExportExcelController::class, 'exportUserCheckin'])->name('export.user_checkin');
         });
     });
 });

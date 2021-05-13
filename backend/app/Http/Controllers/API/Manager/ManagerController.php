@@ -9,7 +9,9 @@ use App\Http\Requests\Manager\ListRequestRequest;
 use App\Models\Department;
 use App\Models\Request;
 use App\Models\User;
-use Exception;
+use App\Services\DepartmentService;
+use App\Services\ManagerService;
+use App\Services\RequestService;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -19,112 +21,65 @@ class ManagerController extends Controller
     private $department;
     private $request;
 
-    public function __construct(User $user, Department $department, Request $request) {
+    private $managerService;
+    private $requestService;
+
+    public function __construct(User $user, Department $department, Request $request,
+        ManagerService $managerService, RequestService $requestService
+    ) {
         $this->user = $user;
         $this->department = $department;
         $this->request = $request;
+        $this->managerService = $managerService;
+        $this->requestService = $requestService;
     }
 
     public function listDepartment()
     {
-        $user_id = Auth::guard('api')->id();
-        $departments = $this->department->where('manager_id', $user_id)->get();
+        $departments = $this->managerService->listDepartment();
         return response()->json([
             'status' => 'success',
             'departments' => $departments
         ], 200);
     }
 
-    public function listUserByDepartmentId($department_id)
+    public function listUserByDepartmentId($departmentId)
     {
-        $user_id = Auth::guard('api')->id();
-        $department = $this->department
-            ->where('manager_id', $user_id)
-            ->where('id', $department_id)
-            ->first();
-        if (!$department) {
+        $users = $this->managerService->listUserByDepartmentId($departmentId);
+
+        if (count($users) === 0) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Phòng ban không thuộc quản lý.'
             ], 500);
         }
-        $users = $department->users;
         return response()->json([
             'status' => 'success',
             'users' => $users
         ], 200);
     }
 
-    public function exportExcelUserByDepartmentId($department_id)
+    public function listRequestByDepartmentId(ListRequestRequest $request, $departmentId)
     {
-        $department = $this->department->find($department_id);
-        if (!$department) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Phòng ban không tồn tại.'
-            ], 500);
-        }
-        $department->manager;
-        $fileName = 'Danh sách nhân viên ' . $department->name . '_' . time() . '.xlsx';
-        return Excel::download(new UserDepartmentExport($department), $fileName);
-    }
-
-    public function exportUserCheckinByUserId($user_id)
-    {
-        $user = $this->user->find($user_id);
-        if (!$user) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Nhân viên không tồn tại'
-            ], 500);
-        }
-        return Excel::download(new UserCheckinExport($user_id), $user_id . '_checkin.xlsx');
-    }
-
-    public function listRequestByDepartmentId(ListRequestRequest $request, $department_id)
-    {
-        $paginate = $this->request
-        ->join('users', 'users.id', 'requests.user_id')
-        ->where(function ($query) use ($request) {
-            if ($request->has('status')) {
-                $query->where('status', $request->input('status'));
-            }
-        })
-        ->where('users.department_id', $department_id)
-        ->select('requests.*', 'users.email', 'users.name')
-        ->paginate(10);
-
-        $paginate->getCollection()->transform(function ($item) {
-            $item->approval = $item->approval;
-            return $item;
-        });
-
+        $paginate = $this->managerService->listRequestByDepartmentId($departmentId, $request->all());
         return response()->json($paginate);
     }
 
-    public function approvalRequest($request_id)
+    public function approvalRequest($requestId)
     {
-        $request = $this->request->find($request_id);
-        $request->update([
-            'status' => 2,
-            'approval_by' => Auth::guard('api')->id()
-        ]);
+        $this->requestService->approvalRequest($requestId);
         return response()->json([
             'status' => 'success',
             'message' => 'Phê duyệt yêu cầu thành công.'
         ], 200);
     }
 
-    public function refuseRequest($request_id)
+    public function refuseRequest($requestId)
     {
-        $request = $this->request->find($request_id);
-        $request->update([
-            'status' => 3,
-            'approval_by' => Auth::guard('api')->id()
-        ]);
+        $this->requestService->refuseRequest($requestId);
         return response()->json([
             'status' => 'success',
-            'message' => 'Từ chôi yêu cầu thành công.'
+            'message' => 'Từ chối yêu cầu thành công.'
         ], 200);
     }
 
