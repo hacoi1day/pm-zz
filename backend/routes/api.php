@@ -95,8 +95,8 @@ Route::prefix('v1')->group(function () {
         // Request
         Route::prefix('request')->middleware('check_role')->group(function () {
             Route::resource('request', RequestResourceController::class);
-            Route::get('approval-request/{request_id}', [RequestResourceController::class, 'approvalRequest'])->name('request.approval_request');
-            Route::get('refuse-request/{request_id}', [RequestResourceController::class, 'refuseRequest'])->name('request.refuse_request');
+            Route::get('approval-request/{requestId}', [RequestResourceController::class, 'approvalRequest'])->name('request.approval_request');
+            Route::get('refuse-request/{requestId}', [RequestResourceController::class, 'refuseRequest'])->name('request.refuse_request');
         });
 
         // Common

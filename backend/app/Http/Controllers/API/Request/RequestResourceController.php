@@ -6,16 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Request\IndexRequest;
 use App\Http\Requests\Request\StoreRequest;
 use App\Http\Requests\Request\UpdateRequest;
-use App\Models\Request;
-use Exception;
+use App\Services\RequestService;
 use Illuminate\Support\Facades\Auth;
 
 class RequestResourceController extends Controller
 {
-    private $request;
+    private $requestService;
 
-    public function __construct(Request $request) {
-        $this->request = $request;
+    public function __construct(RequestService $requestService) {
+        $this->requestService = $requestService;
     }
     /**
      * Display a listing of the resource.
@@ -24,18 +23,7 @@ class RequestResourceController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $paginate = $this->request
-            ->where(function ($query) use ($request) {
-                if ($request->has('status')) {
-                    $query->where('status', $request->input('status'));
-                }
-            })
-            ->paginate(10);
-        $paginate->getCollection()->transform(function ($item) {
-            $item->user;
-            $item->approval;
-            return $item;
-        });
+        $paginate = $this->requestService->paginate($request->all());
         return response()->json($paginate, 200);
     }
 
@@ -58,11 +46,7 @@ class RequestResourceController extends Controller
     public function store(StoreRequest $request)
     {
         $params = $request->all();
-        $params['user_id'] = Auth::guard('api')->id();
-        if (!$request->has('status')) {
-            $params['status'] = 1;
-        }
-        $item = $this->request->create($params);
+        $item = $this->requestService->create($params);
         return response()->json($item, 201);
     }
 
@@ -74,8 +58,7 @@ class RequestResourceController extends Controller
      */
     public function show($id)
     {
-        $item = $this->request->find($id);
-        $item->user;
+        $item = $this->requestService->get($id);
         return response()->json($item, 200);
     }
 
@@ -99,8 +82,7 @@ class RequestResourceController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        $item = $this->request->find($id);
-        $item->update($request->all());
+        $item = $this->requestService->update($request->all(), $id);
         return response()->json($item, 200);
     }
 
@@ -120,26 +102,18 @@ class RequestResourceController extends Controller
         ], 200);
     }
 
-    public function approvalRequest($request_id)
+    public function approvalRequest($requestId)
     {
-        $request = $this->request->find($request_id);
-        $request->update([
-            'status' => 2,
-            'approval_by' => Auth::guard('api')->id()
-        ]);
+        $this->requestService->approvalRequest($requestId);
         return response()->json([
             'status' => 'success',
             'message' => 'Phê duyệt yêu cầu thành công.'
         ], 200);
     }
 
-    public function refuseRequest($request_id)
+    public function refuseRequest($requestId)
     {
-        $request = $this->request->find($request_id);
-        $request->update([
-            'status' => 3,
-            'approval_by' => Auth::guard('api')->id()
-        ]);
+        $this->requestService->refuseRequest($requestId);
         return response()->json([
             'status' => 'success',
             'message' => 'Từ chối yêu cầu thành công.'
