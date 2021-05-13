@@ -107,11 +107,11 @@ Route::prefix('v1')->group(function () {
         // Manager
         Route::prefix('manager')->middleware('check_role')->group(function () {
             Route::get('list-department', [ManagerController::class, 'listDepartment'])->name('manager.list_department');
-            Route::get('list-user-by-department/{department_id}', [ManagerController::class, 'listUserByDepartmentId'])->name('manager.list_user');
+            Route::get('list-user-by-department/{departmentId}', [ManagerController::class, 'listUserByDepartmentId'])->name('manager.list_user');
 
-            Route::get('list-request/{department_id}', [ManagerController::class, 'listRequestByDepartmentId'])->name('manager.list_request');
-            Route::get('approval-request/{request_id}', [ManagerController::class, 'approvalRequest'])->name('manager.approval_request');
-            Route::get('refuse-request/{request_id}', [ManagerController::class, 'refuseRequest'])->name('manager.refuse_request');
+            Route::get('list-request/{departmentId}', [ManagerController::class, 'listRequestByDepartmentId'])->name('manager.list_request');
+            Route::get('approval-request/{requestId}', [ManagerController::class, 'approvalRequest'])->name('manager.approval_request');
+            Route::get('refuse-request/{requestId}', [ManagerController::class, 'refuseRequest'])->name('manager.refuse_request');
         });
 
         // Export Excel
