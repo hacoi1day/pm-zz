@@ -15,6 +15,8 @@ use App\Jobs\Mail\Auth\ResetPassword;
 use App\Models\ChangePass;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\AuthService;
+use App\Services\ChangePasswordService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +29,18 @@ class AuthController extends Controller
     private $changePass;
     private $role;
 
-    public function __construct(User $user, ChangePass $changePass, Role $role) {
+    private $authService;
+    private $changePasswordService;
+
+    public function __construct(
+        AuthService $authService,
+        ChangePasswordService $changePasswordService,
+
+        User $user, ChangePass $changePass, Role $role
+    ) {
+        $this->authService = $authService;
+        $this->changePasswordService = $changePasswordService;
+
         $this->user = $user;
         $this->changePass = $changePass;
         $this->role = $role;
@@ -35,69 +48,37 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        try {
-            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                $user = $this->user->where('email', $request->email)->first();
-                $user->token = $user->createToken('token')->accessToken;
-                $user->role;
-                if ($user->role) {
-                    $user->role->permissions = json_decode($user->role->permissions);
-                }
-                $user->department;
-                if ($user->department) {
-                    $user->department->manager;
-                }
-
-                $change = $this->changePass
-                    ->where('user_id', $user->id)
-                    ->where('type_id', 1)->get();
-                $user->change_password = $change;
-                return response()->json($user, 200);
-            }
-        } catch(Exception $e) {
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $user = $this->authService->login($email, $password);
+        if (!$user) {
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => 'Email hoặc mật khẩu không chính xác.'
             ], 500);
         }
+        return response()->json($user);
     }
 
     public function me()
     {
-        $user = Auth::guard('api')->user();
-        $user->role;
-        if ($user->role) {
-            $user->role->permissions = json_decode($user->role->permissions);
-        }
-        if ($user->department) {
-            $user->department->manager;
-        }
-        $change = $this->changePass
-            ->where('user_id', $user->id)
-            ->where('type_id', 1)->get();
-        $user->change_password = $change;
+        $user = $this->authService->me();
         return response()->json($user);
     }
 
     public function logout()
     {
-        if (Auth::guard('api')->check()) {
-            $tokens = Auth::guard('api')->user()->tokens;
-            foreach($tokens as $token) {
-                $token->revoke();
-            }
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Đăng xuất thành công.'
-            ], 200);
-        }
+        $this->authService->logout();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Đăng xuất thành công.'
+        ], 200);
     }
 
     public function active(ActiveRequest $request)
     {
         $token = $request->token;
-        $item = $this->changePass->where('token', $token)->firstOrFail();
-        $item->delete();
+        $this->authService->active($token);
         return response()->json([
             'status' => 'success',
             'message' => 'Kích hoạt tài khoản thành công !'
@@ -110,23 +91,14 @@ class AuthController extends Controller
         $currentPassword = $params['currentPassword'];
         $newPassword = $params['password'];
 
-        $user = $this->user->where('id', Auth::guard('api')->id())->firstOrFail();
-        if (!Hash::check($currentPassword, $user->password)) {
+        $checkPassword = $this->authService->checkPassword($currentPassword);
+        if (!$checkPassword) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Mật khẩu cũ không chính xác.'
             ], 500);
         }
-        $user->update([
-            'password' => Hash::make($newPassword)
-        ]);
-
-        $change = $this->changePass
-            ->where('user_id', $user->id)
-            ->where('type_id', 1)->first();
-        if ($change) {
-            $change->delete();
-        }
+        $this->authService->changePassword($newPassword);
         return response()->json([
             'status' => 'success',
             'message' => 'Đổi mật khẩu thành công.'
@@ -146,10 +118,7 @@ class AuthController extends Controller
             'address',
             'avatar'
         );
-        $user = $this->user
-            ->where('id', Auth::guard('api')->id())
-            ->firstOrFail();
-        $user->update($params);
+        $this->authService->changeUserInfo($params);
         return response()->json([
             'status' => 'success',
             'message' => 'Cập nhật dữ liệu thành công'
@@ -159,23 +128,7 @@ class AuthController extends Controller
     public function resetPassword (ResetPasswordRequest $request)
     {
         $email = $request->input('email');
-        $user = $this->user->where('email', $email)->firstOrFail();
-        $token = Str::random(60);
-
-        // insert record to table change_passes
-        $this->changePass->create([
-            'user_id' => $user->id,
-            'token' => $token,
-            'type_id' => 2
-        ]);
-
-        // send token to email user
-        $data = [
-            'email' => $email,
-            'token' => $token
-        ];
-        ResetPassword::dispatch($email, $data)->delay(Carbon::now());
-
+        $this->authService->resetPassword($email);
         return response()->json([
             'status' => 'success',
             'message' => 'Đã gửi một email về địa chỉ ' . $email . '.'
@@ -185,7 +138,7 @@ class AuthController extends Controller
     public function checkToken (CheckTokenRequest $request)
     {
         $token = $request->input('token');
-        $change = $this->changePass->where('token', $token)->first();
+        $change = $this->authService->checkToken($token);
         if (!$change) {
             return response()->json([
                 'status' => 'error',
@@ -204,7 +157,7 @@ class AuthController extends Controller
         $password = $request->input('password');
 
         // check has token
-        $change = $this->changePass->where('token', $token)->first();
+        $change = $this->changePasswordService->getByToken($token);
         if (!$change) {
             return response()->json([
                 'status' => 'error',
@@ -213,17 +166,14 @@ class AuthController extends Controller
         }
 
         // check has user
-        $user = $this->user->where('id', $change->user_id)->first();
-        if (!$user) {
+        if (!$this->authService->checkUser($change->user_id)) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Tài khoản không tồn tại hoặc đã bị vô hiệu hoá.'
             ], 500);
         }
 
-        $user->update([
-            'password' => Hash::make($password)
-        ]);
+        $this->authService->changePassword($password);
 
         $change->delete();
 
