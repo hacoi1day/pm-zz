@@ -31,6 +31,7 @@ class DepartmentService
     public function get($id)
     {
         $department = $this->department->findOrFail($id);
+        $department->manager;
         return $department;
     }
 

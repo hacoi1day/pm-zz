@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class CommonController extends Controller
 {
-    private $users;
+    private $user;
 
     public function __construct(User $user) {
         $this->user = $user;

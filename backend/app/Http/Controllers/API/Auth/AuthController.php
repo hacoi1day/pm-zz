@@ -11,39 +11,17 @@ use App\Http\Requests\Auth\CheckPermissionRequest;
 use App\Http\Requests\Auth\CheckTokenRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
-use App\Jobs\Mail\Auth\ResetPassword;
-use App\Models\ChangePass;
-use App\Models\Role;
-use App\Models\User;
 use App\Services\AuthService;
 use App\Services\ChangePasswordService;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    private $user;
-    private $changePass;
-    private $role;
-
     private $authService;
     private $changePasswordService;
 
-    public function __construct(
-        AuthService $authService,
-        ChangePasswordService $changePasswordService,
-
-        User $user, ChangePass $changePass, Role $role
-    ) {
+    public function __construct(AuthService $authService, ChangePasswordService $changePasswordService) {
         $this->authService = $authService;
         $this->changePasswordService = $changePasswordService;
-
-        $this->user = $user;
-        $this->changePass = $changePass;
-        $this->role = $role;
     }
 
     public function login(LoginRequest $request)
@@ -107,9 +85,6 @@ class AuthController extends Controller
 
     public function changeUserInfo (ChangeUserInfoRequest $request)
     {
-        if (!Auth::guard('api')->check()) {
-            abort(401);
-        }
         $params = $request->only(
             'name',
             'phone',
@@ -118,10 +93,11 @@ class AuthController extends Controller
             'address',
             'avatar'
         );
-        $this->authService->changeUserInfo($params);
+        $user = $this->authService->changeUserInfo($params);
         return response()->json([
             'status' => 'success',
-            'message' => 'Cập nhật dữ liệu thành công'
+            'message' => 'Cập nhật dữ liệu thành công',
+            'user' => $user
         ], 200);
     }
 
@@ -146,7 +122,7 @@ class AuthController extends Controller
             ], 500);
         }
         return response()->json([
-            'success',
+            'status' => 'success',
             'message' => 'Token hợp lệ.',
         ], 200);
     }
@@ -166,16 +142,17 @@ class AuthController extends Controller
         }
 
         // check has user
-        if (!$this->authService->checkUser($change->user_id)) {
+        $user = $this->authService->checkUser($change->user_id);
+        if (!$user) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Tài khoản không tồn tại hoặc đã bị vô hiệu hoá.'
             ], 500);
         }
 
-        $this->authService->changePassword($password);
+        $this->authService->changePasswordWithUserId($password, $user->id);
 
-        $change->delete();
+        $this->changePasswordService->delete($change->id);
 
         return response()->json([
             'status' => 'success',
@@ -186,35 +163,9 @@ class AuthController extends Controller
     public function checkPermission(CheckPermissionRequest $request)
     {
         $name = $request->input('name');
-
-        $listPermission = json_decode($this->role->find(1)->permissions);
-        if (!in_array($name, $listPermission)) {
-            return response()->json([
-                'status' => true
-            ], 200);
-        }
-
-        $user = Auth::guard('api')->user();
-
-        // Check user has role
-        // If user hasn't rol => false
-        if (!$user->role_id) {
-            return response()->json([
-                'status' => false
-            ], 200);
-        }
-
-        $role = $this->role->find($user->role_id);
-        $permissions = json_decode($role->permissions);
-        if (in_array($name, $permissions)) {
-            return response()->json([
-                'status' => true
-            ], 200);
-        }
-
+        $check = $this->authService->checkHasPermission($name);
         return response()->json([
-            'status' => false
+            'status' => $check
         ], 200);
     }
-
 }

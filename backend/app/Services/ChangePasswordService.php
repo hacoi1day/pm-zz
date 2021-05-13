@@ -12,14 +12,10 @@ class ChangePasswordService
         $this->changePass = $changePass;
     }
 
-    public function getAll()
+    public function get($id)
     {
-
-    }
-
-    public function get()
-    {
-
+        $change = $this->changePass->findOrFail($id);
+        return $change;
     }
 
     public function getByToken($token)
@@ -38,8 +34,10 @@ class ChangePasswordService
 
     }
 
-    public function delete()
+    public function delete($id)
     {
-
+        $change = $this->get($id);
+        $change->delete();
+        return true;
     }
 }

@@ -95,16 +95,20 @@ class AuthService
     public function changePassword($newPassword)
     {
         $userId = Auth::guard('api')->id();
-        $user = $this->user->where('id', $userId)->fist();
+        $user = $this->user->where('id', $userId)->first();
         $user->update([
             'password' => Hash::make($newPassword)
         ]);
-        $change = $this->changePass
-            ->where('user_id', $user->id)
-            ->where('type_id', 1)->first();
-        if ($change) {
-            $change->delete();
-        }
+        return true;
+    }
+
+    public function changePasswordWithUserId($password, $userId)
+    {
+        $user = $this->user->where('id', $userId)->first();
+        $user->update([
+            'password' => Hash::make($password)
+        ]);
+        return true;
     }
 
     public function changeUserInfo($params = [])
@@ -113,6 +117,7 @@ class AuthService
             ->where('id', Auth::guard('api')->id())
             ->firstOrFail();
         $user->update($params);
+        return $user;
     }
 
     public function resetPassword($email)
@@ -142,7 +147,35 @@ class AuthService
 
     public function checkUser($userId)
     {
-        $user = $this->user->where('id', $userId)->first();
+        $user = $this->user->where('id', $userId)->firstOrFail();
         return $user;
+    }
+
+    public function checkHasPermission($name)
+    {
+        $rootRole = $this->role->find(1);
+        $listPermission = json_decode($rootRole->permissions);
+        if (!in_array($name, $listPermission)) {
+            return response()->json([
+                'status' => true
+            ], 200);
+        }
+
+        $user = Auth::guard('api')->user();
+
+        // Check user has role
+        // If user hasn't role => false
+        if (!$user->role_id) {
+            return false;
+        }
+
+        $role = $this->role->find($user->role_id);
+        if ($role) {
+            $permissions = json_decode($role->permissions);
+            if (in_array($name, $permissions)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -116,8 +116,8 @@ Route::prefix('v1')->group(function () {
 
         // Export Excel
         Route::prefix('export')->middleware('check_role')->group(function () {
-            Route::get('department/{department_id}', [ExportExcelController::class, 'exportDepartment'])->name('export.department');
-            Route::get('user-checkin/{user_id}', [ExportExcelController::class, 'exportUserCheckin'])->name('export.user_checkin');
+            Route::get('department/{departmentId}', [ExportExcelController::class, 'exportDepartment'])->name('export.department');
+            Route::get('user-checkin/{userId}', [ExportExcelController::class, 'exportUserCheckin'])->name('export.user_checkin');
         });
     });
 });
