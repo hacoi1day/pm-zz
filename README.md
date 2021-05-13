@@ -4,13 +4,13 @@ Run <strong>make setup</strong>
 
 # Account Test
 ## Root
-admin@gmail.com - 123456
+<p>admin@gmail.com - 123456</p>
 
 ## Manager
-manager1@gmail.com - 123456
-manager2@gmail.com - 123456
+<p>manager1@gmail.com - 123456</p>
+<p>manager2@gmail.com - 123456</p>
 
 ## User
-user1@gmail.com - 123456
-user2@gmail.com - 123456
-user3@gmail.com - 123456
+<p>user1@gmail.com - 123456</p>
+<p>user2@gmail.com - 123456</p>
+<p>user3@gmail.com - 123456</p>
