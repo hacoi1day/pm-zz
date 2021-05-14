@@ -20,11 +20,7 @@ class DepartmentTest extends TestCase
         $user = json_decode($response->getContent());
         self::$token = $user->token;
     }
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+
     public function test_index_department()
     {
         $response = $this
