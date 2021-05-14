@@ -55,7 +55,7 @@ class DepartmentTest extends TestCase
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->put('api/v1/department/department/1', [
-                'name' => 'Root 1',
+                'name' => 'Department 1',
             ]);
         $response->assertStatus(202)->assertJsonStructure(['name']);
     }
