@@ -8,5 +8,7 @@ WORKDIR /var/www/html/backend
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
+# Copy composer.lock and composer.json
+COPY /backend/composer.lock /backend/composer.json /var/www/html/backend/
 
 RUN install-php-extensions pdo pdo_mysql zip gd simplexml
