@@ -20,11 +20,11 @@ class UserService
 
     public function paginate()
     {
-        $paginate = $this->user->paginate(10);
-        $paginate->getCollection()->transform(function ($item) {
-            $item->department;
-            return $item;
-        });
+        $paginate = $this->user->with('department')->paginate(10);
+        // $paginate->getCollection()->transform(function ($item) {
+        //     $item->department;
+        //     return $item;
+        // });
         return $paginate;
     }
 

@@ -14,11 +14,11 @@ class DepartmentService
 
     public function paginate()
     {
-        $paginate = $this->department->paginate(10);
-        $paginate->getCollection()->transform(function ($item) {
-            $item->manager;
-            return $item;
-        });
+        $paginate = $this->department->with('manager')->paginate(10);
+        // $paginate->getCollection()->transform(function ($item) {
+        //     $item->manager;
+        //     return $item;
+        // });
         return $paginate;
     }
 

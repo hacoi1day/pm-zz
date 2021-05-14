@@ -80,7 +80,7 @@ class DepartmentResourceController extends Controller
     public function update(UpdateDepartment $request, $id)
     {
         $department = $this->departmentService->update($request->all(), $id);
-        return response()->json($department, 200);
+        return response()->json($department, 202);
     }
 
     /**
