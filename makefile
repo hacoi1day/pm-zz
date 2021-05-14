@@ -2,10 +2,14 @@ sh:
 	docker-compose exec backend sh
 
 setup:
+	make install
 	make clear
 	make migrate
 	make storage
 	make passport
+
+install:
+	docker-compose exec backend composer install
 
 migrate:
 	docker-compose exec backend php artisan migrate --seed
@@ -21,3 +25,6 @@ clear:
 passport:
 	docker-compose exec backend php artisan passport:keys --force
 	docker-compose exec backend php artisan passport:client --personal
+
+telescope:
+	docker-compose exec backend php artisan telescope:publish

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import { me } from './apis/auth';
 import VueRouter from 'vue-router';
+import store from './store';
 Vue.use(VueRouter);
 
 // Home
@@ -135,6 +136,7 @@ const router = new VueRouter({
   routes
 });
 
+
 router.beforeEach(async (to, from, next) => {
   const name = to.name;
   if (name === 'change-password-token') {
@@ -143,7 +145,10 @@ router.beforeEach(async (to, from, next) => {
     if (name.indexOf('user') === -1 && name.indexOf('department') === -1 && name.indexOf('manager') === -1) {
       next();
     } else {
-      let user = await me();
+      let user = store.state.user.userInfo;
+      if (!user) {
+        user = await me();
+      }
       if (user.role_id === 1) {
         next();
       } else if (user.role_id === 2 && name.indexOf('manager') !== -1) {
