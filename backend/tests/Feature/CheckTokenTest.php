@@ -11,7 +11,7 @@ class CheckTokenTest extends TestCase
 
     public function test_check_token_true()
     {
-        $response = $this->get('api/v1/check-token?token=NhZWrZG24HmfvV9qrHxAFYoUW0m2rafXu6kHQAv3pEgVFZqaT9G6bI3bU6rV');
+        $response = $this->get('api/v1/check-token?token=FpuFDEMtTBjMBUBy4sfuUHWVwXCRIE14NWu5vtnTFUleNP0imIXU7MiQKHpU');
         $response->assertStatus(200)->assertJsonStructure(['message']);
     }
 

@@ -483,6 +483,15 @@
       ),
       'reference' => 'e46a3228da4e95a411a981ac807bd119ab2485fa',
     ),
+    'laravel/telescope' => 
+    array (
+      'pretty_version' => 'v4.4.9',
+      'version' => '4.4.9.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '506aa21c7ead98d6666cf8341f25d4d2f333f385',
+    ),
     'laravel/tinker' => 
     array (
       'pretty_version' => 'v2.6.1',

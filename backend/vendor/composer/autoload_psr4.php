@@ -70,6 +70,8 @@ return array(
     'Lcobucci\\JWT\\' => array($vendorDir . '/lcobucci/jwt/src'),
     'Lcobucci\\Clock\\' => array($vendorDir . '/lcobucci/clock/src'),
     'Laravel\\Tinker\\' => array($vendorDir . '/laravel/tinker/src'),
+    'Laravel\\Telescope\\Database\\Factories\\' => array($vendorDir . '/laravel/telescope/database/factories'),
+    'Laravel\\Telescope\\' => array($vendorDir . '/laravel/telescope/src'),
     'Laravel\\Sail\\' => array($vendorDir . '/laravel/sail/src'),
     'Laravel\\Passport\\Database\\Factories\\' => array($vendorDir . '/laravel/passport/database/factories'),
     'Laravel\\Passport\\' => array($vendorDir . '/laravel/passport/src'),

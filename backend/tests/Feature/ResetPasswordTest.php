@@ -6,7 +6,6 @@ use Tests\TestCase;
 
 class ResetPasswordTest extends TestCase
 {
-
     public function test_reset_password()
     {
         $response = $this->post('api/v1/reset-password', ['email' => 'admin@gmail.com']);
