@@ -4,10 +4,9 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Str;
 use Tests\TestCase;
 
-class UserTest extends TestCase
+class DepartmentTest extends TestCase
 {
     private static $token;
 
@@ -26,50 +25,50 @@ class UserTest extends TestCase
      *
      * @return void
      */
-    public function test_index_user()
+    public function test_index_department()
     {
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->get('api/v1/user/user');
+            ->get('api/v1/department/department');
         $response->assertStatus(200)->assertJsonStructure(['current_page', 'data', 'total']);
     }
 
-    public function test_show_user()
+    public function test_show_department()
     {
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->get('api/v1/user/user/1');
+            ->get('api/v1/department/department/1');
         $response->assertStatus(200)->assertJsonStructure(['name']);
     }
 
-    public function test_store_user()
+    public function test_store_department()
     {
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->post('api/v1/user/user', [
+            ->post('api/v1/department/department', [
                 'name' => 'Test',
-                'email' => Str::random(6).'@gmail.com',
-                'role_id' => 3,
+                'description' => 'description',
+                'manager_id' => 2,
 
             ]);
-        $response->assertStatus(201)->assertJsonStructure(['name', 'email']);
+        $response->assertStatus(201)->assertJsonStructure(['name']);
     }
 
-    public function test_update_user()
+    public function test_update_department()
     {
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->put('api/v1/user/user/1', [
+            ->put('api/v1/department/department/1', [
                 'name' => 'Root 1',
             ]);
-        $response->assertStatus(202)->assertJsonStructure(['name', 'email']);
+        $response->assertStatus(202)->assertJsonStructure(['name']);
     }
 
-    public function test_destroy_user()
+    public function test_destroy_department()
     {
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->delete('api/v1/user/user/17');
+            ->delete('api/v1/department/department/17');
 
         if ($response->getStatusCode() === 404) {
             $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
@@ -82,7 +81,7 @@ class UserTest extends TestCase
     {
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->post('api/v1/user/dropdown');
+            ->post('api/v1/department/dropdown');
 
         $response->assertStatus(200)->assertJsonStructure([]);
     }
