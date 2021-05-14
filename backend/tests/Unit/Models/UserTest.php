@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
-    public function test_store_user()
+    public function test_user()
     {
         $user = new User;
         $user->name = 'Test';
