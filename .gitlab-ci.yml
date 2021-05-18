@@ -1,6 +1,6 @@
 before_script:
   - echo "Before script"
-  - cd /var/www/html/backend
+  - cd /backend
 
 # variables:
 #   MYSQL_DATABASE: pm
