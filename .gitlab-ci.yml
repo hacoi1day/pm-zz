@@ -2,12 +2,12 @@ before_script:
   - echo "Before script"
   - cd /var/www/html/backend
 
-variables:
-  MYSQL_DATABASE: pm
-  MYSQL_ROOT_PASSWORD: 123456aa
-  DB_HOST: mysql
-  DB_USERNAME: havt
-  DB_PASSWORD: 1234
+# variables:
+#   MYSQL_DATABASE: pm
+#   MYSQL_ROOT_PASSWORD: 123456aa
+#   DB_HOST: mysql
+#   DB_USERNAME: havt
+#   DB_PASSWORD: 1234
 
 stages:
   - build
