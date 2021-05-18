@@ -1,3 +1,5 @@
+image: hacoi1day/php_7.4_test
+
 before_script:
   - echo "Before script"
   - cd backend
@@ -7,12 +9,13 @@ building:
   script:
     - echo "Building"
     - ls
+    - compose
 
 testing:
   stage: test
   script:
     - echo "Testing"
-    - php vendor/bin/phpunit --coverage-text --colors=never
+    # - php vendor/bin/phpunit --coverage-text --colors=never
   
 deploying:
   stage: deploy
