@@ -19,7 +19,7 @@ testing:
   script:
     - echo "Testing"
     - ls
-    - composer
+    - composer install
     - php -v
     - vendor/bin/phpunit
   
