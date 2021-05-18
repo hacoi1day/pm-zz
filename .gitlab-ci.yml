@@ -2,9 +2,10 @@ image: framgia/laravel-workspace
 
 before_script:
   - echo "Before script"
+  - docker-compose up -d
   - pwd
   - ls
-  - cd backend
+  # - cd backend
 
 stages:
   - build
