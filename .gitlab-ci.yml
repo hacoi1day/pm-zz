@@ -1,13 +1,5 @@
 image: hacoi1day/php_7.4_test
 
-variables:
-  MYSQL_DATABASE: 'pm'
-  MYSQL_USER: 'havt'
-  MYSQL_PASSWORD: '1234'
-  MYSQL_ROOT_PASSWORD: '123456aa'
-  SERVICE_TAGS: 'dev'
-  SERVICE_NAME: 'mysql'
-
 before_script:
   - echo "Before script"
   - cd backend
@@ -18,15 +10,13 @@ building:
     - echo "Building"
     - ls
     - composer install
-    - php artisan migrate --seed
-    # - php artisan passport:keys --force
-    # - php artisan passport:client --personal
 
 testing:
   stage: test
   script:
     - echo "Testing"
     # - php vendor/bin/phpunit --coverage-text --colors=never
+    - vendor/bin/phpunit --filter ExampleTest
   
 deploying:
   stage: deploy
