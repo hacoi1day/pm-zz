@@ -1,6 +1,6 @@
-image:
-
-services:
+before_script:
+  - echo "Before script"
+  - cd /backend
 
 variables:
   MYSQL_DATABASE: pm
@@ -10,7 +10,13 @@ variables:
   DB_PASSWORD: 1234
 
 stages:
+  - build
   - test
+
+building:
+  state: build
+  script:
+    - composer install
 
 unit_test:
   stage: test
