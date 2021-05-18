@@ -18,6 +18,9 @@ testing:
   stage: test
   script:
     - echo "Testing"
+    - ls
+    - composer
+    - php
     - vendor/bin/phpunit
   
 deploying:
