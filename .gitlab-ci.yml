@@ -18,9 +18,9 @@ unit_test:
   script:
     - cd backend
     - composer install
-    - php artisan key:generate
-    - php artisan migrate
-    - php artisan passport:keys --force
-    - php artisan passport:client --personal
-    - vendor/bin/phpunit
+    # - php artisan key:generate
+    # - php artisan migrate
+    # - php artisan passport:keys --force
+    # - php artisan passport:client --personal
+    # - vendor/bin/phpunit
   
