@@ -16,7 +16,7 @@ testing:
   script:
     - echo "Testing"
     # - php vendor/bin/phpunit --coverage-text --colors=never
-    - vendor/bin/phpunit --filter ExampleTest
+    - php vendor/bin/phpunit --filter ExampleTest
   
 deploying:
   stage: deploy
