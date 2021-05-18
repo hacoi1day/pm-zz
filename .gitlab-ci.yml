@@ -12,6 +12,7 @@ testing:
   stage: test
   script:
     - echo "Testing"
+    - php vendor/bin/phpunit --coverage-text --colors=never
   
 deploying:
   stage: deploy
