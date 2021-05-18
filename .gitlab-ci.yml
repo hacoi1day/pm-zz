@@ -20,7 +20,7 @@ testing:
     - echo "Testing"
     - ls
     - composer
-    - php
+    - php -v
     - vendor/bin/phpunit
   
 deploying:
