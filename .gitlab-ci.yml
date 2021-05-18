@@ -28,7 +28,6 @@ testing:
     - php artisan migrate --seed
     - php artisan passport:keys --force
     - php artisan passport:client --personal
-    # - php vendor/bin/phpunit --coverage-text --colors=never
     - php vendor/bin/phpunit
   
 deploying:
