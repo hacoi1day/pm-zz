@@ -14,7 +14,7 @@ stages:
   - test
 
 building:
-  state: build
+  stage: build
   script:
     - composer install
 
