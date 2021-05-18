@@ -10,6 +10,9 @@ building:
     - echo "Building"
     - ls
     - composer install
+    - php artisan migrate --seed
+    - php artisan passport:keys --force
+    - php artisan passport:client --personal
 
 testing:
   stage: test
