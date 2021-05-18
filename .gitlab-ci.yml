@@ -25,6 +25,7 @@ testing:
   script:
     - echo "Testing"
     - composer install
+    - php artisan migrate --seed
     # - php vendor/bin/phpunit --coverage-text --colors=never
     - php vendor/bin/phpunit --filter ExampleTest
   
