@@ -11,13 +11,14 @@ variables:
 
 stages:
   - test
-  - deploy
 
 unit_test:
   stage: test
   script:
-    - cd backend
-    - composer install
+    - pwd
+    - ls
+    # - cd backend
+    # - composer install
     # - php artisan key:generate
     # - php artisan migrate
     # - php artisan passport:keys --force
