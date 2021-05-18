@@ -1,0 +1,24 @@
+image:
+
+services:
+
+variables:
+  MYSQL_DATABASE: pm
+  MYSQL_ROOT_PASSWORD: 123456aa
+  DB_HOST: mysql
+  DB_USERNAME: havt
+  DB_PASSWORD: 1234
+
+stages:
+  - test
+  - deploy
+
+unit_test:
+  stage: test
+  script:
+    - cp .env.example .env
+    - composer install
+    - php artisan key:generate
+    - php artisan migrate
+    - vendor/bin/phpunit
+  
