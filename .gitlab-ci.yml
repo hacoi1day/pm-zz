@@ -8,17 +8,17 @@ building:
   stage: build
   script:
     - echo "Building"
-    - ls
+    # - ls
     - composer install
-    - php artisan migrate --seed
-    - php artisan passport:keys --force
-    - php artisan passport:client --personal
+    # - php artisan migrate --seed
+    # - php artisan passport:keys --force
+    # - php artisan passport:client --personal
 
 testing:
   stage: test
   script:
     - echo "Testing"
-    # - php vendor/bin/phpunit --coverage-text --colors=never
+    - php vendor/bin/phpunit --coverage-text --colors=never
   
 deploying:
   stage: deploy
