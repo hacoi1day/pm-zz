@@ -1,0 +1,19 @@
+before_script:
+  - echo "Before script"
+  - pwd
+  - ls
+
+building:
+  stage: build
+  script:
+    - echo "Building"
+
+testing:
+  stage: test
+  script:
+    - echo "Testing"
+  
+deploying:
+  stage: deploy
+  script:
+    - echo "Deploying"
