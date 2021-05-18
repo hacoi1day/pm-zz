@@ -1,4 +1,11 @@
-image: hacoi1day/php_7.4_test
+
+variables:
+  MYSQL_DATABASE: 'pm'
+  MYSQL_USER: 'havt'
+  MYSQL_PASSWORD: '1234'
+  MYSQL_ROOT_PASSWORD: '123456aa'
+  SERVICE_TAGS: 'dev'
+  SERVICE_NAME: 'mysql'
 
 before_script:
   - echo "Before script"
@@ -8,11 +15,13 @@ building:
   stage: build
   script:
     - echo "Building"
-    - ls
-    - composer install
 
 testing:
   stage: test
+  image: hacoi1day/php_7.4_test
+  services:
+    - name: mysql:5.7.33
+      alias: mysql
   script:
     - echo "Testing"
     - composer install
