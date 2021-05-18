@@ -16,7 +16,7 @@ stages:
 building:
   stage: build
   script:
-    - composer install
+    - composer
 
 unit_test:
   stage: test
