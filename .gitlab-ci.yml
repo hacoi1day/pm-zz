@@ -21,7 +21,7 @@ testing:
     - ls
     - composer install
     - php -v
-    - vendor/bin/phpunit
+    - vendor/bin/phpunit --unit
   
 deploying:
   stage: deploy
