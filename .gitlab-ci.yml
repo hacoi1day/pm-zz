@@ -1,15 +1,14 @@
-image: hacoi1day/php_7.4_test
-
 before_script:
   - echo "Before script"
   - cd backend
 
 building:
   stage: build
+  image: hacoi1day/php_7.4_test
   script:
     - echo "Building"
     - ls
-    - compose
+    - composer
 
 testing:
   stage: test
