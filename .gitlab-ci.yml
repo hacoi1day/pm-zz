@@ -38,8 +38,8 @@ deploying:
   script:
     - echo "Deploying"
     - docker-compose --version
-    # - docker-compose up
-    # - make setup
+    - docker-compose up -d --build --remove-orphans
+    - make setup
   environment:
     name: production
     url: http://192.168.159.129
