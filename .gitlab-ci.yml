@@ -33,10 +33,10 @@
 deploying:
   type: deploy
   stage: deploy
+  tags:
+    - shell-runner
   script:
     - echo "Deploying"
     - ls
-  tags:
-    - shell-runner
   only:
     - master
