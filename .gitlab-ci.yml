@@ -1,15 +1,11 @@
 
 variables:
-  # DOCKER_HOST: tcp://192.168.159.129:2376
   MYSQL_DATABASE: 'pm'
   MYSQL_USER: 'havt'
   MYSQL_PASSWORD: '1234'
   MYSQL_ROOT_PASSWORD: '123456aa'
   SERVICE_TAGS: 'dev'
   SERVICE_NAME: 'mysql'
-
-# before_script:
-#   - echo "Before script"
 
 # building:
 #   stage: build
@@ -38,10 +34,10 @@ deploying:
   script:
     - echo "Deploying"
     - docker-compose --version
-    - docker-compose up -d --build
+    - docker-compose build
     - make setup
-  # environment:
-  #   name: production
-  #   url: http://192.168.159.129
+  environment:
+    name: production
+    url: http://192.168.159.129
   only:
     - master
