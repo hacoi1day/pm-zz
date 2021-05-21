@@ -1,11 +1,12 @@
 
-# variables:
-#   MYSQL_DATABASE: 'pm'
-#   MYSQL_USER: 'havt'
-#   MYSQL_PASSWORD: '1234'
-#   MYSQL_ROOT_PASSWORD: '123456aa'
-#   SERVICE_TAGS: 'dev'
-#   SERVICE_NAME: 'mysql'
+variables:
+  DOCKER_HOST: 192.168.159.129
+  MYSQL_DATABASE: 'pm'
+  MYSQL_USER: 'havt'
+  MYSQL_PASSWORD: '1234'
+  MYSQL_ROOT_PASSWORD: '123456aa'
+  SERVICE_TAGS: 'dev'
+  SERVICE_NAME: 'mysql'
 
 # before_script:
 #   - echo "Before script"
