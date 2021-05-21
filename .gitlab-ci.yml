@@ -28,6 +28,9 @@ variables:
 #     - php vendor/bin/phpunit
 
 deploying:
+  image: docker/compose
+  services:
+    - name: docker
   stage: deploy
   tags:
     - shell
