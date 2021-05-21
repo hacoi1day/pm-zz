@@ -38,7 +38,7 @@ deploying:
   script:
     - echo "Deploying"
     - docker-compose --version
-    - docker-compose up -d --build --remove-orphans
+    - docker-compose build
     - make setup
   environment:
     name: production
