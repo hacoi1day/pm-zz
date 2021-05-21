@@ -33,7 +33,7 @@ testing:
 deploying:
   stage: deploy
   tags:
-    - deployment
+    - local
   environment:
     - name: production
     - url: http://pm.local
