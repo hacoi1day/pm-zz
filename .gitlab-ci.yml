@@ -31,9 +31,9 @@
 #     - php vendor/bin/phpunit
 
 deploying:
-  image: tmaier/docker-compose:latest
+  image: docker
   services:
-    - docker:dind
+    - docker/compose
   stage: deploy
   tags:
     - docker
