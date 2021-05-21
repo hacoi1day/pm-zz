@@ -7,50 +7,33 @@ variables:
   SERVICE_TAGS: 'dev'
   SERVICE_NAME: 'mysql'
 
-# before_script:
-#   - echo "Before script"
+before_script:
+  - echo "Before script"
 
-# building:
-#   stage: build
-#   script:
-#     - echo "Building"
+building:
+  stage: build
+  script:
+    - echo "Building"
 
-# testing:
-#   stage: test
-#   image: hacoi1day/php_7.4_test
-#   services:
-#     - name: mysql:5.7.33
-#       alias: mysql
-#   script:
-#     - echo "Testing"
-#     - cd backend
-#     - composer install
-#     - php artisan migrate --seed
-#     - php artisan passport:keys --force
-#     - php artisan passport:client --personal
-#     - php vendor/bin/phpunit
-
-# publish:
-#   image: docker:latest
-#   stage: build
-#   tags:
-#     - local
-#   services:
-#     - docker:dind
-#   script:
-    # - docker build -t $TAG_COMMIT -t $TAG_LATEST .
-    # - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
-    # - docker push $TAG_COMMIT
-    # - docker push $TAG_LATEST
+testing:
+  stage: test
+  image: hacoi1day/php_7.4_test
+  services:
+    - name: mysql:5.7.33
+      alias: mysql
+  script:
+    - echo "Testing"
+    - cd backend
+    - composer install
+    - php artisan migrate --seed
+    - php artisan passport:keys --force
+    - php artisan passport:client --personal
+    - php vendor/bin/phpunit
 
 deploying:
-  image: docker:latest
   stage: deploy
-  tags:
-    - local
   script:
     - echo "Deploying"
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - echo "OK"
   only:
     - master
