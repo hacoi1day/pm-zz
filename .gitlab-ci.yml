@@ -34,3 +34,4 @@ deploying:
   stage: deploy
   script:
     - echo "Deploying"
+    - echo "123"
