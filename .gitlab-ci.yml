@@ -34,7 +34,7 @@ deploying:
   stage: deploy
   script:
     - echo "Deploying"
-    - ls
+    - make setup
   tags:
     - shell-runner
   only:
