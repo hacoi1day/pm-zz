@@ -34,7 +34,7 @@ deploying:
   script:
     - echo "Deploying"
     - docker-compose --version
-    - cd backend/
+    - docker-compose build
     - ls
     # - make setup
   environment:
