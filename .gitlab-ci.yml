@@ -38,5 +38,6 @@ deploying:
   script:
     - echo "Deploying"
     - ls
+    - make setup
   only:
     - master
