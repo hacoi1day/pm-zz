@@ -39,10 +39,9 @@ deploying:
     - docker
   script:
     - echo "Deploying"
-    - docker
-    - docker-compose
+    - docker-compose --version
     # - docker-compose up -d --build --remove-orphans
-    - docker-compose build
+    - docker-compose up
     - make setup
     # - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
     # - ls
