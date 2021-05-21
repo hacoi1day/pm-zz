@@ -16,27 +16,26 @@ building:
   script:
     - echo "Building"
 
-testing:
-  stage: test
-  image: hacoi1day/php_7.4_test
-  services:
-    - name: mysql:5.7.33
-      alias: mysql
-  script:
-    - echo "Testing"
-    - composer install
-    - php artisan migrate --seed
-    - php artisan passport:keys --force
-    - php artisan passport:client --personal
-    - php vendor/bin/phpunit
+# testing:
+#   stage: test
+#   image: hacoi1day/php_7.4_test
+#   services:
+#     - name: mysql:5.7.33
+#       alias: mysql
+#   script:
+#     - echo "Testing"
+#     - composer install
+#     - php artisan migrate --seed
+#     - php artisan passport:keys --force
+#     - php artisan passport:client --personal
+#     - php vendor/bin/phpunit
   
 deploying:
   stage: deploy
   tags:
     - local
   environment:
-    name: production
-    url: http://pm.local
+    name: local
   only:
     - master
   script:
