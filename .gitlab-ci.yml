@@ -38,6 +38,7 @@ deploying:
   script:
     - echo "Deploying"
     - ls
+    - docker compose up -d --build
     - make setup
   only:
     - master
