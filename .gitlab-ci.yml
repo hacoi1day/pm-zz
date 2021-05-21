@@ -28,16 +28,15 @@ variables:
 #     - php vendor/bin/phpunit
 
 deploying:
-  image: docker/compose
   stage: deploy
   tags:
     - docker
   script:
     - echo "Deploying"
     - docker-compose --version
-    # - docker-compose up
-    - docker run -p 80:80 -it nginx
-    - make setup
+    - cd backend/
+    - ls
+    # - make setup
   environment:
     name: production
     url: http://192.168.159.129
