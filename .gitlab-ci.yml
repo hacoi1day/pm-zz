@@ -31,9 +31,9 @@
 #     - php vendor/bin/phpunit
 
 deploying:
-  image: docker
-  services:
-    - docker/compose
+  image: docker/compose
+  # services:
+  #   - docker/compose
   stage: deploy
   tags:
     - docker
