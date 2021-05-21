@@ -35,8 +35,7 @@ deploying:
     - echo "Deploying"
     - docker-compose --version
     - docker-compose build
-    - ls
-    # - make setup
+    - make setup
   environment:
     name: production
     url: http://192.168.159.129
