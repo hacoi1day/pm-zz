@@ -43,7 +43,7 @@ deploying:
     - chmod og= $ID_RSA
     - apk update && apk add openssh-client
     - docker
-    - docker-compose
+    - docker-compose -d --build --remove-orphans
     # - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
     # - ls
     # - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose up -d --build"
