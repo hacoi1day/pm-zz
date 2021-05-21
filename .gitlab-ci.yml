@@ -34,8 +34,7 @@ deploying:
   script:
     - echo "Deploying"
     - docker-compose --version
-    - sudo su
-    - sudo docker-compose build
+    - docker-compose build
     - make setup
   environment:
     name: production
