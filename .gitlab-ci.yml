@@ -31,6 +31,9 @@
 #     - php vendor/bin/phpunit
 
 deploying:
+  image: jonaskello/docker-and-compose:1.12.1-1.8.0
+  services:
+    - docker:1.12.1-dind
   type: deploy
   stage: deploy
   tags:
