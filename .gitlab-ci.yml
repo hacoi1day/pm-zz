@@ -44,11 +44,13 @@ publish:
     - docker push $TAG_LATEST
 
 deploying:
+  image: docker:latest
   stage: deploy
   tags:
     - local
   script:
     - echo "Deploying"
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - echo "OK"
   only:
     - master
