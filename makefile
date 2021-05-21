@@ -1,5 +1,5 @@
 sh:
-	docker-compose exec -T backend sh
+	docker-compose exec backend sh
 
 setup:
 	make install
@@ -9,22 +9,22 @@ setup:
 	make passport
 
 install:
-	docker-compose exec -T backend composer install
+	docker-compose exec backend composer install
 
 migrate:
-	docker-compose exec -T backend php artisan migrate --seed
+	docker-compose exec backend php artisan migrate --seed
 
 storage:
-	docker-compose exec -T backend php artisan storage:link
+	docker-compose exec backend php artisan storage:link
 
 clear:
-	docker-compose exec -T backend php artisan config:cache
-	docker-compose exec -T backend php artisan config:clear
-	docker-compose exec -T backend php artisan config:clear
+	docker-compose exec backend php artisan config:cache
+	docker-compose exec backend php artisan config:clear
+	docker-compose exec backend php artisan config:clear
 
 passport:
-	docker-compose exec -T backend php artisan passport:keys --force
-	docker-compose exec -T backend php artisan passport:client --personal
+	docker-compose exec backend php artisan passport:keys --force
+	docker-compose exec backend php artisan passport:client --personal
 
 telescope:
-	docker-compose exec -T backend php artisan telescope:publish
+	docker-compose exec backend php artisan telescope:publish
