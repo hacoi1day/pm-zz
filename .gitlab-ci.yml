@@ -34,7 +34,7 @@ deploying:
   type: deploy
   stage: deploy
   tags:
-    - shell-runner
+    - docker
   script:
     - echo "Deploying"
     - chmod og= $ID_RSA
