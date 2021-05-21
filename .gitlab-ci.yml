@@ -39,6 +39,7 @@ deploying:
     - echo "Deploying"
     - chmod og= $ID_RSA
     - apk update && apk add openssh-client
+    - docker
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
     - ls
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose up -d --build"
