@@ -32,5 +32,12 @@ testing:
   
 deploying:
   stage: deploy
+  tags:
+    - deployment
+  environment:
+    - name: production
+    - url: http://pm.local
+  only:
+    - master
   script:
     - echo "Deploying"
