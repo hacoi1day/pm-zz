@@ -12,7 +12,7 @@ install:
 	docker-compose exec -T backend composer install
 
 migrate:
-	docker-compose exec -T backend php artisan migrate --seed
+	docker-compose exec -T backend php artisan migrate:fresh --seed
 
 storage:
 	docker-compose exec -T backend php artisan storage:link
