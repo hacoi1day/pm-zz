@@ -40,5 +40,8 @@ deploying:
     - docker-compose --version
     - docker-compose up
     - make setup
+  environment:
+    name: production
+    url: http://192.168.159.129
   only:
     - master
