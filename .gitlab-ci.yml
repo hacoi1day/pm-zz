@@ -32,8 +32,8 @@ before_script:
   
 deploying:
   stage: deploy
-  # tags:
-  #   - local
+  tags:
+    - local
   script:
     - echo "Deploying"
     - echo "OK"
