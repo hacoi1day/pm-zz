@@ -35,8 +35,8 @@ deploying:
   tags:
     - local
   environment:
-    - name: production
-    - url: http://pm.local
+    name: production
+    url: http://pm.local
   only:
     - master
   script:
