@@ -1,6 +1,6 @@
 
 variables:
-  DOCKER_HOST: localhost
+  DOCKER_HOST: tcp://192.168.159.129:2376
   MYSQL_DATABASE: 'pm'
   MYSQL_USER: 'havt'
   MYSQL_PASSWORD: '1234'
@@ -43,6 +43,6 @@ deploying:
     - make setup
   environment:
     name: production
-    url: http://pm.local
+    url: http://192.168.159.129
   only:
     - master
