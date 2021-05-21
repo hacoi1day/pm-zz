@@ -33,6 +33,8 @@ before_script:
 publish:
   image: docker:latest
   stage: build
+  tags:
+    - local
   services:
     - docker:dind
   script:
