@@ -33,6 +33,7 @@ deploying:
     - shell
   script:
     - echo "Deploying"
+    - pwd
     - docker-compose --version
     - docker-compose up -d --build
     - make setup
