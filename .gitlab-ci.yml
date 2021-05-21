@@ -1,39 +1,41 @@
 
-variables:
-  MYSQL_DATABASE: 'pm'
-  MYSQL_USER: 'havt'
-  MYSQL_PASSWORD: '1234'
-  MYSQL_ROOT_PASSWORD: '123456aa'
-  SERVICE_TAGS: 'dev'
-  SERVICE_NAME: 'mysql'
+# variables:
+#   MYSQL_DATABASE: 'pm'
+#   MYSQL_USER: 'havt'
+#   MYSQL_PASSWORD: '1234'
+#   MYSQL_ROOT_PASSWORD: '123456aa'
+#   SERVICE_TAGS: 'dev'
+#   SERVICE_NAME: 'mysql'
 
-before_script:
-  - echo "Before script"
+# before_script:
+#   - echo "Before script"
 
-building:
-  stage: build
-  script:
-    - echo "Building"
+# building:
+#   stage: build
+#   script:
+#     - echo "Building"
 
-testing:
-  stage: test
-  image: hacoi1day/php_7.4_test
-  services:
-    - name: mysql:5.7.33
-      alias: mysql
-  script:
-    - echo "Testing"
-    - cd backend
-    - composer install
-    - php artisan migrate --seed
-    - php artisan passport:keys --force
-    - php artisan passport:client --personal
-    - php vendor/bin/phpunit
+# testing:
+#   stage: test
+#   image: hacoi1day/php_7.4_test
+#   services:
+#     - name: mysql:5.7.33
+#       alias: mysql
+#   script:
+#     - echo "Testing"
+#     - cd backend
+#     - composer install
+#     - php artisan migrate --seed
+#     - php artisan passport:keys --force
+#     - php artisan passport:client --personal
+#     - php vendor/bin/phpunit
 
 deploying:
   stage: deploy
   script:
     - echo "Deploying"
-    - echo "OK"
+    - ls
+  tags:
+    - local
   only:
     - master
