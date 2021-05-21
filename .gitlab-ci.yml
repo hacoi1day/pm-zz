@@ -32,20 +32,13 @@
 
 deploying:
   image: docker/compose
-  # services:
-  #   - docker/compose
   stage: deploy
   tags:
     - docker
   script:
     - echo "Deploying"
     - docker-compose --version
-    # - docker-compose up -d --build --remove-orphans
     - docker-compose up
     - make setup
-    # - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
-    # - ls
-    # - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose up -d --build"
-    # - make setup
   only:
     - master
