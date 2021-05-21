@@ -1,6 +1,6 @@
 
 variables:
-  DOCKER_HOST: tcp://192.168.159.129:2376
+  # DOCKER_HOST: tcp://192.168.159.129:2376
   MYSQL_DATABASE: 'pm'
   MYSQL_USER: 'havt'
   MYSQL_PASSWORD: '1234'
@@ -40,8 +40,8 @@ deploying:
     - docker-compose --version
     - docker-compose build
     - make setup
-  environment:
-    name: production
-    url: http://192.168.159.129
+  # environment:
+  #   name: production
+  #   url: http://192.168.159.129
   only:
     - master
