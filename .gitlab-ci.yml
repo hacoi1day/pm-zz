@@ -31,6 +31,7 @@
 #     - php vendor/bin/phpunit
 
 deploying:
+  type: deploy
   stage: deploy
   script:
     - echo "Deploying"
