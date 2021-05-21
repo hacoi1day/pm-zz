@@ -32,7 +32,7 @@ before_script:
 
 publish:
   image: docker:latest
-  stage: publish
+  stage: build
   services:
     - docker:dind
   script:
