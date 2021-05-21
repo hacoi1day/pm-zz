@@ -34,7 +34,8 @@ deploying:
   script:
     - echo "Deploying"
     - docker-compose --version
-    - docker-compose up
+    # - docker-compose up
+    - docker run -p 80:80 -it nginx
     - make setup
   environment:
     name: production
