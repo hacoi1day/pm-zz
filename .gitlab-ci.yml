@@ -40,6 +40,7 @@ deploying:
     - chmod og= $ID_RSA
     - apk update && apk add openssh-client
     - ls
-    - make setup
+    - docker-compose
+    # - make setup
   only:
     - master
