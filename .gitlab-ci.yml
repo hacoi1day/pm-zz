@@ -36,11 +36,12 @@ deploying:
   tags:
     - shell-runner
   script:
+    - echo "Deploying"
     - chmod og= $ID_RSA
     - apk update && apk add openssh-client
-    - echo "Deploying"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker-compose up -d --build"
     - ls
-    - docker-compose up -d --build
     - make setup
   only:
     - master
