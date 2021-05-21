@@ -11,10 +11,10 @@ before_script:
   - echo "Before script"
   - cd backend
 
-building:
-  stage: build
-  script:
-    - echo "Building"
+# building:
+#   stage: build
+#   script:
+#     - echo "Building"
 
 # testing:
 #   stage: test
