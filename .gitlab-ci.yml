@@ -34,6 +34,7 @@ deploying:
   script:
     - echo "Deploying"
     - pwd
+    - rm -rf backend/vendor
     - docker-compose --version
     - docker-compose up -d --build
     - make setup
