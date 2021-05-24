@@ -33,7 +33,7 @@ deploying:
     - docker-compose up -d --build
     - make setup
   environment:
-    name: devlopment
+    name: development
     url: http://192.168.159.129
   only:
     - master
