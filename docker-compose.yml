@@ -57,7 +57,7 @@ services:
         container_name: node_${APP_NAME}
         volumes: 
             - ./frontend:/var/www/html/frontend
-        # command: yarn serve
+        command: yarn serve
         ports:
             - 8080:8080
         environment:
