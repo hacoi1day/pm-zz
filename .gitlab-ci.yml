@@ -6,7 +6,7 @@ variables:
   MYSQL_ROOT_PASSWORD: '123456aa'
   SERVICE_TAGS: 'dev'
   SERVICE_NAME: 'mysql'
-  DOCKER_HOST: 'tcp://192.168.159.129:2376'
+  DOCKER_HOST: 'tcp://192.168.159.129:2375'
 
 building:
   stage: build
