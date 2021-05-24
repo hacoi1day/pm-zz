@@ -7,11 +7,6 @@ variables:
   SERVICE_TAGS: 'dev'
   SERVICE_NAME: 'mysql'
 
-building:
-  stage: build
-  script:
-    - echo "Building"
-
 testing:
   stage: test
   image: hacoi1day/php_7.4_test
@@ -20,6 +15,7 @@ testing:
       alias: mysql
   script:
     - echo "Testing"
+    - pwd
     - cd backend
     - composer install
     - php artisan migrate --seed
@@ -34,7 +30,6 @@ deploying:
   script:
     - echo "Deploying"
     - pwd
-    - docker-compose --version
     - docker-compose up -d --build
     - make setup
   environment:
