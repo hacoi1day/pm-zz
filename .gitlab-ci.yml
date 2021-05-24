@@ -6,6 +6,7 @@ variables:
   MYSQL_ROOT_PASSWORD: '123456aa'
   SERVICE_TAGS: 'dev'
   SERVICE_NAME: 'mysql'
+  NODE_ENV: 'development'
 
 testing:
   stage: test
