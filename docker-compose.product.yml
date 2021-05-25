@@ -59,6 +59,6 @@ services:
         volumes: 
             - ./frontend:/var/www/html/frontend
         environment:
-          NODE_ENV: production
+            NODE_ENV: production
         networks: 
             - app-network
