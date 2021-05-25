@@ -31,8 +31,8 @@ deploying:
     - echo "Deploying"
     - pwd
     - docker-compose -f docker-compose.yml -f docker-compose.product.yml up
-    - docker-compose exec frontend yarn
-    - docker-compose exec frontend yarn build
+    # - docker-compose exec frontend yarn
+    # - docker-compose exec frontend yarn build
     - make setup
   environment:
     name: development
