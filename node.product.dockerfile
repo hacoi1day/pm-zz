@@ -4,6 +4,6 @@ FROM node:14
 WORKDIR /var/www/html/frontend
 COPY /frontend/package.json /frontend/yarn.lock /var/www/html/frontend/
 
-RUN yarn
+# RUN yarn
 
-RUN yarn build
+# RUN yarn build
