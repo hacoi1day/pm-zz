@@ -33,7 +33,7 @@ deploying:
   script:
     - echo "Deploying"
     - pwd
-    - docker-compose -f docker-compose.yml -f docker-compose.product.yml up
+    - docker-compose -f docker-compose.yml -f docker-compose.product.yml up -d
     # - docker-compose exec frontend yarn
     # - docker-compose exec frontend yarn build
     - make setup
