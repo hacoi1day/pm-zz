@@ -7,9 +7,6 @@ variables:
   SERVICE_TAGS: 'dev'
   SERVICE_NAME: 'mysql'
 
-stage:
-  - testing
-
 testing:
   stage: test
   image: hacoi1day/php_7.4_test
@@ -26,19 +23,19 @@ testing:
     - php artisan passport:client --personal
     - php vendor/bin/phpunit
 
-deploying:
-  stage: deploy
-  tags:
-    - shell
-  script:
-    - echo "Deploying"
-    - pwd
-    - docker-compose -f docker-compose.yml -f docker-compose.product.yml up -d
-    # - docker-compose exec frontend yarn
-    # - docker-compose exec frontend yarn build
-    - make setup
-  environment:
-    name: development
-    url: http://192.168.159.129
-  only:
-    - master
+# deploying:
+#   stage: deploy
+#   tags:
+#     - shell
+#   script:
+#     - echo "Deploying"
+#     - pwd
+#     - docker-compose -f docker-compose.yml -f docker-compose.product.yml up -d
+#     # - docker-compose exec frontend yarn
+#     # - docker-compose exec frontend yarn build
+#     - make setup
+#   environment:
+#     name: development
+#     url: http://192.168.159.129
+#   only:
+#     - master
