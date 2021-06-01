@@ -52,7 +52,11 @@ class CheckinTest extends TestCase
                 'time_in' => '2021-05-12 09:00:00',
                 'time_out' => ''
             ]);
-        $response->assertStatus(201)->assertJsonStructure(['date']);
+        $checkin = json_decode($response->getContent(), true);
+        $response->assertStatus(201)->assertJsonStructure(['date', 'id']);
+        $this->assertDatabaseHas('checkins', [
+            'id' => $checkin['id']
+        ]);
     }
 
     public function test_update_checkin()
@@ -63,6 +67,10 @@ class CheckinTest extends TestCase
                 'time_out' => '2021-05-12 18:00:00'
             ]);
         $response->assertStatus(202)->assertJsonStructure(['date']);
+        $this->assertDatabaseHas('checkins', [
+            'id' => 1,
+            'time_out' => '2021-05-12 18:00:00'
+        ]);
     }
 
     public function test_destroy_checkin()
@@ -73,8 +81,14 @@ class CheckinTest extends TestCase
 
         if ($response->getStatusCode() === 404) {
             $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
+            $this->assertDatabaseMissing('checkins', [
+                'id' => 17
+            ]);
         } else {
             $response->assertStatus(200);
+            $this->assertDatabaseMissing('checkins', [
+                'id' => 17
+            ]);
         }
     }
 
