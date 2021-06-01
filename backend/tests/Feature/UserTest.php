@@ -90,7 +90,7 @@ class UserTest extends TestCase
             $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
         } else {
             $response->assertStatus(200);
-            $this->assertDatabaseMissing('users', [
+            $this->assertDeleted('users', [
                 'id' => $user->id
             ]);
         }
