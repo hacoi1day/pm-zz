@@ -3,7 +3,6 @@
 namespace Tests\Unit\Models;
 
 use App\Models\User;
-// use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
 use Faker\Factory as Faker;
 use Illuminate\Support\Str;
@@ -15,19 +14,15 @@ class UserTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->fake = Faker::create();
+        $this->faker = Faker::create();
         $this->user = [
-            'name' => $this->fake->name,
-            'email' => $this->fake->email,
+            'name' => $this->faker->name,
+            'email' => $this->faker->email,
             'password' => Str::random(50),
             'role_id' => 3
         ];
     }
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
+
     public function test_store_user()
     {
         $user = User::create($this->user);
