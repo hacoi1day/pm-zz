@@ -34,8 +34,8 @@ class DepartmentTest extends TestCase
         $department = Department::factory()->create();
         $found = Department::find($department->id);
         $this->assertInstanceOf(Department::class, $found);
-        $this->assertEquals($found->name, $found->name);
-        $this->assertEquals($found->description, $found->description);
+        $this->assertEquals($department->name, $found->name);
+        $this->assertEquals($department->description, $found->description);
     }
 
     public function test_update_department()
