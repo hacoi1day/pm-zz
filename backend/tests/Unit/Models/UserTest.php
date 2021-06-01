@@ -38,9 +38,9 @@ class UserTest extends TestCase
         $user = User::factory()->create();
         $found = User::find($user->id);
         $this->assertInstanceOf(User::class, $found);
-        $this->assertEquals($found->name, $found->name);
-        $this->assertEquals($found->email, $found->email);
-        $this->assertEquals($found->role_id, $found->role_id);
+        $this->assertEquals($user->name, $found->name);
+        $this->assertEquals($user->email, $found->email);
+        $this->assertEquals($user->role_id, $found->role_id);
     }
 
     public function test_update_user()
