@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Request;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -27,18 +28,24 @@ class RequestTest extends TestCase
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->get('api/v1/request/request');
         $response->assertStatus(200)->assertJsonStructure(['current_page', 'data', 'total']);
+        $resData = json_decode($response->getContent(), true);
+        $this->assertDatabaseCount('requests', $resData['total']);
     }
 
     public function test_show_request()
     {
+        $request = Request::factory()->create();
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->get('api/v1/request/request/1');
+            ->get('api/v1/request/request/'.$request->id);
         if ($response->getStatusCode() === 404) {
             $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
         } else {
             $response->assertStatus(200)->assertJsonStructure(['type', 'start', 'end']);
         }
+        $this->assertDatabaseHas('requests', [
+            'id' => $request->id
+        ]);
     }
 
     public function test_my_request()
@@ -71,5 +78,9 @@ class RequestTest extends TestCase
                 'status' => 1,
             ]);
         $response->assertStatus(201)->assertJsonStructure(['type', 'start', 'end', 'cause', 'project', 'status']);
+        $resData = json_decode($response->getContent(), true);
+        $this->assertDatabaseHas('requests', [
+            'id' => $resData['id']
+        ]);
     }
 }
