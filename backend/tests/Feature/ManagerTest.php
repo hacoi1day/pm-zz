@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Request;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -63,25 +64,36 @@ class ManagerTest extends TestCase
 
     public function test_approval_request()
     {
+        $request = Request::factory()->create();
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->get('api/v1/manager/approval-request/1');
+            ->get('api/v1/manager/approval-request/'.$request->id);
         if ($response->getStatusCode() === 404) {
             $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
         } else {
             $response->assertStatus(200)->assertJsonStructure(['status', 'message']);
+            $this->assertDatabaseHas('requests', [
+                'id' => $request->id,
+                'status' => 2
+            ]);
         }
     }
 
     public function test_refuse_request()
     {
+        $request = Request::factory()->create();
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->get('api/v1/manager/refuse-request/1');
+            ->get('api/v1/manager/refuse-request/'.$request->id);
+
         if ($response->getStatusCode() === 404) {
             $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
         } else {
             $response->assertStatus(200)->assertJsonStructure(['status', 'message']);
+            $this->assertDatabaseHas('requests', [
+                'id' => $request->id,
+                'status' => 3
+            ]);
         }
     }
 }

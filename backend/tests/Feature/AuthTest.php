@@ -40,7 +40,6 @@ class AuthTest extends TestCase
             'password' => '123456'
         ]);
         $user = json_decode($response->getContent());
-        // dd($user);
         $this->user = $user;
         $response->assertStatus(200)->assertJsonStructure(['email', 'token']);
     }
@@ -92,12 +91,24 @@ class AuthTest extends TestCase
 
     public function test_change_user_info()
     {
+        $newData = [
+            'name' => 'Root 2'
+        ];
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->post('api/v1/auth/change-user-info', [
-                'name' => 'Root 1',
-            ]);
-        $response->assertStatus(200)->assertJsonStructure(['message']);
+            ->post('api/v1/auth/change-user-info', $newData);
+        $response->assertStatus(200)->assertJsonStructure([
+            'status',
+            'message',
+            'user' => [
+                'name'
+            ]
+        ]);
+        $resData = json_decode($response->getContent(), true);
+        $this->assertDatabaseHas('users', [
+            'id' => $resData['user']['id'],
+            'name' => $newData['name']
+        ]);
     }
 
     public function test_check_permission()

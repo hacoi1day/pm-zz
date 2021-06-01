@@ -29,6 +29,10 @@ class CommonTest extends TestCase
                 'value' => 'admin@gmail.com'
             ]);
         $response->assertStatus(200)->assertSeeText('1');
+        $this->assertDatabaseHas('users', [
+            'id' => 1,
+            'email' => 'admin@gmail.com'
+        ]);
     }
 
     public function test_check_unique_false()
@@ -38,6 +42,10 @@ class CommonTest extends TestCase
             ->post('api/v1/common/check-unique/users/email/2', [
                 'value' => 'admin@gmail.com'
             ]);
-            $response->assertStatus(200)->assertSeeText('0');
+        $response->assertStatus(200)->assertSeeText('0');
+        $this->assertDatabaseMissing('users', [
+            'id' => 2,
+            'email' => 'admin@gmail.com'
+        ]);
     }
 }
