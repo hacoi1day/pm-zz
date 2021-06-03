@@ -34,19 +34,6 @@ class CheckinTest extends TestCase
         $this->assertDatabaseCount('checkins', $resData['total']);
     }
 
-    public function test_show_checkin()
-    {
-        $response = $this
-            ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->get('api/v1/checkin/checkin/1');
-        if ($response->getStatusCode() === 404) {
-            $response->assertStatus(404);
-        } else {
-            $response->assertStatus(200)->assertJsonStructure(['date']);
-        }
-
-    }
-
     public function test_store_checkin()
     {
         $checkin = Checkin::factory()->make();
@@ -58,6 +45,26 @@ class CheckinTest extends TestCase
         $this->assertDatabaseHas('checkins', [
             'id' => $checkin['id']
         ]);
+    }
+
+    public function test_show_checkin()
+    {
+        $id = 1;
+        $response = $this
+            ->withHeader('Authorization', 'Bearer '.self::$token)
+            ->get('api/v1/checkin/checkin/'.$id);
+        $response->assertStatus(200)->assertJsonStructure(['date']);
+        $this->assertDatabaseHas('checkins', [
+            'id' => 1
+        ]);
+    }
+
+    public function test_show_checkin_not_found()
+    {
+        $response = $this
+            ->withHeader('Authorization', 'Bearer '.self::$token)
+            ->get('api/v1/checkin/checkin/99999');
+        $response->assertStatus(404);
     }
 
     public function test_update_checkin()
@@ -83,25 +90,38 @@ class CheckinTest extends TestCase
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->delete('api/v1/checkin/checkin/'.$checkin->id);
 
-        if ($response->getStatusCode() === 404) {
-            $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
-            $this->assertDatabaseMissing('checkins', [
-                'id' => 17
-            ]);
-        } else {
-            $response->assertStatus(200);
-            $this->assertDeleted('checkins', [
-                'id' => 17
-            ]);
-        }
+        $response->assertStatus(200);
+        $this->assertDeleted('checkins', [
+            'id' => 17
+        ]);
+    }
+
+    public function test_destroy_checkin_not_found()
+    {
+        $checkinId = 9999;
+        $response = $this
+            ->withHeader('Authorization', 'Bearer '.self::$token)
+            ->delete('api/v1/checkin/checkin/'.$checkinId);
+
+        $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
+        $this->assertDatabaseMissing('checkins', [
+            'id' => $checkinId
+        ]);
     }
 
     public function test_calendar()
     {
+        $startDate = '2021-05-01';
+        $endDate = '2021-05-30';
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->get('api/v1/checkin/calendar?start_date=2021-05-01&end_date=2021-05-31');
+            ->get('api/v1/checkin/calendar?start_date='.$startDate.'&end_date='.$endDate);
         $response->assertStatus(200)->assertJsonStructure([]);
+        $resData = json_decode($response->getContent(), true);
+        $startDate = date($startDate);
+        $endDate = date($endDate);
+        $countCheckin = Checkin::whereBetween('date', [$startDate, $endDate])->count();
+        $this->assertEquals($countCheckin, count($resData));
     }
 
     public function test_calendar_without_start_date()
@@ -125,31 +145,27 @@ class CheckinTest extends TestCase
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->get('api/v1/checkin/me/checkin');
-        if ($response->getStatusCode() === 500) {
-            $response->assertStatus(500)->assertJsonStructure(['status', 'message']);
-        } else {
-            $response->assertStatus(200)->assertJsonStructure(['status', 'item' => ['date']]);
-            $resData = json_decode($response->getContent(), true);
-            $this->assertDatabaseHas('checkins', [
-                'id' => $resData['item']['id']
-            ]);
-        }
+        $response->assertStatus(200)->assertJsonStructure(['status', 'item' => ['date']]);
+        $resData = json_decode($response->getContent(), true);
+        $this->assertDatabaseHas('checkins', [
+            'id' => $resData['item']['id']
+        ]);
     }
 
     public function test_checkout()
     {
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
+            ->get('api/v1/checkin/me/checkin');
+
+        $response = $this
+            ->withHeader('Authorization', 'Bearer '.self::$token)
             ->get('api/v1/checkin/me/checkout');
-        if ($response->getStatusCode() === 500) {
-            $response->assertStatus(500)->assertJsonStructure(['status', 'message']);
-        } else {
-            $response->assertStatus(200)->assertJsonStructure(['status', 'item' => ['date']]);
-            $resData = json_decode($response->getContent(), true);
-            $this->assertDatabaseHas('checkins', [
-                'id' => $resData['item']['id']
-            ]);
-        }
+        $response->assertStatus(200)->assertJsonStructure(['status', 'item' => ['date']]);
+        $resData = json_decode($response->getContent(), true);
+        $this->assertDatabaseHas('checkins', [
+            'id' => $resData['item']['id']
+        ]);
     }
 
     public function test_get_last_checkin()

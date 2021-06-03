@@ -80,14 +80,19 @@ class DepartmentTest extends TestCase
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->delete('api/v1/department/department/'.$department->id);
 
-        if ($response->getStatusCode() === 404) {
-            $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
-        } else {
-            $response->assertStatus(200);
-            $this->assertDeleted('departments', [
-                'id' => $department->id
-            ]);
-        }
+        $response->assertStatus(200);
+        $this->assertDeleted('departments', [
+            'id' => $department->id
+        ]);
+    }
+
+    public function test_destroy_department_not_found()
+    {
+        $response = $this
+            ->withHeader('Authorization', 'Bearer '.self::$token)
+            ->delete('api/v1/department/department/999');
+
+        $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
     }
 
     public function test_dropdown_department()

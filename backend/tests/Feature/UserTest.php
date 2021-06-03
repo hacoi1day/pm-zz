@@ -11,6 +11,7 @@ use Tests\TestCase;
 class UserTest extends TestCase
 {
     private static $token;
+    private static $user;
 
     public function setUp(): void
     {
@@ -21,6 +22,7 @@ class UserTest extends TestCase
         ]);
         $user = json_decode($response->getContent());
         self::$token = $user->token;
+        self::$user = $user;
     }
 
     public function test_index_user()
@@ -86,14 +88,23 @@ class UserTest extends TestCase
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->delete('api/v1/user/user/'.$user->id);
 
-        if ($response->getStatusCode() === 404) {
-            $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
-        } else {
-            $response->assertStatus(200);
-            $this->assertDeleted('users', [
-                'id' => $user->id
-            ]);
-        }
+        $response->assertStatus(200);
+        $this->assertDeleted('users', [
+            'id' => $user->id
+        ]);
+    }
+
+    public function test_destroy_user_not_found()
+    {
+        $userId = 999;
+        $response = $this
+            ->withHeader('Authorization', 'Bearer '.self::$token)
+            ->delete('api/v1/user/user/'.$userId);
+
+        $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
+        $this->assertDatabaseMissing('users', [
+            'id' => $userId
+        ]);
     }
 
     public function test_dropdown_department()
