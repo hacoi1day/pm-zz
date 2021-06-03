@@ -22,28 +22,28 @@ class CheckinSeeder extends Seeder
             'time_out' => '2021-06-01 18:00:00'
         ]);
         Checkin::create([
-            'id' => 1,
+            'id' => 2,
             'user_id' => 1,
             'date' => '2021-06-02',
             'time_in' => '2021-06-02 09:00:00',
             'time_out' => '2021-06-02 18:00:00'
         ]);
         Checkin::create([
-            'id' => 1,
+            'id' => 3,
             'user_id' => 1,
             'date' => '2021-06-03',
             'time_in' => '2021-06-03 09:00:00',
             'time_out' => '2021-06-03 18:00:00'
         ]);
         Checkin::create([
-            'id' => 1,
+            'id' => 4,
             'user_id' => 1,
             'date' => '2021-06-04',
             'time_in' => '2021-06-04 09:00:00',
             'time_out' => '2021-06-04 18:00:00'
         ]);
         Checkin::create([
-            'id' => 1,
+            'id' => 5,
             'user_id' => 1,
             'date' => '2021-06-05',
             'time_in' => '2021-06-05 09:00:00',
