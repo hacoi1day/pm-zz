@@ -10,6 +10,7 @@ use Tests\TestCase;
 class RequestTest extends TestCase
 {
     private static $token;
+    private static $user;
 
     public function setUp(): void
     {
@@ -20,6 +21,7 @@ class RequestTest extends TestCase
         ]);
         $user = json_decode($response->getContent());
         self::$token = $user->token;
+        self::$user = $user;
     }
 
     public function test_index_request()
@@ -38,13 +40,21 @@ class RequestTest extends TestCase
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->get('api/v1/request/request/'.$request->id);
-        if ($response->getStatusCode() === 404) {
-            $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
-        } else {
-            $response->assertStatus(200)->assertJsonStructure(['type', 'start', 'end']);
-        }
+        $response->assertStatus(200)->assertJsonStructure(['type', 'start', 'end']);
         $this->assertDatabaseHas('requests', [
             'id' => $request->id
+        ]);
+    }
+
+    public function test_show_request_not_found()
+    {
+        $requestId = 999;
+        $response = $this
+            ->withHeader('Authorization', 'Bearer '.self::$token)
+            ->get('api/v1/request/request/'.$requestId);
+        $response->assertStatus(404)->assertJsonStructure(['status', 'message']);
+        $this->assertDatabaseMissing('requests', [
+            'id' => $requestId
         ]);
     }
 
@@ -54,6 +64,9 @@ class RequestTest extends TestCase
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->get('api/v1/my-request');
         $response->assertStatus(200)->assertJsonStructure(['current_page', 'data', 'total']);
+        $resData = json_decode($response->getContent(), true);
+        $countMyRequest = Request::where('user_id', self::$user->id)->count();
+        $this->assertEquals($countMyRequest, $resData['total']);
     }
 
     public function test_my_request_with_page()
