@@ -111,8 +111,8 @@ class CheckinTest extends TestCase
 
     public function test_calendar()
     {
-        $startDate = '2021-06-01';
-        $endDate = '2021-06-30';
+        $startDate = '2021-05-01';
+        $endDate = '2021-05-30';
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->get('api/v1/checkin/calendar?start_date='.$startDate.'&end_date='.$endDate);
@@ -128,7 +128,7 @@ class CheckinTest extends TestCase
     {
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->get('api/v1/checkin/calendar?end_date=2021-06-01');
+            ->get('api/v1/checkin/calendar?end_date=2021-05-01');
         $response->assertStatus(422)->assertJsonStructure(['errors' => ['start_date']]);
     }
 
@@ -136,7 +136,7 @@ class CheckinTest extends TestCase
     {
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->get('api/v1/checkin/calendar?start_date=2021-06-01');
+            ->get('api/v1/checkin/calendar?start_date=2021-05-01');
         $response->assertStatus(422)->assertJsonStructure(['errors' => ['end_date']]);
     }
 
@@ -154,9 +154,10 @@ class CheckinTest extends TestCase
 
     public function test_checkout()
     {
-        $this
+        $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->get('api/v1/checkin/me/checkin');
+
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->get('api/v1/checkin/me/checkout');
