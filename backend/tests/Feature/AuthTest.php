@@ -2,13 +2,17 @@
 
 namespace Tests\Feature;
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
-    private $user;
+    private static $user;
+    private static $email = 'admin@gmail.com';
+    private static $password = '123456';
     private static $token;
 
     public function test_login_without_params()
@@ -36,20 +40,22 @@ class AuthTest extends TestCase
     public function test_login()
     {
         $response = $this->post('api/v1/login', [
-            'email' => 'admin@gmail.com',
-            'password' => '123456'
+            'email' => self::$email,
+            'password' => self::$password
         ]);
         $user = json_decode($response->getContent());
-        $this->user = $user;
+        self::$user = $user;
         $response->assertStatus(200)->assertJsonStructure(['email', 'token']);
+        $resData = json_decode($response->getContent(), true);
+        $this->assertEquals($resData['email'], self::$email);
     }
 
     public function setUp(): void
     {
         parent::setUp();
         $response = $this->post('api/v1/login', [
-            'email' => 'admin@gmail.com',
-            'password' => '123456'
+            'email' => self::$email,
+            'password' => self::$password
         ]);
         $user = json_decode($response->getContent());
         self::$token = $user->token;
@@ -59,6 +65,8 @@ class AuthTest extends TestCase
     {
         $response = $this->withHeader('Authorization', 'Bearer '.self::$token)->get('api/v1/auth/me');
         $response->assertStatus(200)->assertJsonStructure(['email', 'name']);
+        $resData = json_decode($response->getContent(), true);
+        $this->assertEquals($resData['email'], self::$email);
     }
 
     public function test_change_password()
@@ -113,11 +121,15 @@ class AuthTest extends TestCase
 
     public function test_check_permission()
     {
+        $permission = 'user.index';
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
-            ->get('api/v1/auth/check-permission?name=user.index');
-
+            ->get('api/v1/auth/check-permission?name='.$permission);
         $response->assertStatus(200)->assertJsonStructure(['status']);
+        // check user has permission
+        $role = Role::find(self::$user->role_id);
+        $permissions = json_decode($role->permissions, true);
+        $this->assertContains($permission, $permissions);
     }
 
     public function test_check_permission_without_name()
@@ -125,14 +137,20 @@ class AuthTest extends TestCase
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->get('api/v1/auth/check-permission');
-
         $response->assertStatus(422)->assertJsonStructure(['errors' => ['name']]);
     }
 
     public function test_reset_password()
     {
-        $response = $this->post('api/v1/reset-password', ['email' => 'admin@gmail.com']);
+        $email = 'admin@gmail.com';
+        $response = $this->post('api/v1/reset-password', ['email' => $email]);
         $response->assertStatus(200)->assertJsonStructure(['message']);
+        $user = User::where('email', $email)->first();
+        // check database record change password
+        $this->assertDatabaseHas('change_passes', [
+            'user_id' => $user->id,
+            'type_id' => 2
+        ]);
     }
 
     public function test_reset_password_without_email()
