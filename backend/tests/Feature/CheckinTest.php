@@ -154,6 +154,9 @@ class CheckinTest extends TestCase
 
     public function test_checkout()
     {
+        $this
+            ->withHeader('Authorization', 'Bearer '.self::$token)
+            ->get('api/v1/checkin/me/checkin');
         $response = $this
             ->withHeader('Authorization', 'Bearer '.self::$token)
             ->get('api/v1/checkin/me/checkout');
