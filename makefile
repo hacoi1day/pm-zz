@@ -1,5 +1,5 @@
-sh:
-	docker-compose exec backend sh
+bash:
+	docker-compose exec backend bash
 
 setup:
 	make install

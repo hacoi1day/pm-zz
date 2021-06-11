@@ -27,6 +27,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('v1')->group(function () {
+
+    // Test
+    Route::get('test', function () {
+        return response()->json([
+            'test' => 'testing'
+        ], 200);
+    });
+
     // Auth Router
     Route::post('login', [AuthController::class, 'login']);
 
