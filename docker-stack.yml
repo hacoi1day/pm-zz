@@ -1,0 +1,55 @@
+version: '3'
+
+networks:
+  app_network:
+
+services: 
+  nginx:
+    image: nginx:stable-alpine
+    ports: 
+      - 80:80
+    volumes: 
+      - ./:/var/www/html
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - backend
+      - frontend
+      - mysql
+    networks:
+      - app_network
+
+  mysql:
+    image: mysql:5.7.33
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: unless-stopped
+    tty: true
+    ports: 
+      - 3306:3306
+    environment: 
+      MYSQL_ROOT_PASSWORD: 123456aa
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    networks: 
+      - app_network
+  
+  backend:
+    image: pm_backend
+    volumes: 
+      - ./backend:/var/www/html/backend
+    ports: 
+      - 9000:9000
+    networks: 
+      - app_network
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 150MB
+        # reservation:
+        #   cpus: '0.25'
+        #   memory: 50MB
+      restart_policy:
+        condition: on-failure
