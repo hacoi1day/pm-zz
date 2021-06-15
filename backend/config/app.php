@@ -181,6 +181,9 @@ return [
 
         // Laravel Excel
         Maatwebsite\Excel\ExcelServiceProvider::class,
+
+        // L5 Swagger
+        L5Swagger\L5SwaggerServiceProvider::class,
     ],
 
     /*

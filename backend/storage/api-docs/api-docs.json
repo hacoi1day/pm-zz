@@ -1,0 +1,152 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Auth",
+        "description": "Auth",
+        "contact": {
+            "email": "admin@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "L5_SWAGGER_CONST_HOST",
+            "description": "PM API Server"
+        }
+    ],
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login",
+                "description": "Login",
+                "operationId": "postLogin",
+                "responses": {
+                    "200": {
+                        "description": "User Info and Token",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/me": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Me",
+                "description": "Me",
+                "operationId": "getMe",
+                "responses": {
+                    "200": {
+                        "description": "User Info",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout",
+                "description": "Logout",
+                "operationId": "getLogout",
+                "responses": {
+                    "200": {
+                        "description": "Status Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/active": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Active",
+                "description": "Active",
+                "operationId": "getActive",
+                "responses": {
+                    "200": {
+                        "description": "Status Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/change-password": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Change Password",
+                "description": "Change Password",
+                "operationId": "postChangePassword",
+                "responses": {
+                    "200": {
+                        "description": "Status Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/change-user-info": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Change User Info",
+                "description": "Change User Info",
+                "operationId": "postChangeUserInfo",
+                "responses": {
+                    "200": {
+                        "description": "Status Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Projects",
+            "description": "API Endpoints of PM Projects"
+        }
+    ],
+    "security": [
+        []
+    ]
+}
