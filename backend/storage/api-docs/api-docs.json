@@ -408,6 +408,120 @@
                     }
                 }
             }
+        },
+        "/department/department": {
+            "get": {
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Get Paginate Department",
+                "description": "Get Paginate Department",
+                "operationId": "getPaginateDepartment",
+                "responses": {
+                    "200": {
+                        "description": "Paginate Department Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Post Department",
+                "description": "Post Department",
+                "operationId": "postDepartment",
+                "responses": {
+                    "201": {
+                        "description": "Department Data Post",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/department/department/{id}": {
+            "get": {
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Get Department",
+                "description": "Get Department",
+                "operationId": "getDepartment",
+                "responses": {
+                    "200": {
+                        "description": "Department Data Get",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Put Department",
+                "description": "Put Department",
+                "operationId": "putDepartment",
+                "responses": {
+                    "202": {
+                        "description": "Department Data Put",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Delete Department",
+                "description": "Delete Department",
+                "operationId": "deleteDepartment",
+                "responses": {
+                    "200": {
+                        "description": "Status Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/department/dropdown": {
+            "get": {
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Dropdown Department",
+                "description": "Dropdown Department",
+                "operationId": "getDropdownDepartment",
+                "responses": {
+                    "200": {
+                        "description": "List Dropdown Department",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [

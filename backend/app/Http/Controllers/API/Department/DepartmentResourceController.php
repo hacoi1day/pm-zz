@@ -14,6 +14,21 @@ class DepartmentResourceController extends Controller
     public function __construct(DepartmentService $departmentService) {
         $this->departmentService = $departmentService;
     }
+
+    /**
+     * @OA\Get(
+     *      path="/department/department",
+     *      operationId="getPaginateDepartment",
+     *      tags={"Department"},
+     *      summary="Get Paginate Department",
+     *      description="Get Paginate Department",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Paginate Department Data",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     /**
      * Display a listing of the resource.
      *
@@ -36,6 +51,20 @@ class DepartmentResourceController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *      path="/department/department",
+     *      operationId="postDepartment",
+     *      tags={"Department"},
+     *      summary="Post Department",
+     *      description="Post Department",
+     *      @OA\Response(
+     *          response=201,
+     *          description="Department Data Post",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -47,6 +76,20 @@ class DepartmentResourceController extends Controller
         return response()->json($department, 201);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/department/department/{id}",
+     *      operationId="getDepartment",
+     *      tags={"Department"},
+     *      summary="Get Department",
+     *      description="Get Department",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Department Data Get",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     /**
      * Display the specified resource.
      *
@@ -71,6 +114,21 @@ class DepartmentResourceController extends Controller
     }
 
     /**
+     * @OA\Put(
+     *      path="/department/department/{id}",
+     *      operationId="putDepartment",
+     *      tags={"Department"},
+     *      summary="Put Department",
+     *      description="Put Department",
+     *      @OA\Response(
+     *          response=202,
+     *          description="Department Data Put",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -82,6 +140,21 @@ class DepartmentResourceController extends Controller
         $department = $this->departmentService->update($request->all(), $id);
         return response()->json($department, 202);
     }
+
+    /**
+     * @OA\Delete(
+     *      path="/department/department/{id}",
+     *      operationId="deleteDepartment",
+     *      tags={"Department"},
+     *      summary="Delete Department",
+     *      description="Delete Department",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
 
     /**
      * Remove the specified resource from storage.
@@ -98,6 +171,20 @@ class DepartmentResourceController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/department/dropdown",
+     *      operationId="getDropdownDepartment",
+     *      tags={"Department"},
+     *      summary="Dropdown Department",
+     *      description="Dropdown Department",
+     *      @OA\Response(
+     *          response=200,
+     *          description="List Dropdown Department",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function dropdown()
     {
         $dropdown = $this->departmentService->dropdown();
