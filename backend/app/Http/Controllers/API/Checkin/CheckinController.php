@@ -17,12 +17,40 @@ class CheckinController extends Controller
         $this->checkinService = $checkinService;
     }
 
+    /**
+     * @OA\Get(
+     *      path="/checkin/calendar",
+     *      operationId="getCalendar",
+     *      tags={"Checkin"},
+     *      summary="Calendar",
+     *      description="Calendar",
+     *      @OA\Response(
+     *          response=200,
+     *          description="List Checkin in Month",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function getCalendar(CalendarRequest $request)
     {
         $result = $this->checkinService->calendar($request->get('start_date'), $request->get('end_date'));
         return response()->json($result, 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/checkin/me/checkin",
+     *      operationId="getCheckin",
+     *      tags={"Checkin"},
+     *      summary="Checkin",
+     *      description="Checkin",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Checkin Resource Data",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function checkin()
     {
         if (!$this->checkinService->checkHasCheckin()) {
@@ -39,6 +67,20 @@ class CheckinController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/checkin/me/checkout",
+     *      operationId="getCheckout",
+     *      tags={"Checkin"},
+     *      summary="Checkout",
+     *      description="Checkout",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Checkout Resource Data",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function checkout()
     {
         if ($this->checkinService->checkHasCheckin()) {
@@ -55,6 +97,20 @@ class CheckinController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/checkin/me/last-checkin",
+     *      operationId="getLastCheckin",
+     *      tags={"Checkin"},
+     *      summary="Last Checkin",
+     *      description="Last Checkin",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Last Checkin Resource Data",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function getLastCheckin()
     {
         $lastCheckin = $this->checkinService->getLastCheckin();

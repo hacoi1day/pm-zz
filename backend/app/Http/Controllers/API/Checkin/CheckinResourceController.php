@@ -16,6 +16,20 @@ class CheckinResourceController extends Controller
     }
 
     /**
+     * @OA\Get(
+     *      path="/checkin/checkin",
+     *      operationId="getPaginateCheckin",
+     *      tags={"Checkin"},
+     *      summary="Paginate Checkin",
+     *      description="Paginate Checkin",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Paginate Checkin Data",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -37,6 +51,20 @@ class CheckinResourceController extends Controller
     }
 
     /**
+     * @OA\Post(
+     *      path="/checkin/checkin",
+     *      operationId="postStoreCheckin",
+     *      tags={"Checkin"},
+     *      summary="Store Checkin",
+     *      description="Store Checkin",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Checkin Data Store",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -48,6 +76,20 @@ class CheckinResourceController extends Controller
         return response()->json($item, 201);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/checkin/checkin/{id}",
+     *      operationId="getCheckin",
+     *      tags={"Checkin"},
+     *      summary="Get Checkin",
+     *      description="Get Checkin",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Checkin Data Get",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     /**
      * Display the specified resource.
      *
@@ -72,6 +114,20 @@ class CheckinResourceController extends Controller
     }
 
     /**
+     * @OA\Put(
+     *      path="/checkin/checkin/{id}",
+     *      operationId="putCheckin",
+     *      tags={"Checkin"},
+     *      summary="Update Checkin",
+     *      description="Update Checkin",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Checkin Data Update",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -84,6 +140,20 @@ class CheckinResourceController extends Controller
         return response()->json($item, 202);
     }
 
+    /**
+     * @OA\Delete(
+     *      path="/checkin/checkin/{id}",
+     *      operationId="deleteCheckin",
+     *      tags={"Checkin"},
+     *      summary="Delete Checkin",
+     *      description="Delete Checkin",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     /**
      * Remove the specified resource from storage.
      *

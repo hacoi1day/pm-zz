@@ -1,14 +1,10 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Auth",
-        "description": "Auth",
+        "title": "PM API",
+        "description": "PM API Documentation",
         "contact": {
             "email": "admin@gmail.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         },
         "version": "1.0.0"
     },
@@ -210,6 +206,180 @@
                 "responses": {
                     "200": {
                         "description": "Status Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/checkin/calendar": {
+            "get": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Calendar",
+                "description": "Calendar",
+                "operationId": "getCalendar",
+                "responses": {
+                    "200": {
+                        "description": "List Checkin in Month",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/checkin/me/checkin": {
+            "get": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Checkin",
+                "description": "Checkin",
+                "operationId": "getCheckin",
+                "responses": {
+                    "200": {
+                        "description": "Checkin Resource Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/checkin/me/checkout": {
+            "get": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Checkout",
+                "description": "Checkout",
+                "operationId": "getCheckout",
+                "responses": {
+                    "200": {
+                        "description": "Checkout Resource Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/checkin/me/last-checkin": {
+            "get": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Last Checkin",
+                "description": "Last Checkin",
+                "operationId": "getLastCheckin",
+                "responses": {
+                    "200": {
+                        "description": "Last Checkin Resource Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/checkin/checkin": {
+            "get": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Paginate Checkin",
+                "description": "Paginate Checkin",
+                "operationId": "getPaginateCheckin",
+                "responses": {
+                    "200": {
+                        "description": "Paginate Checkin Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Store Checkin",
+                "description": "Store Checkin",
+                "operationId": "postStoreCheckin",
+                "responses": {
+                    "200": {
+                        "description": "Checkin Data Store",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/checkin/checkin/{id}": {
+            "get": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Get Checkin",
+                "description": "Get Checkin",
+                "operationId": "getCheckin",
+                "responses": {
+                    "200": {
+                        "description": "Checkin Data Get",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Update Checkin",
+                "description": "Update Checkin",
+                "operationId": "putCheckin",
+                "responses": {
+                    "200": {
+                        "description": "Checkin Data Update",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Delete Checkin",
+                "description": "Delete Checkin",
+                "operationId": "deleteCheckin",
+                "responses": {
+                    "200": {
+                        "description": "Status Message",
                         "content": {
                             "application/json": {
                                 "schema": {}

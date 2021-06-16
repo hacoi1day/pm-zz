@@ -16,31 +16,6 @@ use App\Services\ChangePasswordService;
 
 class AuthController extends Controller
 {
-    /**
-     * @OA\Info(
-     *      version="1.0.0",
-     *      title="Auth",
-     *      description="Auth",
-     *      @OA\Contact(
-     *          email="admin@gmail.com"
-     *      ),
-     *      @OA\License(
-     *          name="Apache 2.0",
-     *          url="http://www.apache.org/licenses/LICENSE-2.0.html"
-     *      )
-     * )
-     *
-     * @OA\Server(
-     *      url="L5_SWAGGER_CONST_HOST",
-     *      description="PM API Server"
-     * )
-     *
-     * @OA\Tag(
-     *     name="Projects",
-     *     description="API Endpoints of PM Projects"
-     * )
-     */
-
     private $authService;
     private $changePasswordService;
 
