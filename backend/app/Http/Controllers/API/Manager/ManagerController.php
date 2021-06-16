@@ -34,6 +34,20 @@ class ManagerController extends Controller
         $this->requestService = $requestService;
     }
 
+    /**
+     * @OA\Get(
+     *      path="/manager/list-department",
+     *      operationId="getListDepartment",
+     *      tags={"Manager"},
+     *      summary="List Department",
+     *      description="List Department",
+     *      @OA\Response(
+     *          response=200,
+     *          description="List Department By Manager Id",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function listDepartment()
     {
         $departments = $this->managerService->listDepartment();
@@ -43,6 +57,20 @@ class ManagerController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/manager/list-user-by-department/{departmentId}",
+     *      operationId="getListUserByDepartment",
+     *      tags={"Manager"},
+     *      summary="List User By Department",
+     *      description="List User By Department",
+     *      @OA\Response(
+     *          response=200,
+     *          description="List User By Department",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function listUserByDepartmentId($departmentId)
     {
         $users = $this->managerService->listUserByDepartmentId($departmentId);
@@ -59,12 +87,40 @@ class ManagerController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/manager/list-request/{departmentId}",
+     *      operationId="getListRequestByDepartment",
+     *      tags={"Manager"},
+     *      summary="List Request By Department",
+     *      description="List Request By Department",
+     *      @OA\Response(
+     *          response=200,
+     *          description="List Request By Department",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function listRequestByDepartmentId(ListRequestRequest $request, $departmentId)
     {
         $paginate = $this->managerService->listRequestByDepartmentId($departmentId, $request->all());
         return response()->json($paginate);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/manager/approval-request/{requestId}",
+     *      operationId="getApprovalRequest",
+     *      tags={"Manager"},
+     *      summary="Approval Request",
+     *      description="Approval Request",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function approvalRequest($requestId)
     {
         $this->requestService->approvalRequest($requestId);
@@ -74,6 +130,20 @@ class ManagerController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/manager/refuse-request/{requestId}",
+     *      operationId="getRefuseRequest",
+     *      tags={"Manager"},
+     *      summary="Refuse Request",
+     *      description="Refuse Request",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function refuseRequest($requestId)
     {
         $this->requestService->refuseRequest($requestId);

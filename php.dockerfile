@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-alpine
+FROM php:7.4-fpm
 
 WORKDIR /var/www/html/backend
 
@@ -12,3 +12,14 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 COPY /backend/composer.lock /backend/composer.json /var/www/html/backend/
 
 RUN install-php-extensions pdo pdo_mysql zip gd simplexml
+
+# Arguments defined in docker-compose.yml
+ARG user
+ARG uid
+
+# Create system user to run Composer and Artisan Commands
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+RUN mkdir -p /home/$user/.composer && \
+    chown -R $user:$user /home/$user
+
+USER $user

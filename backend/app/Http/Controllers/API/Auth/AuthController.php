@@ -24,6 +24,20 @@ class AuthController extends Controller
         $this->changePasswordService = $changePasswordService;
     }
 
+    /**
+     * @OA\Post(
+     *      path="/auth/login",
+     *      operationId="postLogin",
+     *      tags={"Auth"},
+     *      summary="Login",
+     *      description="Login",
+     *      @OA\Response(
+     *          response=200,
+     *          description="User Info and Token",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function login(LoginRequest $request)
     {
         $email = $request->input('email');
@@ -38,12 +52,40 @@ class AuthController extends Controller
         return response()->json($user);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/auth/me",
+     *      operationId="getMe",
+     *      tags={"Auth"},
+     *      summary="Me",
+     *      description="Me",
+     *      @OA\Response(
+     *          response=200,
+     *          description="User Info",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function me()
     {
         $user = $this->authService->me();
         return response()->json($user);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/auth/logout",
+     *      operationId="getLogout",
+     *      tags={"Auth"},
+     *      summary="Logout",
+     *      description="Logout",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Success Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function logout()
     {
         $this->authService->logout();
@@ -53,6 +95,20 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/auth/active",
+     *      operationId="getActive",
+     *      tags={"Auth"},
+     *      summary="Active",
+     *      description="Active",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Success Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function active(ActiveRequest $request)
     {
         $token = $request->token;
@@ -63,6 +119,20 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Post(
+     *      path="/auth/change-password",
+     *      operationId="postChangePassword",
+     *      tags={"Auth"},
+     *      summary="Change Password",
+     *      description="Change Password",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Success Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function changePassword (ChangePasswordRequest $request)
     {
         $params = $request->all();
@@ -83,6 +153,20 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Post(
+     *      path="/auth/change-user-info",
+     *      operationId="postChangeUserInfo",
+     *      tags={"Auth"},
+     *      summary="Change User Info",
+     *      description="Change User Info",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Success Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function changeUserInfo (ChangeUserInfoRequest $request)
     {
         $params = $request->only(
@@ -101,6 +185,20 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Post(
+     *      path="/auth/reset-password",
+     *      operationId="postResetPassword",
+     *      tags={"Auth"},
+     *      summary="Reset Password",
+     *      description="Reset Password",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Success Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function resetPassword (ResetPasswordRequest $request)
     {
         $email = $request->input('email');
@@ -111,6 +209,20 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/auth/check-token",
+     *      operationId="getCheckToken",
+     *      tags={"Auth"},
+     *      summary="Check Token",
+     *      description="Check Token",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Success Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function checkToken (CheckTokenRequest $request)
     {
         $token = $request->input('token');
@@ -127,6 +239,20 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Post(
+     *      path="/auth/change-password-token",
+     *      operationId="postChangePasswordToken",
+     *      tags={"Auth"},
+     *      summary="Change Password Token",
+     *      description="Change Password Token",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Success Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function changePasswordToken(ChangePasswordTokenRequest $request)
     {
         $token = $request->input('token');
@@ -160,6 +286,20 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/auth/check-permission",
+     *      operationId="getCheckPermission",
+     *      tags={"Auth"},
+     *      summary="Check Permission",
+     *      description="Check Permission",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Success Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function checkPermission(CheckPermissionRequest $request)
     {
         $name = $request->input('name');

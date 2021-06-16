@@ -19,6 +19,20 @@ class UserController extends Controller
         $this->user = $user;
     }
 
+    /**
+     * @OA\Post(
+     *      path="/user/reset-password",
+     *      operationId="postResetPassword",
+     *      tags={"User"},
+     *      summary="Reset Password",
+     *      description="Reset Password",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function resetPassword(ResetPasswordRequest $request)
     {
         $user_ids = $request->input('user_ids');

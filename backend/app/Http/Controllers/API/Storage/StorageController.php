@@ -13,6 +13,20 @@ class StorageController extends Controller
     public function __construct(StorageService $storageService) {
         $this->storageService = $storageService;
     }
+    /**
+     * @OA\Post(
+     *      path="/storage/store-file",
+     *      operationId="postStoreFile",
+     *      tags={"Storage"},
+     *      summary="Store File",
+     *      description="Store File",
+     *      @OA\Response(
+     *          response=200,
+     *          description="URL File Store",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function storeFile(StoreRequest $request)
     {
         $file = $request->file('file');
