@@ -522,6 +522,106 @@
                     }
                 }
             }
+        },
+        "/manager/list-department": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "List Department",
+                "description": "List Department",
+                "operationId": "getListDepartment",
+                "responses": {
+                    "200": {
+                        "description": "List Department By Manager Id",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/manager/list-user-by-department/{departmentId}": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "List User By Department",
+                "description": "List User By Department",
+                "operationId": "getListUserByDepartment",
+                "responses": {
+                    "200": {
+                        "description": "List User By Department",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/manager/list-request/{departmentId}": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "List Request By Department",
+                "description": "List Request By Department",
+                "operationId": "getListRequestByDepartment",
+                "responses": {
+                    "200": {
+                        "description": "List Request By Department",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/manager/approval-request/{requestId}": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "Approval Request",
+                "description": "Approval Request",
+                "operationId": "getApprovalRequest",
+                "responses": {
+                    "200": {
+                        "description": "Status Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/manager/refuse-request/{requestId}": {
+            "get": {
+                "tags": [
+                    "Manager"
+                ],
+                "summary": "Refuse Request",
+                "description": "Refuse Request",
+                "operationId": "getRefuseRequest",
+                "responses": {
+                    "200": {
+                        "description": "Status Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [
