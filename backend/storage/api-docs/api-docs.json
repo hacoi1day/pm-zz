@@ -622,6 +622,46 @@
                     }
                 }
             }
+        },
+        "/my-request": {
+            "get": {
+                "tags": [
+                    "Request"
+                ],
+                "summary": "My Request",
+                "description": "My Request",
+                "operationId": "getMyRequest",
+                "responses": {
+                    "200": {
+                        "description": "Paginate My Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/create-my-request": {
+            "post": {
+                "tags": [
+                    "Request"
+                ],
+                "summary": "Create My Request",
+                "description": "Create My Request",
+                "operationId": "postCreateMyRequest",
+                "responses": {
+                    "201": {
+                        "description": "Create My Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [
