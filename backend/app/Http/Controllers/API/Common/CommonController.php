@@ -17,6 +17,20 @@ class CommonController extends Controller
         $this->commonService = $commonService;
     }
 
+    /**
+     * @OA\Get(
+     *      path="/common/check-unique/{table}/{column}/{id?}",
+     *      operationId="getCheckUnique",
+     *      tags={"Common"},
+     *      summary="Get Check Unique",
+     *      description="Get Check Unique",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Checkin Unique Status",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function checkUnique (CheckUniqueRequest $request, $table, $column, $id = '')
     {
         $value = $request->input('value');

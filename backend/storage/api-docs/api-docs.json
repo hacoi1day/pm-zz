@@ -388,6 +388,26 @@
                     }
                 }
             }
+        },
+        "/common/check-unique/{table}/{column}/{id?}": {
+            "get": {
+                "tags": [
+                    "Common"
+                ],
+                "summary": "Get Check Unique",
+                "description": "Get Check Unique",
+                "operationId": "getCheckUnique",
+                "responses": {
+                    "200": {
+                        "description": "Checkin Unique Status",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [
