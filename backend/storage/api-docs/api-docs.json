@@ -138,6 +138,86 @@
                     }
                 }
             }
+        },
+        "/auth/reset-password": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Reset Password",
+                "description": "Reset Password",
+                "operationId": "postResetPassword",
+                "responses": {
+                    "200": {
+                        "description": "Status Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/check-token": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Check Token",
+                "description": "Check Token",
+                "operationId": "getCheckToken",
+                "responses": {
+                    "200": {
+                        "description": "Status Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/change-password-token": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Change Password Token",
+                "description": "Change Password Token",
+                "operationId": "postChangePasswordToken",
+                "responses": {
+                    "200": {
+                        "description": "Status Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/check-permission": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Check Permission",
+                "description": "Check Permission",
+                "operationId": "getCheckPermission",
+                "responses": {
+                    "200": {
+                        "description": "Status Success Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [

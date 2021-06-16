@@ -210,6 +210,20 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Post(
+     *      path="/auth/reset-password",
+     *      operationId="postResetPassword",
+     *      tags={"Auth"},
+     *      summary="Reset Password",
+     *      description="Reset Password",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Success Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function resetPassword (ResetPasswordRequest $request)
     {
         $email = $request->input('email');
@@ -220,6 +234,20 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/auth/check-token",
+     *      operationId="getCheckToken",
+     *      tags={"Auth"},
+     *      summary="Check Token",
+     *      description="Check Token",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Success Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function checkToken (CheckTokenRequest $request)
     {
         $token = $request->input('token');
@@ -236,6 +264,20 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Post(
+     *      path="/auth/change-password-token",
+     *      operationId="postChangePasswordToken",
+     *      tags={"Auth"},
+     *      summary="Change Password Token",
+     *      description="Change Password Token",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Success Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function changePasswordToken(ChangePasswordTokenRequest $request)
     {
         $token = $request->input('token');
@@ -269,6 +311,20 @@ class AuthController extends Controller
         ], 200);
     }
 
+    /**
+     * @OA\Get(
+     *      path="/auth/check-permission",
+     *      operationId="getCheckPermission",
+     *      tags={"Auth"},
+     *      summary="Check Permission",
+     *      description="Check Permission",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Status Success Message",
+     *          @OA\JsonContent()
+     *       )
+     *     )
+     */
     public function checkPermission(CheckPermissionRequest $request)
     {
         $name = $request->input('name');
