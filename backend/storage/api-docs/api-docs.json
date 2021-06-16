@@ -662,6 +662,160 @@
                     }
                 }
             }
+        },
+        "/storage/store-file": {
+            "post": {
+                "tags": [
+                    "Storage"
+                ],
+                "summary": "Store File",
+                "description": "Store File",
+                "operationId": "postStoreFile",
+                "responses": {
+                    "200": {
+                        "description": "URL File Store",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/reset-password": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Reset Password",
+                "description": "Reset Password",
+                "operationId": "postResetPassword",
+                "responses": {
+                    "200": {
+                        "description": "Status Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Paginate User",
+                "description": "Paginate User",
+                "operationId": "getPaginateUser",
+                "responses": {
+                    "200": {
+                        "description": "Paginate User Data",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Store User",
+                "description": "Store User",
+                "operationId": "postStoreUser",
+                "responses": {
+                    "200": {
+                        "description": "User Data Store",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/user/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get User",
+                "description": "Get User",
+                "operationId": "getUser",
+                "responses": {
+                    "200": {
+                        "description": "User Data Get",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update User",
+                "description": "Update User",
+                "operationId": "putUser",
+                "responses": {
+                    "200": {
+                        "description": "User Data Update",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete User",
+                "description": "Delete User",
+                "operationId": "deleteUser",
+                "responses": {
+                    "200": {
+                        "description": "Status Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/dropdown": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Dropdown User",
+                "description": "Dropdown User",
+                "operationId": "getDropdownUser",
+                "responses": {
+                    "200": {
+                        "description": "List Dropdown User",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [
